@@ -18,7 +18,8 @@ export default function Hero() {
       </div>
       <div className="pb-10">
         <p className=" text-center text-[20px] leading-[28px] text-[#495057]">
-          Join us at GDSC Uyo’s Tech Ignite, a one-day event designed to spark <br class="hidden lg:block"/>
+          Join us at GDSC Uyo’s Tech Ignite, a one-day event designed to spark{' '}
+          <br className="hidden lg:block" />
           your interest in the ever-evolving world of tech.
         </p>
       </div>

@@ -29,9 +29,40 @@ export const faqs = [
         question: "Header Will Go Here",
         answer: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident dolor nam nostrum expedita obcaecati quia dolore necessitatibus officia libero tenetur."
     },
+    
 ]
 
 export const speakers = [
+  {
+    image: '/speakers/frame.jpg',
+    speaker: 'Birthright Ntuk',
+    title: 'Work Stuff'
+  },
+  {
+    image: '/speakers/frame.jpg',
+    speaker: 'Birthright Ntuk',
+    title: 'Work Stuff'
+  },
+  {
+    image: '/speakers/frame.jpg',
+    speaker: 'Birthright Ntuk',
+    title: 'Work Stuff'
+  },
+  {
+    image: '/speakers/frame.jpg',
+    speaker: 'Birthright Ntuk',
+    title: 'Work Stuff'
+  },
+  {
+    image: '/speakers/frame.jpg',
+    speaker: 'Birthright Ntuk',
+    title: 'Work Stuff'
+  },
+  {
+    image: '/speakers/frame.jpg',
+    speaker: 'Birthright Ntuk',
+    title: 'Work Stuff'
+  },
     {
         image: "/speakers/frame.jpg",
         speaker: "Birthright Ntuk",
@@ -47,19 +78,4 @@ export const speakers = [
         speaker: "Birthright Ntuk",
         title: "Work Stuff",
     },
-    {
-        image: "/speakers/frame.jpg",
-        speaker: "Birthright Ntuk",
-        title: "Work Stuff",
-    },
-    {
-        image: "/speakers/frame.jpg",
-        speaker: "Birthright Ntuk",
-        title: "Work Stuff",
-    },
-    {
-        image: "/speakers/frame.jpg",
-        speaker: "Birthright Ntuk",
-        title: "Work Stuff",
-    },
-]
+];
