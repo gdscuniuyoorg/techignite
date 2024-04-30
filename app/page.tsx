@@ -18,8 +18,8 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between bg-[#F5F9FE]">
-            <Navbar />
+    <main className=" min-h-screen  bg-[#F5F9FE]">
+     <Navbar />
 
       <Hero />
       {/* <Topics /> */}

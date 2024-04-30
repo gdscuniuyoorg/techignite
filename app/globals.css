@@ -75,3 +75,34 @@
       @apply bg-background text-foreground;
     }
   }
+  .container {
+  max-width: 1215px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .container {
+    width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 75%;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 83%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 93%;
+  }
+}

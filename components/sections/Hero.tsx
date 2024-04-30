@@ -13,18 +13,17 @@ export default function Hero() {
       id="About"
       className="container flex flex-col py-20 items-center justify-center w-full"
     >
-      
-      <div className="py-5 px-0">
+      <div className="py-5 flex justify-center items-center w-full px-0">
         <HeroImg />
       </div>
       <div className="pb-10">
-        <p className="lg:w-[599px] text-center text-[18px] text-[#495057]">
-          Join us at GDSC Uyo’s Tech Ignite, a one-day event designed to spark
+        <p className=" text-center text-[20px] leading-[28px] text-[#495057]">
+          Join us at GDSC Uyo’s Tech Ignite, a one-day event designed to spark <br class="hidden lg:block"/>
           your interest in the ever-evolving world of tech.
         </p>
       </div>
       <div className="pb-5">
-        <Button className="">Register Now</Button>
+        <Button className="!p-[10px_32px]">Register Now</Button>
       </div>
       <p>Registration is free</p>
       <RegistrationUnderlineImg />
