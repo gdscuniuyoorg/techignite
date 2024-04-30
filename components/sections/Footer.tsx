@@ -7,8 +7,8 @@ import { MdMail } from "react-icons/md";
 
 export default function Footer() {
   return (
-    <footer className="bg-white py-10 px-4 xl:px-0">
-      <div className="max-w-[1200px] mx-auto flex flex-col-reverse md:flex-row gap-6 items-center justify-between">
+    <footer className="bg-white py-10 w-full">
+      <div className="container flex flex-col-reverse md:flex-row gap-6 items-center justify-between">
         <div className="flex items-center">
           <Image
             src="/icons/logo.svg"
