@@ -8,7 +8,7 @@ export default function Speakers() {
       <h2 className="font-bold text-2xl text-[#101828] mb-3 lg:text-5xl text-center">
         Speakers
       </h2>
-      <p className="text-[#475467] text-sm lg:text-xl text-center lg:w-[480px] mx-auto mb-16">
+      <p className="text-[#475467] text-sm lg:text-xl text-center mx-auto mb-16">
         Whether you&apos;re a complete beginner or looking to{' '}
         <br className="hidden lg:block" />
         take your skills to the next level.
@@ -28,7 +28,7 @@ export default function Speakers() {
                     className="object-cover w-[331px] h-[243px]"
                   />
                 </div>
-                <div className="text-center mt-4">
+                <div className="text-center mt-4 font-product-sans">
                   <p className="font-bold text-xl lg:text-2xl mb-3 text-[#130E09]">
                     {speaker.speaker}
                   </p>
@@ -53,7 +53,7 @@ export default function Speakers() {
                     className="object-cover w-[331px] h-[243px]"
                   />
                 </div>
-                <div className="text-center mt-4">
+                <div className="text-center mt-4 font-product-sans">
                   <p className="font-bold text-xl lg:text-2xl mb-3 text-[#130E09]">
                     {speaker.speaker}
                   </p>

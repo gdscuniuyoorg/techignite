@@ -18,6 +18,9 @@ const config = {
     //   },
     // },
     extend: {
+      fontFamily: {
+        "product-sans": ["var(--font-product-sans)"]
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

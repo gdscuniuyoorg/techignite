@@ -11,7 +11,7 @@ export default function Hero() {
   return (
     <div
       id="About"
-      className="container flex flex-col py-20 items-center justify-center w-full"
+      className="container font-product-sans flex flex-col py-20 items-center justify-center w-full"
     >
       <div className="py-5 flex justify-center items-center w-full px-0">
         <HeroImg />
