@@ -1,6 +1,4 @@
-const HeroImg = (props: any) => {
-    return (
-      <svg
+ <svg
         width="350"
         height="180"
         viewBox="0 0 429 180"
@@ -289,8 +287,3 @@ const HeroImg = (props: any) => {
           fill="#2C2E31"
         />
       </svg>
-    );
-};
-
-export default HeroImg
-

@@ -18,6 +18,10 @@ const config = {
     //   },
     // },
     extend: {
+       backgroundImage: {
+        'heroPattern': "url('/icons/wavy.svg')",
+        'expectationsPattern':"url('/icons/background.svg')"
+      },
       fontFamily: {
         "product-sans": ["var(--font-product-sans)"]
       },
