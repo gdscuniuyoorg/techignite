@@ -15,17 +15,17 @@ export default function Speakers() {
       </p>
       <div className="overflow-x-auto flex flex-col hide-scrollbar lg:!ml-[130px] !pr-0 !mr-0">
         {' '}
-        <div className=" flex flex-row w-full gap-10">
+        <div className=" lg:flex hidden flex-row w-full gap-10">
           {speakers.map((speaker, i) => {
             return (
               <div className="w-full lg:w-[379px]" key={i}>
-                <div className="bg-white rounded-3xl object-contain p-5 w-[331px] h-[243px]">
+                <div className="bg-white rounded-3xl object-contain overflow-hidden items-center flex justify-center p-5 w-[331px] h-[293px]">
                   <Image
                     src={speaker.image}
                     alt={speaker.speaker}
                     width={400}
                     height={243}
-                    className="object-cover w-[331px] h-[243px]"
+                    className="object-cover overflow-hidden w-[331px] h-[243px]"
                   />
                 </div>
                 <div className="text-center mt-4 font-product-sans">
@@ -40,11 +40,11 @@ export default function Speakers() {
             );
           })}
         </div>
-        <div className=" flex flex-row gap-10">
+        <div className=" flex flex-row mt-10 gap-10">
           {speakers.map((speaker, i) => {
             return (
               <div className="w-full lg:w-[379px]" key={i}>
-                <div className="bg-white rounded-3xl object-contain p-5 w-[331px] h-[243px]">
+                <div className="bg-white rounded-3xl object-contain overflow-hidden items-center flex justify-center p-5 w-[331px] h-[293px]">
                   <Image
                     src={speaker.image}
                     alt={speaker.speaker}
