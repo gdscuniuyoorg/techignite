@@ -1,21 +1,23 @@
 import React from "react";
 
-interface TopicsContainerProps {
+interface ExpectationBoxesProps {
   children: React.ReactNode;
   className?: string; // Corrected attribute name to className
 }
 
-const TopicsContainer: React.FC<TopicsContainerProps> = ({
+const ExpectationBoxes: React.FC<ExpectationBoxesProps> = ({
   children,
   className,
 }) => {
   const containerClass = className ? `pl-4 ${className}` : "";
 
   return (
-    <div className={`bg-[#AD8100] rounded-3xl p-3 ${containerClass}`}>
+    <div
+      className={`bg-[#D4E4FF]/60 bg-expectationsPattern w-[100%] h-[295px] rounded-[32px] p-5 ${className}`}
+    >
       {children}
     </div>
   );
 };
 
-export default TopicsContainer;
+export default ExpectationBoxes;
