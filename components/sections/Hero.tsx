@@ -22,15 +22,13 @@ export default function Hero() {
       </div>
       <div className="pb-10">
         <p className=" text-center text-[20px] leading-[28px] text-[#495057]">
-          Join us at GDSC Uyo’s Tech Ignite, a one-day event designed to spark{' '}
+          Join us at GDSC Uyo’s Tech Ignite, a one-day event designed to spark{" "}
           <br className="hidden lg:block" />
           your interest in the ever-evolving world of tech.
         </p>
       </div>
       <div className="pb-5">
-        <Button  className="!p-[10px_32px]">
-          Register Now
-        </Button>
+        <Button className="!p-[10px_32px]">Register Now</Button>
       </div>
       <p>Registration is free</p>
       <Image
@@ -40,12 +38,21 @@ export default function Hero() {
         height={21.5}
       ></Image>
 
-      <div className="pt-5">
+      <div className=" px-5 pt-5 hidden lg:block lg:px-0">
         <Image
           src="/icons/venue.svg"
           alt="Tech Ignite Lightening"
           width={789}
           height={357.19}
+        ></Image>
+      </div>
+
+      <div className=" px-5 pt-5 block  lg:hidden lg:px-0">
+        <Image
+          src="/icons/smallvenue.svg"
+          alt="Tech Ignite Lightening"
+          width={380}
+          height={287}
         ></Image>
       </div>
     </div>
