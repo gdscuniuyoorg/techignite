@@ -15,7 +15,7 @@ const Expectations = () => {
         take your skills to the next level.
       </p>
       <div className="flex flex-col-reverse w-full gap-4 lg:flex-row justify-between lg:gap-20">
-        <div className="w-full h-[622px] bg-gradient-to-b from-blue-500 via-red-500 to-blue-900 rounded-[32px] pt-[35px] lg:w-[40%]">
+        <div className="w-full h-[622px] bg-[#4285F4] rounded-[32px] pt-[35px] lg:w-[40%]">
           <div className=" bg-black/90 bg-heroPattern w-[90%] h-[587px] m-auto rounded-[24px] text-white flex flex-col items-center justify-center">
             <div className="text-center font-inter">
               <h2 className="text-[20px] font-bold">There’s a lot to unpack</h2>
