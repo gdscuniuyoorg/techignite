@@ -20,7 +20,7 @@ const Expectations = () => {
             <div className="text-center font-inter">
               <h2 className="text-[20px] font-bold">There’s a lot to unpack</h2>
               <p className="text-[16px] py-5">
-                Whether you're a complete <br />
+                {`Whether you're a complete`} <br />
                 beginner or looking to take your skills <br />
                 to the next level.
               </p>
@@ -50,7 +50,7 @@ const Expectations = () => {
               <h3 className="text-[20px] font-bold py-3">
                 Interactive Workshops
               </h3>
-              <p>Whether you're a complete beginner or looking to take your</p>
+              <p>{`Whether you're a complete beginner or looking to take your`}</p>
             </div>
           </ExpectationBoxes>
           <ExpectationBoxes>
@@ -64,7 +64,7 @@ const Expectations = () => {
               <h3 className="text-[20px] font-bold py-3">
                 Learn in-demand Tech skills
               </h3>
-              <p>Whether you're a complete beginner or looking to take your</p>
+              <p>{`Whether you're a complete beginner or looking to take your`}</p>
             </div>
           </ExpectationBoxes>
           <ExpectationBoxes>
@@ -78,7 +78,7 @@ const Expectations = () => {
               <h3 className="text-[20px] font-bold py-3">
                 Network with people
               </h3>
-              <p>Whether you're a complete beginner or looking to take your</p>
+              <p>{`Whether you're a complete beginner or looking to take your`}</p>
             </div>
           </ExpectationBoxes>
           <ExpectationBoxes>
@@ -93,7 +93,7 @@ const Expectations = () => {
               <h3 className="text-[20px] font-bold py-3">
                 Discover opportunities
               </h3>
-              <p>Whether you're a complete beginner or looking to take your</p>
+              <p>{`Whether you're a complete beginner or looking to take your`}</p>
             </div>
           </ExpectationBoxes>
         </div>
