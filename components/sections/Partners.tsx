@@ -10,6 +10,7 @@ const Partners = () => {
       className="bg-[#FBBC04]"
       link="#"
       otherClassName={["black", "black"]}
+      cta="Partner with us"
     />
   );
 };

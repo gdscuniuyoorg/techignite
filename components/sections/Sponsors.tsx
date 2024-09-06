@@ -9,6 +9,7 @@ const Sponsors = () => {
       images={sponsors}
       className="bg-[#130E09]"
       link="#"
+      cta="Sponsor us"
     />
   );
 };

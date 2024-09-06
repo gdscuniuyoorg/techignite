@@ -14,6 +14,7 @@ const PartnersAndSponsors = ({
   className,
   link,
   otherClassName,
+  cta,
 }: {
   topic: string;
   description: string;
@@ -21,9 +22,10 @@ const PartnersAndSponsors = ({
   className?: string;
   link: string;
   otherClassName?: string[];
+  cta: string;
 }) => {
   return (
-    <section className={`py-14 ${className}`}>
+    <section className={`py-14 ${className} bg-heroPattern`}>
       <h2
         className={`font-semibold text-3xl mb-3 lg:text-5xl text-left italic  lg:px-[130px] px-[1rem] ${
           otherClassName ? `text-${otherClassName?.[0]}` : "text-yellow-500"
@@ -62,7 +64,7 @@ const PartnersAndSponsors = ({
         <div className="flex-1 bg-white h-[.1px]"></div>
         <a href={link} target="_blank">
           <SecondButton className="flex gap-3 items-center border border-1 border-black">
-            Sponsor Us <FiArrowUpRight className="text-xl" />
+            {cta} <FiArrowUpRight className="text-xl" />
           </SecondButton>
         </a>
       </div>
