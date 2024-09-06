@@ -37,50 +37,41 @@ export const partners = [
   },
 ];
 
-export const speakers = [
+export const sponsors = [
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
   {
     image: "/speakers/frame.jpg",
-    speaker: "Birthright Ntuk",
     title: "Work Stuff",
   },
 ];
