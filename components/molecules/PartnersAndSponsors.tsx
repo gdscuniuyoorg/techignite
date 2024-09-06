@@ -25,21 +25,21 @@ const PartnersAndSponsors = ({
   return (
     <section className={`py-14 ${className}`}>
       <h2
-        className={`font-semibold text-2xl mb-3 lg:text-5xl text-left italic px-[130px] ${
+        className={`font-semibold text-3xl mb-3 lg:text-5xl text-left italic  lg:px-[130px] px-[1rem] ${
           otherClassName ? `text-${otherClassName?.[0]}` : "text-yellow-500"
         }`}
       >
         {topic}
       </h2>
       <p
-        className={`text-sm lg:text-xl text-left mx-auto mb-16 px-[130px] ${
+        className={`text-xl  text-left mx-auto mb-16  lg:px-[130px] px-[1rem] ${
           otherClassName ? `text-${otherClassName?.[1]}` : "text-white"
         }`}
       >
         {description}
       </p>
-      <div className="overflow-x-auto flex flex-col hide-scrollbar lg:!ml-[130px] !pr-0 !mr-0">
-        <div className="lg:flex hidden flex-row w-full gap-10">
+      <div className="overflow-x-auto flex flex-col hide-scrollbar lg:!ml-[130px] !pr-0 !mr-0 px-[1rem]">
+        <div className="flex flex-row mt-10 gap-10">
           {images.map((el, i) => {
             return (
               <div className="w-full lg:w-[379px]" key={i}>
@@ -58,10 +58,10 @@ const PartnersAndSponsors = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-6 mt-24 px-[130px]">
+      <div className="flex items-center gap-6 mt-24 lg:px-[130px] px-[1rem]">
         <div className="flex-1 bg-white h-[.1px]"></div>
         <a href={link} target="_blank">
-          <SecondButton className="flex gap-3 items-center border-1 border-black">
+          <SecondButton className="flex gap-3 items-center border border-1 border-black">
             Sponsor Us <FiArrowUpRight className="text-xl" />
           </SecondButton>
         </a>
