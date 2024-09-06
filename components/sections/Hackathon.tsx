@@ -9,8 +9,8 @@ const Hackathon = () => {
           <div className="text-justify font-inter lg:w-[376px] w-full">
             <h2 className="font-bold ">Hackathon</h2>
             <p className="lg:pt-8 pt-3 text-[16px]">
-              Whether you're a complete beginner or looking to take your skills
-              to the next level, Tech Ignite has something for you!
+              {`Whether you're a complete beginner or looking to take your skills
+              to the next level, Tech Ignite has something for you!`}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -18,9 +18,13 @@ const Hackathon = () => {
               <a href="https://gdsc.community.dev/e/mbnwyd/" target="_blank">
                 Register Here
               </a>
-             
             </p>
-            <Image src="icons/arrow.svg" alt="arrow" width={24} height={24}></Image>
+            <Image
+              src="icons/arrow.svg"
+              alt="arrow"
+              width={24}
+              height={24}
+            ></Image>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import Topics from "@/components/sections/Topics";
 import Hero from "@/components/sections/Hero";
 import Image from "next/image";
 import Hackathon from "@/components/sections/Hackathon";
+import SponsorsAndPartners from "@/components/sections/SponsorsAndPartners";
 
 export default function Home() {
   return (
@@ -18,8 +19,9 @@ export default function Home() {
       <Expectations />
       <Hackathon />
       <Speakers />
+      <SponsorsAndPartners />
       <About />
-      <Faqs />
+      {/* <Faqs /> */}
     </main>
   );
 }
