@@ -24,7 +24,9 @@ const Expectations = () => {
                 beginner or looking to take your skills <br />
                 to the next level.
               </p>
-              <SecondButton>Register Now</SecondButton>
+              <a href="https://gdsc.community.dev/e/m5hskb/" target="_blank">
+                <SecondButton>Register Now</SecondButton>
+              </a>
 
               <p className="pt-5">Registration is free</p>
               <div className=" flex items-center justify-center pt-3">

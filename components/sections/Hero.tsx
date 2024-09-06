@@ -28,7 +28,9 @@ export default function Hero() {
         </p>
       </div>
       <div className="pb-5">
-        <Button className="!p-[10px_32px]">Register Now</Button>
+        <a href="https://gdsc.community.dev/e/m5hskb/" target="_blank">
+          <Button className="!p-[10px_32px]">Register Now</Button>
+        </a>
       </div>
       <p>Registration is free</p>
       <Image
