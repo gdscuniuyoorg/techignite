@@ -9,6 +9,7 @@ const Partners = () => {
       images={partners}
       className="bg-[#FBBC04]"
       link="#"
+      otherClassName={["black", "black"]}
     />
   );
 };

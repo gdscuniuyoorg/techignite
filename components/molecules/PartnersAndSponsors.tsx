@@ -13,19 +13,29 @@ const PartnersAndSponsors = ({
   images,
   className,
   link,
+  otherClassName,
 }: {
   topic: string;
   description: string;
   images: ImageEntity[];
   className?: string;
   link: string;
+  otherClassName?: string[];
 }) => {
   return (
     <section className={`py-14 ${className}`}>
-      <h2 className="font-semibold text-2xl text-yellow-500 mb-3 lg:text-5xl text-left italic px-[130px]">
+      <h2
+        className={`font-semibold text-2xl mb-3 lg:text-5xl text-left italic px-[130px] ${
+          otherClassName ? `text-${otherClassName?.[0]}` : "text-yellow-500"
+        }`}
+      >
         {topic}
       </h2>
-      <p className="text-white text-sm lg:text-xl text-left mx-auto mb-16 px-[130px]">
+      <p
+        className={`text-sm lg:text-xl text-left mx-auto mb-16 px-[130px] ${
+          otherClassName ? `text-${otherClassName?.[1]}` : "text-white"
+        }`}
+      >
         {description}
       </p>
       <div className="overflow-x-auto flex flex-col hide-scrollbar lg:!ml-[130px] !pr-0 !mr-0">
