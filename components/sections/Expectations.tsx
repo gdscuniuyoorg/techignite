@@ -2,6 +2,7 @@ import React from "react";
 import SecondButton from "./buttons/SecondButton";
 import Image from "next/image";
 import ExpectationBoxes from "./buttons/ExpectationBoxes";
+import Hackathon from "./Hackathon";
 
 const Expectations = () => {
   return (
@@ -14,6 +15,7 @@ const Expectations = () => {
         <br className="hidden lg:block" />
         take your skills to the next level.
       </p>
+      <Hackathon />
       <div className="flex flex-col-reverse w-full gap-4 lg:flex-row justify-between lg:gap-20">
         <div className="w-full h-[622px] bg-[#4285F4] rounded-[32px] pt-[35px] lg:w-[40%]">
           <div className=" bg-black/90 bg-heroPattern w-[90%] h-[587px] m-auto rounded-[24px] text-white flex flex-col items-center justify-center">
