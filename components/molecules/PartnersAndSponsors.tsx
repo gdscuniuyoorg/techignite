@@ -27,16 +27,14 @@ const PartnersAndSponsors = ({
   return (
     <section className={`py-14 ${className} bg-heroPattern`}>
       <h2
-        className={`font-semibold text-3xl mb-3 lg:text-5xl text-left italic  lg:px-[130px] px-[1rem] ${
-          otherClassName ? `text-${otherClassName?.[0]}` : "text-yellow-500"
-        }`}
+        className={`font-semibold text-3xl mb-3 lg:text-5xl text-left italic  lg:px-[130px] px-[1rem] ${otherClassName ? `text-${otherClassName?.[0]}` : "text-yellow-500"
+          }`}
       >
         {topic}
       </h2>
       <p
-        className={`text-xl  text-left mx-auto mb-16  lg:px-[130px] px-[1rem] ${
-          otherClassName ? `text-${otherClassName?.[1]}` : "text-white"
-        }`}
+        className={`text-xl  text-left mx-auto mb-16  lg:px-[130px] px-[1rem] ${otherClassName ? `text-${otherClassName?.[1]}` : "text-white"
+          }`}
       >
         {description}
       </p>
@@ -51,7 +49,7 @@ const PartnersAndSponsors = ({
                     alt={el.title}
                     width={400}
                     height={243}
-                    className="object-cover overflow-hidden w-[331px] h-[243px]"
+                    className="object-contain overflow-hidden w-[331px] h-[243px]"
                   />
                 </div>
               </div>
