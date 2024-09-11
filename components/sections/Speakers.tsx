@@ -29,7 +29,7 @@ export default function Speakers() {
                 </div>
                 <div className="text-center mt-4 font-product-sans">
                   <p className="font-bold text-xl lg:text-2xl mb-3 text-[#130E09]">
-                    {speaker.speaker}
+                    {speaker.speaker }
                   </p>
                   <p className="text-[#212529] text-sm lg:text-base">
                     {speaker.title}

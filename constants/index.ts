@@ -40,21 +40,22 @@ export const faqs = [
 export const speakers = [
   {
     image: "/speakers/frame.jpg",
-  },
-  // {
-  //   image: '/speakers/frame.jpg',
-  //   speaker: 'Birthright Ntuk',
-  //   title: 'Work Stuff'
-  // },
-
-  {
-    image: "/speakers/frame.jpg",
+    speaker: "",
+    title: "",
   },
   {
     image: "/speakers/frame.jpg",
+    speaker: "",
+    title: "",
   },
-
   {
     image: "/speakers/frame.jpg",
+    speaker: "",
+    title: "",
+  },
+  {
+    image: "/speakers/frame.jpg",
+    speaker: "",
+    title: "",
   },
 ];
