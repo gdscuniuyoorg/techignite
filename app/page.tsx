@@ -1,5 +1,3 @@
-"use client";
-import { useEffect, useState } from "react";
 import About from "@/components/sections/About";
 import Expectations from "@/components/sections/Expectations";
 import Faqs from "@/components/sections/Faqs";
@@ -10,14 +8,12 @@ import Hero from "@/components/sections/Hero";
 import Sponsors from "@/components/sections/Sponsors";
 import Partners from "@/components/sections/Partners";
 import TicketPage from "@/components/molecules/TicketPage";
+import { headers } from "next/headers";
 
 export default function Home() {
-  const [isTicketSubdomain, setIsTicketSubdomain] = useState(false);
-
-  useEffect(() => {
-    const subDomain = window.location.hostname;
-    setIsTicketSubdomain(subDomain.includes("tickets."));
-  }, []);
+  const headersList = headers();
+  const host = headersList.get("host") || "";
+  const isTicketSubdomain = host.startsWith("tickets.");
 
   if (isTicketSubdomain) {
     return (
@@ -27,7 +23,6 @@ export default function Home() {
       </main>
     );
   }
-
   return (
     <main className=" min-h-screen  bg-[#F5F9FE]">
       <Navbar />
