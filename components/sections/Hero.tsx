@@ -28,9 +28,15 @@ export default function Hero() {
         </p>
       </div>
       <div className="pb-5">
-        <a href="https://gdsc.community.dev/e/m5hskb/" target="_blank">
+        <a
+          href="https://lu.ma/event/evt-UkQmzgDlFU4DNoy"
+          // className="luma-checkout--button"
+          data-luma-action="checkout"
+          data-luma-event-id="evt-UkQmzgDlFU4DNoy"
+        >
           <Button className="!p-[10px_32px]">Register Now</Button>
         </a>
+        {/* <a href="https://gdsc.community.dev/e/m5hskb/" target="_blank"></a> */}
       </div>
       <p>Registration is free</p>
       <Image

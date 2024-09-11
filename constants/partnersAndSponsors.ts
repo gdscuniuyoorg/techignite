@@ -16,7 +16,7 @@ export const partners = [
     title: "GDSC Akwa Ibom State University, AKSU",
   },
   {
-    image: "/partners/She Code Africa.jpg",
+    image: "/partners/She Code Africa d.jpg",
     title: "She Code Africa, Uyo Chapter",
   },
   {
