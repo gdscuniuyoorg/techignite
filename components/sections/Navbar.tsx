@@ -32,16 +32,15 @@ const Navbar = () => {
           />
         </div>
 
-        
-        <div className="md:hidden" onClick={toggleMenu}>
+
+        <div className="md:hidden z-40" onClick={toggleMenu}>
           {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </div>
 
-       
+
         <div
-          className={`${
-            menuOpen ? "flex" : "hidden"
-          } md:flex flex-col md:flex-row gap-10 md:items-center text-[#344363] fixed md:relative top-0 left-0 w-full h-full md:w-auto md:h-auto bg-white p-10 md:p-0`}
+          className={`${menuOpen ? "flex" : "hidden"
+            } md:flex flex-col md:flex-row gap-10 md:items-center text-[#344363] fixed md:relative top-0 left-0 w-full h-full md:w-auto md:h-auto bg-white p-10 md:p-0`}
         >
           <a href="#About" onClick={toggleMenu}>
             About Tech Ignite

@@ -1,77 +1,45 @@
 export const partners = [
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/partners/ACES Logo.png",
+    title: "ACES Logo",
   },
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/partners/UNIUYO_AWS_CLUB.png",
+    title: "UNIUYO AWS Club logo",
   },
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/partners/the unscholed.png",
+    title: "The Unscholed logo",
   },
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/partners/GDSC AKSU.png",
+    title: "GDSC Akwa Ibom State University, AKSU",
   },
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/partners/She Code Africa.jpg",
+    title: "She Code Africa, Uyo Chapter",
   },
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/partners/NexaScale.jpg",
+    title: "NexaScale",
   },
 ];
 
 export const sponsors = [
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/sponsors/cleva black.png",
+    title: "Clever",
   },
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/sponsors/Ubulu.png",
+    title: "Ubulu Africa",
   },
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/sponsors/TC_LOGO_BLACK.png",
+    title: "Tech Circle",
   },
   {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    title: "Work Stuff",
+    image: "/sponsors/paystack.png",
+    title: "PayStack",
   },
 ];
