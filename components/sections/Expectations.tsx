@@ -26,9 +26,18 @@ const Expectations = () => {
                 beginner or looking to take your skills <br />
                 to the next level.
               </p>
-              <a href="https://gdsc.community.dev/e/m5hskb/" target="_blank">
+
+              <a
+                href="https://lu.ma/event/evt-UkQmzgDlFU4DNoy"
+                // className="luma-checkout--button"
+                data-luma-action="checkout"
+                data-luma-event-id="evt-UkQmzgDlFU4DNoy"
+              >
                 <SecondButton>Register Now</SecondButton>
               </a>
+              {/* <a href="https://gdsc.community.dev/e/m5hskb/" target="_blank">
+                <SecondButton>Register Now</SecondButton>
+              </a> */}
 
               <p className="pt-5">Registration is free</p>
               <div className=" flex items-center justify-center pt-3">

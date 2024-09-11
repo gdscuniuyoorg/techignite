@@ -18,7 +18,7 @@ export default function Home() {
   if (isTicketSubdomain) {
     return (
       <main className="h-full">
-        <Navbar />
+        <Navbar isTicketSubdomain={true} />
         <TicketPage />
       </main>
     );
