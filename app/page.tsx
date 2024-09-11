@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import About from "@/components/sections/About";
 import Expectations from "@/components/sections/Expectations";
 import Faqs from "@/components/sections/Faqs";
@@ -7,16 +7,19 @@ import Navbar from "@/components/sections/Navbar";
 import Speakers from "@/components/sections/Speakers";
 import Topics from "@/components/sections/Topics";
 import Hero from "@/components/sections/Hero";
-import Hackathon from "@/components/sections/Hackathon";
 import Sponsors from "@/components/sections/Sponsors";
 import Partners from "@/components/sections/Partners";
-import { usePathname } from "next/navigation";
 import TicketPage from "@/components/molecules/TicketPage";
 
 export default function Home() {
-  const subDomain = window.location.hostname;
+  const [isTicketSubdomain, setIsTicketSubdomain] = useState(false);
 
-  if (subDomain.includes("tickets.")) {
+  useEffect(() => {
+    const subDomain = window.location.hostname;
+    setIsTicketSubdomain(subDomain.includes("tickets."));
+  }, []);
+
+  if (isTicketSubdomain) {
     return (
       <main className="h-full">
         <Navbar />
