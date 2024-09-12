@@ -5,6 +5,7 @@ import SecondButton from "../sections/buttons/SecondButton";
 type ImageEntity = {
   title: string;
   image: string;
+  website: string
 };
 
 const PartnersAndSponsors = ({
@@ -25,7 +26,7 @@ const PartnersAndSponsors = ({
   cta: string;
 }) => {
   return (
-    <section className={`py-14 ${className} bg-heroPattern`}>
+    <section className={`py-14 ${className} bg-heroPattern`} id={topic === "Sponsors" ? "Sponsors" : "Partners"}>
       <h2
         className={`font-semibold text-3xl mb-3 lg:text-5xl text-left italic  lg:px-[130px] px-[1rem] ${otherClassName ? `text-${otherClassName?.[0]}` : "text-yellow-500"
           }`}
@@ -43,7 +44,7 @@ const PartnersAndSponsors = ({
           {images.map((el, i) => {
             return (
               <div className="w-full lg:w-[379px]" key={i}>
-                <div className="bg-white rounded-3xl object-contain overflow-hidden items-center flex justify-center p-5 w-[331px] h-[293px]">
+                {topic === "Sponsors" ? (<a href={el.website} target="_blank" className="cursor-pointer"><div className="bg-white rounded-3xl object-contain overflow-hidden items-center flex justify-center p-5 w-[331px] h-[293px]">
                   <Image
                     src={el.image}
                     alt={el.title}
@@ -51,7 +52,15 @@ const PartnersAndSponsors = ({
                     height={243}
                     className="object-contain overflow-hidden w-[331px] h-[243px]"
                   />
-                </div>
+                </div></a>) : (<div className="bg-white rounded-3xl object-contain overflow-hidden items-center flex justify-center p-5 w-[331px] h-[293px]">
+                  <Image
+                    src={el.image}
+                    alt={el.title}
+                    width={400}
+                    height={243}
+                    className="object-contain overflow-hidden w-[331px] h-[243px]"
+                  />
+                </div>)}
               </div>
             );
           })}
@@ -66,7 +75,7 @@ const PartnersAndSponsors = ({
           </SecondButton>
         </a>
       </div>
-    </section>
+    </section >
   );
 };
 

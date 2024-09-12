@@ -40,13 +40,27 @@ const Navbar = ({ isTicketSubdomain }: { isTicketSubdomain?: boolean }) => {
         </div>
 
         <div
-          className={`${
-            menuOpen ? "flex" : "hidden"
-          } md:flex flex-col md:flex-row gap-10 md:items-center text-[#344363] fixed md:relative top-0 left-0 w-full h-full md:w-auto md:h-auto bg-white p-10 md:p-0`}
+          className={`${menuOpen ? "flex" : "hidden"
+            } md:flex flex-col md:flex-row gap-10 md:items-center text-[#344363] fixed md:relative top-0 left-0 w-full h-full md:w-auto md:h-auto bg-white p-10 md:p-0`}
         >
           {!isTicketSubdomain && (
             <a href="#About" onClick={toggleMenu}>
               About Tech Ignite
+            </a>
+          )}
+          {/* {!isTicketSubdomain && (
+            <a href="#Schedule" onClick={toggleMenu}>
+              Schedule
+            </a>
+          )} */}
+          {!isTicketSubdomain && (
+            <a href="#Speakers" onClick={toggleMenu}>
+              Speakers
+            </a>
+          )}
+          {!isTicketSubdomain && (
+            <a href="#Sponsors" onClick={toggleMenu}>
+              Sponsors
             </a>
           )}
           {/* {!isTicketSubdomain && (
