@@ -34,90 +34,42 @@ const Topics = () => {
             </div>
             <div className="grid grid-cols-2 gap-2 text-[10px] pt-10 lg:gap-4 lg:text-[14px]">
               <div>
-                <TopicsContainer className="flex items-center justify-between">
-                  <Image
-                    src="/icons/location.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  ></Image>
+                <TopicsContainer className="flex items-center justify-start">
                   <p>Career Growth</p>
                 </TopicsContainer>
               </div>
               <div className="mt-6">
-                <TopicsContainer className="flex items-center justify-between">
-                  <Image
-                    src="/icons/location.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  ></Image>
+                <TopicsContainer className="flex items-center justify-start">
                   <p>Artificial Intelligence</p>
                 </TopicsContainer>
               </div>
               <div>
-                <TopicsContainer className="flex items-center justify-between">
-                  <Image
-                    src="/icons/location.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  ></Image>
+                <TopicsContainer className="flex items-center justify-start">
                   <p>Multidisciplinary Design</p>
                 </TopicsContainer>
               </div>
               <div className="mt-6">
-                <TopicsContainer className="flex items-center justify-between">
-                  <Image
-                    src="/icons/location.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  ></Image>
+                <TopicsContainer className="flex items-center justify-start">
                   <p>Cybersecurity</p>
                 </TopicsContainer>
               </div>
               <div>
-                <TopicsContainer className="flex items-center justify-between">
-                  <Image
-                    src="/icons/location.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  ></Image>
+                <TopicsContainer className="flex items-center justify-start">
                   <p>Low and No Code</p>
                 </TopicsContainer>
               </div>
               <div className="mt-6">
-                <TopicsContainer className="flex items-center justify-between">
-                  <Image
-                    src="/icons/location.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  ></Image>
+                <TopicsContainer className="flex items-center justify-start">
                   <p>Digital Marketing</p>
                 </TopicsContainer>
               </div>
               <div>
                 <TopicsContainer className="flex items-center justify-between">
-                  <Image
-                    src="/icons/location.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  ></Image>
                   <p>Software Engineering</p>
                 </TopicsContainer>
               </div>
               <div className="mt-6">
                 <TopicsContainer className="flex items-center justify-between">
-                  <Image
-                    src="/icons/location.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                  ></Image>
                   <p>Project Management</p>
                 </TopicsContainer>
               </div>

@@ -15,7 +15,7 @@ const Hackathon = () => {
           </div>
           <div className="flex items-center gap-2">
             <p className="underline underline-offset-4">
-              <a href="https://gdsc.community.dev/e/mbnwyd/" target="_blank">
+              <a href="https://forms.gle/CJgRwNRQu8binh2B7" target="_blank">
                 Register Here
               </a>
             </p>
