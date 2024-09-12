@@ -41,7 +41,7 @@ const Topics = () => {
                     width={24}
                     height={24}
                   ></Image>
-                  <p>129c Aka road, Uyo</p>
+                  <p>Career Growth</p>
                 </TopicsContainer>
               </div>
               <div className="mt-6">
@@ -52,7 +52,7 @@ const Topics = () => {
                     width={24}
                     height={24}
                   ></Image>
-                  <p>129c Aka road, Uyo</p>
+                  <p>Artificial Intelligence</p>
                 </TopicsContainer>
               </div>
               <div>
@@ -63,7 +63,7 @@ const Topics = () => {
                     width={24}
                     height={24}
                   ></Image>
-                  <p>129c Aka road, Uyo</p>
+                  <p>Multidisciplinary Design</p>
                 </TopicsContainer>
               </div>
               <div className="mt-6">
@@ -74,7 +74,7 @@ const Topics = () => {
                     width={24}
                     height={24}
                   ></Image>
-                  <p>129c Aka road, Uyo</p>
+                  <p>Cybersecurity</p>
                 </TopicsContainer>
               </div>
               <div>
@@ -85,7 +85,7 @@ const Topics = () => {
                     width={24}
                     height={24}
                   ></Image>
-                  <p>129c Aka road, Uyo</p>
+                  <p>Low and No Code</p>
                 </TopicsContainer>
               </div>
               <div className="mt-6">
@@ -96,7 +96,7 @@ const Topics = () => {
                     width={24}
                     height={24}
                   ></Image>
-                  <p>129c Aka road, Uyo</p>
+                  <p>Digital Marketing</p>
                 </TopicsContainer>
               </div>
               <div>
@@ -107,7 +107,7 @@ const Topics = () => {
                     width={24}
                     height={24}
                   ></Image>
-                  <p>129c Aka road, Uyo</p>
+                  <p>Software Engineering</p>
                 </TopicsContainer>
               </div>
               <div className="mt-6">
@@ -118,7 +118,7 @@ const Topics = () => {
                     width={24}
                     height={24}
                   ></Image>
-                  <p>129c Aka road, Uyo</p>
+                  <p>Project Management</p>
                 </TopicsContainer>
               </div>
             </div>

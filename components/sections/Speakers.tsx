@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Speakers() {
   return (
-    <section className="py-12">
+    <section className="py-12" id="Speakers">
       <h2 className="font-bold text-2xl text-[#101828] mb-3 lg:text-5xl text-center">
         Speakers
       </h2>
