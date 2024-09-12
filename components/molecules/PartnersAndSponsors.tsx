@@ -5,7 +5,7 @@ import SecondButton from "../sections/buttons/SecondButton";
 type ImageEntity = {
   title: string;
   image: string;
-  website: string
+  website?: string
 };
 
 const PartnersAndSponsors = ({
