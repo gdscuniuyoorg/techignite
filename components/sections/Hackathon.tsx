@@ -9,8 +9,7 @@ const Hackathon = () => {
           <div className="text-justify font-inter lg:w-[376px] w-full">
             <h2 className="font-bold text-2xl">Hackathon</h2>
             <p className="lg:pt-8 pt-3 text-[16px]">
-              {`Whether you're a complete beginner or looking to take your skills
-              to the next level, Tech Ignite has something for you!`}
+              {`Whether you’re a coding pro or simply passionate about creating something amazing, this is your chance to shine and win big! Sign up for our hackathon and join us in developing innovative projects  that advance education. `}
             </p>
           </div>
           <div className="flex items-center gap-2">
