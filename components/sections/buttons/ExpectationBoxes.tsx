@@ -13,7 +13,7 @@ const ExpectationBoxes: React.FC<ExpectationBoxesProps> = ({
 
   return (
     <div
-      className={`bg-[#D4E4FF]/60 bg-expectationsPattern w-[100%] h-[295px] rounded-[32px] p-5 ${className}`}
+      className={`bg-[#D4E4FF]/60 bg-expectationsPattern w-[100%] h-auto rounded-[32px] p-5 ${className}`}
     >
       {children}
     </div>

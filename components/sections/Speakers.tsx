@@ -9,9 +9,9 @@ export default function Speakers() {
         Speakers
       </h2>
       <p className="text-[#475467] text-sm lg:text-xl text-center mx-auto mb-16">
-        Whether you&apos;re a complete beginner or looking to{" "}
+        Our lineup features seasoned experts who will share their extensive knowledge on careers, tech, and education.
         <br className="hidden lg:block" />
-        take your skills to the next level.
+        Get ready to gain valuable insights from the best in the field.
       </p>
       <div className="overflow-x-auto flex flex-col hide-scrollbar lg:!ml-[130px] !pr-0 !mr-0">
         <div className="flex flex-row mt-10 gap-10">
@@ -29,7 +29,7 @@ export default function Speakers() {
                 </div>
                 <div className="text-center mt-4 font-product-sans">
                   <p className="font-bold text-xl lg:text-2xl mb-3 text-[#130E09]">
-                    {speaker.speaker }
+                    {speaker.speaker}
                   </p>
                   <p className="text-[#212529] text-sm lg:text-base">
                     {speaker.title}
