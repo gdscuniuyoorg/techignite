@@ -14,11 +14,11 @@ export default function Speakers() {
         <br className="hidden lg:block" />
         Get ready to gain valuable insights from the best in the field.
       </p>
-      <div className="overflow-x-auto flex flex-col hide-scrollbar lg:!ml-[130px] !pr-0 !mr-0">
+      <div className="overflow-x-auto flex flex-col hide-scrollbar lg:!ml-[130px] !pr-0 !mr-0" role="list" aria-label="Speakers">
         <div className="flex flex-row mt-10 gap-10">
           {speakers.map((speaker, i) => {
             return (
-              <div className="w-full lg:w-[379px]" key={i}>
+              <article className="w-full lg:w-[379px] transition duration-300 hover:shadow-lg" key={i} role="listitem">
                 <div className="bg-white rounded-3xl object-contain overflow-hidden items-center flex justify-center p-5 w-[331px] h-[293px]">
                   <Image
                     src={speaker.image}
@@ -26,6 +26,7 @@ export default function Speakers() {
                     width={400}
                     height={243}
                     className="object-cover w-[331px] h-[243px]"
+                    loading="lazy"
                   />
                 </div>
                 <div className="text-center mt-4 font-product-sans">
@@ -36,7 +37,7 @@ export default function Speakers() {
                     {speaker.title}
                   </p>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>

@@ -1,4 +1,3 @@
-import PartnersAndSponsors from "../molecules/PartnersAndSponsors";
 import { sponsors } from "@/constants/partnersAndSponsors";
 import Image from "next/image";
 import SecondButton from "./buttons/SecondButton";
