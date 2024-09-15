@@ -4,112 +4,84 @@ import Image from "next/image";
 import ExpectationBoxes from "./buttons/ExpectationBoxes";
 import Hackathon from "./Hackathon";
 
-const Expectations = () => {
+const expectationItems = [
+  {
+    icon: "/icons/third.svg",
+    title: "Interactive Workshops",
+    description:
+      "Join our interactive workshops to learn, connect, and grow with tech experts. Participate in practical sessions on the latest tools, trends, and best practices in the Tech industry.",
+  },
+  {
+    icon: "/icons/second.svg",
+    title: "Learn in-demand Tech skills",
+    description:
+      "Gain the tech skills that are driving the industry forward. Elevate your career by learning the tools and expertise that employers are looking for in today's fast-paced tech world.",
+  },
+  {
+    icon: "/icons/first.svg",
+    title: "Network with people",
+    description:
+      "Meet and connect with professionals from various tech fields. Engage with like-minded individuals, exchange ideas, and build lasting collaborations that can drive your career forward.",
+  },
+  {
+    icon: "/icons/fourth.svg",
+    title: "Discover opportunities",
+    description:
+      "Your next big career move could start here. Don't miss out on the chance to uncover exciting opportunities and make valuable connections.",
+  },
+];
+
+const Expectations: React.FC = () => {
   return (
-    <div className="container w-full py-10 ">
+    <section className="container w-full py-10 px-4 md:px-8">
       <h2 className="font-bold text-2xl text-[#101828] mb-3 lg:text-5xl text-center">
         What you should expect
       </h2>
-      <p className="text-[#475467] pt-5 text-sm lg:text-xl text-center mx-auto mb-16">
-        {`At Tech Ignite, you'll encounter professionals from diverse tech fields. `}       <br className="hidden lg:block" />Who knows? You might even meet your next employer.
+      <p className="text-[#475467] pt-5 text-base lg:text-xl text-center mx-auto mb-16 max-w-3xl">
+        {`At Tech Ignite, you'll encounter professionals from diverse tech fields.`}
+        <br className="hidden lg:block" />
+        {`Who knows? You might even meet your next employer.`}
       </p>
       <Hackathon />
-      <div className="flex flex-col-reverse w-full gap-4 lg:flex-row justify-between lg:gap-20">
-        <div className="w-full h-[622px] bg-[#4285F4] rounded-[32px] pt-[35px] lg:w-[40%]">
-          <div className=" bg-black/90 bg-heroPattern w-[90%] h-[587px] m-auto rounded-[24px] text-white flex flex-col items-center justify-center">
-            <div className="text-center font-inter">
-              <h2 className="text-[20px] font-bold">There’s a lot to unpack</h2>
-              <p className="text-[16px] py-5">
-                {`We have an exciting lineup in store for you!`} <br />
-                After an amazing event last year, we’re back with even bigger and better experiences. <br />
-                Don’t miss out!
-              </p>
-
-              <a
-                href="https://lu.ma/event/evt-UkQmzgDlFU4DNoy"
-                // className="luma-checkout--button"
-                data-luma-action="checkout"
-                data-luma-event-id="evt-UkQmzgDlFU4DNoy"
-              >
-                <SecondButton>Register Now</SecondButton>
-              </a>
-              {/* <a href="https://gdsc.community.dev/e/m5hskb/" target="_blank">
-                <SecondButton>Register Now</SecondButton>
-              </a> */}
-
-              <p className="pt-5">Registration is free</p>
-              <div className=" flex items-center justify-center pt-3">
-                <Image
-                  src="/icons/lightening.svg"
-                  alt="Tech Ignite Lightening"
-                  width={167.5}
-                  height={21.5}
-                ></Image>
-              </div>
-            </div>
+      <div className="flex flex-col-reverse lg:flex-row justify-between gap-8 lg:gap-20">
+        <div className="w-full lg:w-2/5 bg-[#4285F4] rounded-3xl p-4">
+          <div className="bg-black/90 bg-heroPattern w-full h-full rounded-2xl text-white flex flex-col items-center justify-center p-8">
+            <h2 className="text-2xl font-bold mb-4">{`There's a lot to unpack`}</h2>
+            <p className="text-lg text-center mb-6">
+              {`We have an exciting lineup in store for you! After an amazing
+              event last year, we're back with even bigger and better
+              experiences. Don't miss out!`}
+            </p>
+            <a
+              href="https://lu.ma/event/evt-UkQmzgDlFU4DNoy"
+              data-luma-action="checkout"
+              data-luma-event-id="evt-UkQmzgDlFU4DNoy"
+              className="mb-6"
+            >
+              <SecondButton>Register Now</SecondButton>
+            </a>
+            <p className="text-lg mb-4">Registration is free</p>
+            <Image
+              src="/icons/lightening.svg"
+              alt="Tech Ignite Lightening"
+              width={167.5}
+              height={21.5}
+            />
           </div>
         </div>
-        <div className="[w-60%] pt-2 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:pt-5">
-          <ExpectationBoxes>
-            <div className="flex flex-col items-center justify-center text-center">
-              <Image
-                src="/icons/third.svg"
-                alt=""
-                width={113}
-                height={113}
-              ></Image>
-              <h3 className="text-[20px] font-bold py-3">
-                Interactive Workshops
-              </h3>
-              <p>{`Join our interactive workshops to learn, connect, and grow with tech experts. Participate in practical sessions on the latest tools, trends, and best practices in the Tech industry. Whether you're sharpening your skills or expanding your knowledge, these workshops provide valuable insights and networking opportunities.`}</p>
-            </div>
-          </ExpectationBoxes>
-          <ExpectationBoxes>
-            <div className="flex flex-col items-center justify-center text-center">
-              <Image
-                src="/icons/second.svg"
-                alt=""
-                width={113}
-                height={113}
-              ></Image>
-              <h3 className="text-[20px] font-bold py-3">
-                Learn in-demand Tech skills
-              </h3>
-              <p>{`Gain the tech skills that are driving the industry forward. Elevate your career by learning the tools and expertise that employers are looking for in today’s fast-paced tech world.`}</p>
-            </div>
-          </ExpectationBoxes>
-          <ExpectationBoxes>
-            <div className="flex flex-col items-center justify-center text-center">
-              <Image
-                src="/icons/first.svg"
-                alt=""
-                width={113}
-                height={113}
-              ></Image>
-              <h3 className="text-[20px] font-bold py-3">
-                Network with people
-              </h3>
-              <p>{`Meet and connect with professionals from various tech fields. Engage with like-minded individuals, exchange ideas, and build lasting collaborations that can drive your career forward.`}</p>
-            </div>
-          </ExpectationBoxes>
-          <ExpectationBoxes>
-            {" "}
-            <div className="flex flex-col items-center justify-center text-center">
-              <Image
-                src="/icons/fourth.svg"
-                alt=""
-                width={113}
-                height={113}
-              ></Image>
-              <h3 className="text-[20px] font-bold py-3">
-                Discover opportunities
-              </h3>
-              <p>{`Your next big career move could start here. Don’t miss out on the chance to uncover exciting opportunities and make valuable connections.`}</p>
-            </div>
-          </ExpectationBoxes>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:w-3/5">
+          {expectationItems.map((item, index) => (
+            <ExpectationBoxes key={index}>
+              <div className="flex flex-col items-center text-center">
+                <Image src={item.icon} alt="" width={113} height={113} />
+                <h3 className="text-xl font-bold py-3">{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+            </ExpectationBoxes>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
