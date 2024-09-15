@@ -38,19 +38,19 @@ const Expectations: React.FC = () => {
         What you should expect
       </h2>
       <p className="text-[#475467] pt-5 text-base lg:text-xl text-center mx-auto mb-16 max-w-3xl">
-        At Tech Ignite, you'll encounter professionals from diverse tech fields.
+        {`At Tech Ignite, you'll encounter professionals from diverse tech fields.`}
         <br className="hidden lg:block" />
-        Who knows? You might even meet your next employer.
+        {`Who knows? You might even meet your next employer.`}
       </p>
       <Hackathon />
       <div className="flex flex-col-reverse lg:flex-row justify-between gap-8 lg:gap-20">
         <div className="w-full lg:w-2/5 bg-[#4285F4] rounded-3xl p-4">
           <div className="bg-black/90 bg-heroPattern w-full h-full rounded-2xl text-white flex flex-col items-center justify-center p-8">
-            <h2 className="text-2xl font-bold mb-4">There's a lot to unpack</h2>
+            <h2 className="text-2xl font-bold mb-4">{`There's a lot to unpack`}</h2>
             <p className="text-lg text-center mb-6">
-              We have an exciting lineup in store for you! After an amazing
+              {`We have an exciting lineup in store for you! After an amazing
               event last year, we're back with even bigger and better
-              experiences. Don't miss out!
+              experiences. Don't miss out!`}
             </p>
             <a
               href="https://lu.ma/event/evt-UkQmzgDlFU4DNoy"
