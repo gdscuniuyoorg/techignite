@@ -11,9 +11,7 @@ const Expectations = () => {
         What you should expect
       </h2>
       <p className="text-[#475467] pt-5 text-sm lg:text-xl text-center mx-auto mb-16">
-        Whether you&apos;re a complete beginner or looking to{" "}
-        <br className="hidden lg:block" />
-        take your skills to the next level.
+        {`At Tech Ignite, you'll encounter professionals from diverse tech fields. `}       <br className="hidden lg:block" />Who knows? You might even meet your next employer.
       </p>
       <Hackathon />
       <div className="flex flex-col-reverse w-full gap-4 lg:flex-row justify-between lg:gap-20">
@@ -22,9 +20,9 @@ const Expectations = () => {
             <div className="text-center font-inter">
               <h2 className="text-[20px] font-bold">There’s a lot to unpack</h2>
               <p className="text-[16px] py-5">
-                {`Whether you're a complete`} <br />
-                beginner or looking to take your skills <br />
-                to the next level.
+                {`We have an exciting lineup in store for you!`} <br />
+                After an amazing event last year, we’re back with even bigger and better experiences. <br />
+                Don’t miss out!
               </p>
 
               <a
@@ -63,7 +61,7 @@ const Expectations = () => {
               <h3 className="text-[20px] font-bold py-3">
                 Interactive Workshops
               </h3>
-              <p>{`Whether you're a complete beginner or looking to take your`}</p>
+              <p>{`Join our interactive workshops to learn, connect, and grow with tech experts. Participate in practical sessions on the latest tools, trends, and best practices in the Tech industry. Whether you're sharpening your skills or expanding your knowledge, these workshops provide valuable insights and networking opportunities.`}</p>
             </div>
           </ExpectationBoxes>
           <ExpectationBoxes>
@@ -77,7 +75,7 @@ const Expectations = () => {
               <h3 className="text-[20px] font-bold py-3">
                 Learn in-demand Tech skills
               </h3>
-              <p>{`Whether you're a complete beginner or looking to take your`}</p>
+              <p>{`Gain the tech skills that are driving the industry forward. Elevate your career by learning the tools and expertise that employers are looking for in today’s fast-paced tech world.`}</p>
             </div>
           </ExpectationBoxes>
           <ExpectationBoxes>
@@ -91,7 +89,7 @@ const Expectations = () => {
               <h3 className="text-[20px] font-bold py-3">
                 Network with people
               </h3>
-              <p>{`Whether you're a complete beginner or looking to take your`}</p>
+              <p>{`Meet and connect with professionals from various tech fields. Engage with like-minded individuals, exchange ideas, and build lasting collaborations that can drive your career forward.`}</p>
             </div>
           </ExpectationBoxes>
           <ExpectationBoxes>
@@ -106,7 +104,7 @@ const Expectations = () => {
               <h3 className="text-[20px] font-bold py-3">
                 Discover opportunities
               </h3>
-              <p>{`Whether you're a complete beginner or looking to take your`}</p>
+              <p>{`Your next big career move could start here. Don’t miss out on the chance to uncover exciting opportunities and make valuable connections.`}</p>
             </div>
           </ExpectationBoxes>
         </div>
