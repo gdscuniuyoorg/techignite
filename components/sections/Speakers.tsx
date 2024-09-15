@@ -4,12 +4,13 @@ import React from "react";
 
 export default function Speakers() {
   return (
-    <section className="py-12" id="Speakers">
+    <section className="py-12 " id="Speakers">
       <h2 className="font-bold text-2xl text-[#101828] mb-3 lg:text-5xl text-center">
         Speakers
       </h2>
-      <p className="text-[#475467] text-sm lg:text-xl text-center mx-auto mb-16">
-        Our lineup features seasoned experts who will share their extensive knowledge on careers, tech, and education.
+      <p className="text-[#475467] text-[1rem] lg:text-xl text-center mx-auto mb-16">
+        Our lineup features seasoned experts who will share their extensive
+        knowledge on careers, tech, and education.
         <br className="hidden lg:block" />
         Get ready to gain valuable insights from the best in the field.
       </p>
