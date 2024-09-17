@@ -16,8 +16,9 @@ export default function Hero() {
       </div>
       <div className="pb-10">
         <p className=" text-center text-[20px] leading-[28px] text-[#495057]">
-          Join us at GDSC University of Uyo Tech Ignite, a one-day event
-          designed to spark <br className="hidden lg:block" />
+          Join us this october for a one-day tech conference held in
+          collaboration with GDG On Campus UNIUYO community, designed to spark{" "}
+          <br className="hidden lg:block" />
           your interest in the ever-evolving world of tech.
         </p>
       </div>
