@@ -3,9 +3,13 @@ import TopicsContainer from "./buttons/TopicsContainerr";
 import Image from "next/image";
 
 const topicItems = [
+  "Virtual Assistant📋",
+  "Content Writing📝",
   "Cloud Computing☁️",
   "Blockchain💎",
   "Cybersecurity🔒",
+  "Digital Marketing💻",
+  "Project Management💼",
   "AI and ML🤖",
   "Andriod Development📱",
   "Web Development🌐",
@@ -13,7 +17,6 @@ const topicItems = [
   "Data Science📊",
   "Game Development🎮",
   "DevOps🛠️",
-  "IoT (Internet of things)",
 ];
 
 const TopicItem = ({ text, index }: { text: string; index: number }) => (
