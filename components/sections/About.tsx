@@ -11,13 +11,16 @@ export default function About() {
               About Tech Ignite
             </h2>
             <div className="lg:w-[480px] text-xs sm:text-sm lg:text-xl flex flex-col">
-              <p>Tech Ignite</p>
-              <p>One event, featuring:</p>
+              <p>
+                A tech conference held in collaboration with GDG On Campus
+                UNIUYO community
+              </p>
+              <p className="text-[#FBBC04] font-bold mt-[1.5rem]">Featuring:</p>
               <p>3 speakers</p>
-              <p>5  panelists</p>
+              <p>5 panelists</p>
               <p>1,000+ attendees</p>
             </div>
-          </div >
+          </div>
           <div className="mr-8 sm:mr-14 bg-[#FBBC04] py-5 mb-10 lg:mb-24 rounded-tr-full rounded-br-full">
             <div className="w-max mx-auto flex items-center space-x-2">
               <div className="w-4 h-4 lg:w-8 lg:h-8">
@@ -29,7 +32,8 @@ export default function About() {
                 />
               </div>
               <p className="lg:text-xl sm:text-sm text-xs text-[#130E09]">
-                Innovative, Engaging, Inspiring, Collaborative, Transformative.              </p>
+                Innovative, Engaging, Inspiring, Collaborative, Transformative.{" "}
+              </p>
               <div className="w-4 h-4 lg:w-8 lg:h-8">
                 <Image
                   src="/icons/Star.svg"
@@ -40,7 +44,7 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div >
+        </div>
         <div className="lg:pr-[72px] px-6">
           <div className="bg-[#FDDD81] rounded-t-[20px] lg:rounded-t-[32px] p-4 lg:px-6 lg:py-8">
             <div className="w-[72px] h-11 lg:w-32 lg:h-20">
@@ -52,11 +56,13 @@ export default function About() {
               />
             </div>
             <p className="text-[#130E09] text-xs sm:text-sm lg:text-lg mt-3">
-              Join us for an exciting journey of discovery, networking, and learning as we bring together tech enthusiasts, developers, and creatives to explore the latest advancements in technology.
+              Join us for an exciting journey of discovery, networking, and
+              learning as we bring together tech enthusiasts, developers, and
+              creatives to explore the latest advancements in technology.
             </p>
           </div>
         </div>
-      </div >
-    </section >
+      </div>
+    </section>
   );
 }
