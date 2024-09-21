@@ -27,6 +27,10 @@ export const partners = [
     image: "/partners/ACES Logo.png",
     title: "ACES Logo",
   },
+  {
+    image: "/partners/For The Love Of Defi.png",
+    title: "ACES Logo",
+  },
 ];
 
 export const sponsors = [
