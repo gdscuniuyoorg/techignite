@@ -29,7 +29,7 @@ export const partners = [
   },
   {
     image: "/partners/For The Love Of Defi.png",
-    title: "ACES Logo",
+    title: "For The Love of Defi Logo",
   },
 ];
 
