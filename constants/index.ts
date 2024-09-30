@@ -48,4 +48,24 @@ export const speakers = [
     speaker: "Enobong Okposin",
     title: "Project/Product Manager & Chief Operations Officer, TinaPay",
   },
+  {
+    image: "/speakers/frame.jpg",
+    speaker: "",
+    title: "",
+  },
+  {
+    image: "/speakers/frame.jpg",
+    speaker: "",
+    title: "",
+  },
+  {
+    image: "/speakers/frame.jpg",
+    speaker: "",
+    title: "",
+  },
+  {
+    image: "/speakers/frame.jpg",
+    speaker: "",
+    title: "",
+  },
 ];

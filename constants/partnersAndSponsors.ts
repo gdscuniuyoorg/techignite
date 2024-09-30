@@ -35,6 +35,10 @@ export const partners = [
     image: "/partners/WeaveDB Logo.png",
     title: "WeaveDB Logo",
   },
+  {
+    image: "/partners/Starthub Logo.png",
+    title: "StartHub Logo",
+  },
 ];
 
 export const sponsors = [
