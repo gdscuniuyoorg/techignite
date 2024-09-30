@@ -39,14 +39,14 @@ export const faqs = [
 
 export const speakers = [
   {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
+    image: "/speakers/Utibe Etim.jpeg",
+    speaker: "Utibe Etim",
+    title: "GDG Uyo, Lead Organiser",
   },
   {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
+    image: "/speakers/Enobong Okposin.jpg",
+    speaker: "Enobong Okposin",
+    title: "Project/Product Manager & Chief Operations Officer, TinaPay",
   },
   {
     image: "/speakers/frame.jpg",
