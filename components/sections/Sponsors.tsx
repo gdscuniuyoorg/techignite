@@ -5,7 +5,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 const Sponsors = () => {
   return (
-    <section className="py-14 lg:px-[130px] px-[2rem] bg-heroPattern bg-[#130E09] flex flex-col md:block items-center justify-center">
+    <section className="py-14 lg:px-[130px] px-[2rem] bg-heroPattern bg-[#130E09] flex flex-col md:block items-center justify-center container">
       <div className="mb-[5rem]">
         <h2 className="font-semibold text-3xl mb-3 lg:text-5xl text-left italic text-yellow-500">
           Our Sponsors
@@ -25,7 +25,7 @@ const Sponsors = () => {
             className="cursor-pointer"
             key={i}
           >
-            <div className="bg-white rounded-3xl object-contain overflow-hidden items-center flex justify-center p-3 sm:p-4 md:p-5 lg:p-6 w-full sm:w-[200px] md:w-[240px] lg:w-[280px] xl:w-[320px] h-[140px] sm:h-[160px] md:h-[180px] lg:h-[200px]">
+            <div className="bg-white rounded-3xl object-contain overflow-hidden items-center flex justify-center p-3 sm:p-4 md:p-5 lg:p-6 h-[140px] sm:h-[160px] md:h-[180px] lg:h-[200px]">
               <Image
                 src={el.image}
                 alt={el.title}

@@ -31,6 +31,14 @@ export const partners = [
     image: "/partners/For The Love Of Defi.png",
     title: "For The Love of Defi Logo",
   },
+  {
+    image: "/partners/WeaveDB Logo.png",
+    title: "WeaveDB Logo",
+  },
+  {
+    image: "/partners/Starthub Logo.png",
+    title: "StartHub Logo",
+  },
 ];
 
 export const sponsors = [

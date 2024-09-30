@@ -68,29 +68,4 @@ export const speakers = [
     speaker: "",
     title: "",
   },
-  {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
-  },
 ];
