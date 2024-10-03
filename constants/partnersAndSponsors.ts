@@ -39,6 +39,11 @@ export const partners = [
     image: "/partners/Starthub Logo.png",
     title: "StartHub Logo",
   },
+  {
+    image: "/partners/Postman-Logo.png",
+    title: "Postman Logo",
+  },
+
 ];
 
 export const sponsors = [
