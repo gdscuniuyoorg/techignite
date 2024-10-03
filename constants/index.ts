@@ -44,20 +44,16 @@ export const speakers = [
     title: "GDG Uyo, Lead Organiser",
   },
   {
+    image: "/speakers/David Orok.jpg",
+    speaker: "David Orok",
+    title: "Technology Entrepreneur, Founder of Eelspace & Nocode Africa",
+  },
+  {
     image: "/speakers/Enobong Okposin.jpg",
     speaker: "Enobong Okposin",
     title: "Project/Product Manager & Chief Operations Officer, TinaPay",
   },
-  {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
-  },
-  {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
-  },
+
   {
     image: "/speakers/frame.jpg",
     speaker: "",
