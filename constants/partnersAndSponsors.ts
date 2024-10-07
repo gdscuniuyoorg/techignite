@@ -39,6 +39,11 @@ export const partners = [
     image: "/partners/Starthub Logo.png",
     title: "StartHub Logo",
   },
+  {
+    image: "/partners/Postman-Logo.png",
+    title: "Postman Logo",
+  },
+
 ];
 
 export const sponsors = [
@@ -61,5 +66,15 @@ export const sponsors = [
     image: "/sponsors/paystack.png",
     title: "PayStack",
     website: "https://paystack.com/",
+  },
+  {
+    image: "/sponsors/Fincra Logo.png",
+    title: "Fincra",
+    website: "https://fincra.com/",
+  },
+  {
+    image: "/sponsors/chimoney logo.jpg",
+    title: "Chimoney",
+    website: "https://chimoney.io/",
   },
 ];
