@@ -41,7 +41,7 @@ export const speakers = [
   {
     image: "/speakers/Utibe Etim.jpeg",
     speaker: "Utibe Etim",
-    title: "GDG Uyo, Lead Organiser",
+    title: "Lead Organiser, GDG Uyo",
   },
   {
     image: "/speakers/David Orok.jpg",
@@ -55,13 +55,23 @@ export const speakers = [
   },
 
   {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
+    image: "/speakers/ifiokbernard.jpg",
+    speaker: "Ifiok Bernard",
+    title: "Copywriter & Tech Content Creator",
   },
   {
-    image: "/speakers/frame.jpg",
-    speaker: "",
-    title: "",
+    image: "/speakers/Idongesit Akpan.jpg",
+    speaker: "Idongesit Akpan",
+    title: "Community Engagement Officer, iṣẹ́",
+  },
+  {
+    image: "/speakers/Nsikak Thompson.jpg",
+    speaker: "Nsikak Thompson",
+    title: "Android Engineer, League",
+  },
+  {
+    image: "/speakers/Saviour Inyang.webp",
+    speaker: "Saviour Inyang",
+    title: "Product Designer",
   },
 ];
