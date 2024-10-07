@@ -67,4 +67,14 @@ export const sponsors = [
     title: "PayStack",
     website: "https://paystack.com/",
   },
+  {
+    image: "/sponsors/Fincra Logo.png",
+    title: "Fincra",
+    website: "https://fincra.com/",
+  },
+  {
+    image: "/sponsors/chimoney logo.jpg",
+    title: "Chimoney",
+    website: "https://chimoney.io/",
+  },
 ];
