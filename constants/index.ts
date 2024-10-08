@@ -56,7 +56,7 @@ export const speakers = [
 
   {
     image: "/speakers/ifiokbernard.jpg",
-    speaker: "Ifiok Bernard",
+    speaker: "Ifioque",
     title: "Copywriter & Tech Content Creator",
   },
   {
