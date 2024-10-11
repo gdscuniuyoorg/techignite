@@ -16,9 +16,9 @@ export default function About() {
                 UNIUYO community
               </p>
               <p className="text-[#FBBC04] font-bold mt-[1.5rem]">Featuring:</p>
-              <p>3 speakers</p>
+              <p>10 speakers</p>
               <p>5 panelists</p>
-              <p>1,000+ attendees</p>
+              <p>500+ attendees</p>
             </div>
           </div>
           <div className="mr-8 sm:mr-14 bg-[#FBBC04] py-5 mb-10 lg:mb-24 rounded-tr-full rounded-br-full">
