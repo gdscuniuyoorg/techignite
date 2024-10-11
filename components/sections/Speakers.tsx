@@ -4,18 +4,18 @@ import React from "react";
 
 export default function Speakers() {
   return (
-    <section className="py-12 " id="Speakers">
+    <section className="py-12 my-16" id="Speakers">
       <h2 className="font-bold text-2xl text-[#101828] mb-3 lg:text-5xl text-center">
         Speakers
       </h2>
-      <p className="text-[#475467] text-[1rem] lg:text-xl text-center mx-auto mb-16">
+      <p className="text-[#475467] text-[1rem] lg:text-xl text-center mx-auto mb-1">
         Our lineup features seasoned experts who will share their extensive
         knowledge on careers, tech, and education.
         <br className="hidden lg:block" />
         Get ready to gain valuable insights from the best in the field.
       </p>
       <div className="overflow-x-auto flex flex-col hide-scrollbar lg:!ml-[130px] !pr-0 !mr-0" role="list" aria-label="Speakers">
-        <div className="flex flex-row mt-10 gap-10">
+        <div className="flex flex-row mt-7 gap-10">
           {speakers.map((speaker, i) => {
             return (
               <article className="w-full lg:w-[379px] transition duration-300 hover:shadow-lg" key={i} role="listitem">
