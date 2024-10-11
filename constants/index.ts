@@ -70,8 +70,13 @@ export const speakers = [
     title: "Android Engineer, League",
   },
   {
-    image: "/speakers/Saviour Inyang.webp",
+    image: "/speakers/saviour.jpeg",
     speaker: "Saviour Inyang",
     title: "Product Designer",
+  },
+  {
+    image: "/speakers/gideon.jpeg",
+    speaker: "Gideon Archibong",
+    title: "GoodTimesHub - Game Developer | Unity | Unreal | Godot | UEFN",
   },
 ];
