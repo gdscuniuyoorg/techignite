@@ -74,4 +74,9 @@ export const speakers = [
     speaker: "Saviour Inyang",
     title: "Product Designer",
   },
+  {
+    image: "/speakers/gideon.jpeg",
+    speaker: "Gideon Archibong",
+    title: "GoodTimesHub - Game Developer | Unity | Unreal | Godot | UEFN",
+  },
 ];
