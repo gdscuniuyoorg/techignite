@@ -44,6 +44,16 @@ export const speakers = [
     title: "Lead Organiser, GDG Uyo",
   },
   {
+    image: "/speakers/adora.jpg",
+    speaker: "Adora Nwodo",
+    title: "Founder of NexaScale",
+  },
+  {
+    image: "/speakers/innocent.jpeg",
+    speaker: "Innocent Onwukanjo",
+    title: "DevOps Engineer, Inhlelo Consultants",
+  },
+  {
     image: "/speakers/David Orok.jpg",
     speaker: "David Orok",
     title: "Technology Entrepreneur, Founder of Eelspace & Nocode Africa",
