@@ -70,7 +70,7 @@ export const speakers = [
     title: "Android Engineer, League",
   },
   {
-    image: "/speakers/Saviour Inyang.webp",
+    image: "/speakers/saviour.jpeg",
     speaker: "Saviour Inyang",
     title: "Product Designer",
   },
