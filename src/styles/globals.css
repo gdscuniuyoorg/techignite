@@ -82,7 +82,7 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Google Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-product-sans: 'Product Sans', 'Inter Variable', sans-serif;
 
   --color-border: hsl(var(--border));
