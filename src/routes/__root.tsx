@@ -1,4 +1,3 @@
-import LumaCheckoutScript from '@/components/molecules/Luma';
 import appCss from '@/styles/globals.css?url';
 import '@fontsource-variable/google-sans';
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
