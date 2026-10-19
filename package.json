@@ -18,6 +18,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "smoke": "node scripts/smoke.mjs",
     "check": "tsc --noEmit && eslint . && prettier --check ."
   },
   "dependencies": {
