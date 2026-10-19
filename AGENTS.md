@@ -45,6 +45,7 @@ bun run lint                 # eslint .
 bun run format               # prettier --write .
 bun run check                # typecheck + lint + format:check
 bun run build                # vite build (Nitro -> .output/)
+bun run smoke                # boot the build and verify / + CSS
 bun run start                # node .output/server/index.mjs
 ```
 
@@ -153,8 +154,8 @@ fresh-model review + docs.
 - [ ] `bun run lint` — zero errors
 - [ ] `bun run format:check` — clean
 - [ ] `bun run build` — succeeds
-- [ ] `bun run dev` — affected route renders, including the `tickets.`
-      subdomain path when touched
+- [ ] `bun run smoke` — built server serves `/` and its stylesheet
+- [ ] `bun run dev` — affected route renders
 - [ ] Edited files re-read; no debug leftovers, secrets, or placeholder code
 - [ ] Lockfile updated when dependencies changed
 

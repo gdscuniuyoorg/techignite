@@ -38,6 +38,7 @@ pnpm install --lockfile-only
 | `bun run lint`            | ESLint 10 flat config                         |
 | `bun run format`          | Prettier (with Tailwind class sorting)        |
 | `bun run check`           | Typecheck + lint + format check               |
+| `bun run smoke`           | Smoke-test the built server (`/` + CSS)       |
 
 ## Structure
 
