@@ -8,10 +8,11 @@ Last updated: 2026-10-19
 - Tailwind CSS v4 with CSS-first theme in `src/styles/globals.css`.
 - Strict TypeScript, ESLint 10 flat config, Prettier, CI workflow.
 - Bun for local installs; `pnpm-lock.yaml` as the committed lockfile.
-- Landing page and `tickets.` subdomain rendering preserved.
+- Home page content cleared to an empty shell; `tickets.` subdomain preserved.
 
 ## Next candidates
 
+- Build the new home page content.
 - Visual regression or Playwright smoke test for `/` and the tickets host.
 - Real FAQ content (currently placeholder in `src/constants/index.ts`).
 - Replace native `<img>` with a hosted image CDN if optimisation is needed.

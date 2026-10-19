@@ -19,7 +19,7 @@ flagship event.
 
 The `tickets.` subdomain is served by the same app: `src/routes/index.tsx`
 reads the `Host` header on the server and renders the embedded Luma ticket
-page instead of the landing page. Do not move that decision to the client.
+page instead of the home page. Do not move that decision to the client.
 
 ## 2. Package manager
 

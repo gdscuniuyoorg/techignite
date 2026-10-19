@@ -14,27 +14,27 @@ use pnpm.
 
 ## Load-bearing decisions
 
-| Decision              | Choice                                                                                                    | Why                                                                                    |
-| --------------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Framework             | TanStack Start 1.169 + TanStack Router 1.170 (Vite 8)                                                     | Requested migration; file-based routes mirror App Router                               |
-| React                 | React 19.3                                                                                                | Current Start/Bun guidance; required by latest tooling                                 |
-| Styling               | Tailwind CSS 4.3 via `@tailwindcss/vite`, CSS-first config                                                | Latest major; removes JS/PostCSS configs                                               |
-| TypeScript            | 5.9 with `strict` + `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, unused/return/switch checks | "Strict TypeScript checks"; 5.9 is the newest release supported by `typescript-eslint` |
-| Lint                  | ESLint 10 flat config, `typescript-eslint` strict-type-checked                                            | Type-aware, current standard                                                           |
-| Format                | Prettier 3 + `prettier-plugin-tailwindcss`                                                                | Single formatting authority                                                            |
-| Build output          | Nitro Node server (`.output/`)                                                                            | Portable; Vercel/Netlify/Railway/Node all supported                                    |
-| Local package manager | Bun                                                                                                       | Speed, per request                                                                     |
-| Committed lockfile    | `pnpm-lock.yaml` only                                                                                     | Per request; CI uses `--frozen-lockfile`                                               |
-| Fonts                 | `@fontsource-variable/inter` + local `@font-face` for Product Sans                                        | Replaces `next/font` without runtime calls                                             |
-| Images                | Native `<img>` with explicit dimensions                                                                   | Start has no image optimizer; assets are already sized                                 |
-| Scripts               | Plain async `<script>` for the Luma checkout widget                                                       | Replaces `next/script`                                                                 |
+| Decision              | Choice                                                                                                    | Why                                                                                           |
+| --------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Framework             | TanStack Start 1.169 + TanStack Router 1.170 (Vite 8)                                                     | Requested migration; file-based routes mirror App Router                                      |
+| React                 | React 19.3                                                                                                | Current Start/Bun guidance; required by latest tooling                                        |
+| Styling               | Tailwind CSS 4.3 via `@tailwindcss/vite`, CSS-first config                                                | Latest major; removes JS/PostCSS configs                                                      |
+| TypeScript            | 5.9 with `strict` + `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, unused/return/switch checks | "Strict TypeScript checks"; 5.9 is the newest release supported by `typescript-eslint`        |
+| Lint                  | ESLint 10 flat config, `typescript-eslint` strict-type-checked                                            | Type-aware, current standard                                                                  |
+| Format                | Prettier 3 + `prettier-plugin-tailwindcss`                                                                | Single formatting authority                                                                   |
+| Build output          | Nitro Node server (`.output/`)                                                                            | Portable; Vercel/Netlify/Railway/Node all supported                                           |
+| Local package manager | Bun                                                                                                       | Speed, per request                                                                            |
+| Committed lockfile    | `pnpm-lock.yaml` only                                                                                     | Per request; CI uses `--frozen-lockfile`                                                      |
+| Fonts                 | `@fontsource-variable/google-sans` + local `@font-face` for Product Sans                                  | Google Sans is OFL and on Fontsource; Product Sans is proprietary, so the committed TTFs stay |
+| Images                | Native `<img>` with explicit dimensions                                                                   | Start has no image optimizer; assets are already sized                                        |
+| Scripts               | Plain async `<script>` for the Luma checkout widget                                                       | Replaces `next/script`                                                                        |
 
 ## Route/behavior contract
 
 | Path                                   | Behavior                                                                                                                |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `/` on the apex host                   | Landing page: Navbar, Hero, Topics, Expectations, Speakers, Sponsors, Partners, About, Footer                           |
-| `/` when `Host` starts with `tickets.` | Navbar (ticket mode) + embedded Luma ticket page, Footer still present                                                  |
+| `/` on the apex host                   | Empty `<main>` (all landing content removed); no footer in the root layout                                              |
+| `/` when `Host` starts with `tickets.` | Navbar (ticket mode) + embedded Luma ticket page; no footer                                                             |
 | Any host                               | Document head sets title `Tech Ignite` and description `Built by GDSC Uniuyo`; favicons and web manifest from `public/` |
 
 Existing anchors (`#About`, `#Speakers`, `#Sponsors`), outbound links,
@@ -59,7 +59,7 @@ redesign is in scope.
 2. `bun run lint` exits 0 under ESLint 10 flat config.
 3. `bun run format:check` exits 0.
 4. `bun run build` produces `.output/server/index.mjs`.
-5. `bun run dev` serves `/` with SSR HTML containing the hero copy; requesting
+5. `bun run dev` serves `/` with an empty main element; requesting
    `/` with `Host: tickets.techignite.live` renders the ticket iframe.
 6. No `next/*` imports, no `'use client'`, no Tailwind JS config remain.
 7. `pnpm install --frozen-lockfile` succeeds from a clean checkout.
@@ -92,3 +92,5 @@ Known notes:
   cleanly on ESLint 10; lint output is the source of truth.
 - `@vitejs/plugin-react` is declared as `^6.1.1`; the lockfile pins the
   currently published 6.1.2.
+- Home page content is intentionally empty as of this change; all section
+  components remain in `src/components/sections` for reuse.

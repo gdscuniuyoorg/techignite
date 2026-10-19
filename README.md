@@ -44,8 +44,8 @@ pnpm install --lockfile-only
 ```text
 src/
   routes/            # TanStack Router file-based routes
-    __root.tsx       # document shell (head, footer, Luma script)
-    index.tsx        # landing page + tickets subdomain branch
+    __root.tsx       # document shell (head, Luma script)
+    index.tsx        # empty home shell + tickets subdomain branch
   components/
     sections/        # page sections (Hero, Speakers, ...)
     molecules/       # shared composed UI
@@ -56,11 +56,19 @@ src/
 public/              # static assets (images, icons, fonts)
 ```
 
+## Fonts
+
+- **Google Sans** — `@fontsource-variable/google-sans` (OFL-1.1), used for
+  body and UI text.
+- **Product Sans** — proprietary; not available on Fontsource. The TTFs in
+  `public/custom-font/product-sans/` are self-hosted and applied with the
+  `font-product-sans` utility.
+
 ## Subdomains
 
 The root route reads the `Host` header on the server. Requests where the host
 starts with `tickets.` render the embedded Luma ticket page instead of the
-landing page. This requires a server runtime (Nitro output), not static
+home page. This requires a server runtime (Nitro output), not static
 hosting.
 
 ## Deployment
