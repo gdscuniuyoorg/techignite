@@ -1,0 +1,10 @@
+node_modules
+.output
+dist
+build
+coverage
+.vite
+public
+pnpm-lock.yaml
+src/routeTree.gen.ts
+.vscode
