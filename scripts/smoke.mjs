@@ -52,8 +52,8 @@ try {
   }
 
   const html = await home.text();
-  if (!html.includes('Welcome to Tech Ignite26')) {
-    fail('home page is missing the expected heading');
+  if (!html.includes('Are you actually Building?') || !html.includes('main-content')) {
+    fail('home page is missing the expected Tech Ignite content');
   }
 
   const stylesheet = html.match(/href="([^"]+\.css)"/)?.[1];

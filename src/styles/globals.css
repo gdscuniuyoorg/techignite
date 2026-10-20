@@ -1,8 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @font-face {
   font-family: 'Product Sans';
   src: url('/custom-font/product-sans/Product-Sans-Regular.ttf') format('truetype');
@@ -19,171 +17,130 @@
   font-display: swap;
 }
 
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
-
-  --radius: 0.5rem;
-}
-
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
-}
-
-@theme inline {
+/*
+ * Tech Ignite '26 design tokens.
+ * Palettes are sampled from the event art direction: off-black canvas,
+ * paper sections, a cream hero arch, and blue / green / amber accents.
+ */
+@theme {
+  /* Type */
   --font-sans: 'Google Sans Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-product-sans: 'Product Sans', 'Inter Variable', sans-serif;
+  --font-display: 'Google Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-product-sans: 'Product Sans', 'Google Sans Variable', sans-serif;
 
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
+  /* Brand palette */
+  --color-ink: #050505;
+  --color-ink-raised: #171717;
+  --color-ink-soft: #202020;
+  --color-paper: #ffffff;
+  --color-brand-blue: #2f6fed;
+  --color-brand-blue-strong: #2459c9;
+  --color-brand-blue-soft: #8db2ff;
+  --color-brand-blue-pale: #d7e4ff;
+  --color-brand-green: #0a7a3c;
+  --color-brand-green-bright: #22c55e;
+  --color-brand-amber: #ffb020;
+  --color-brand-cream: #ffe08a;
+  --color-brand-cream-deep: #f2c95f;
+  --color-brand-red: #e1493c;
+  --color-mist: #f2f4f7;
+  --color-line: #2a2a2a;
+  --color-line-light: #e4e7ec;
 
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
+  /* Semantic roles */
+  --color-background: var(--color-ink);
+  --color-foreground: var(--color-paper);
+  --color-surface: var(--color-ink-raised);
+  --color-surface-raised: var(--color-ink-soft);
+  --color-muted: #a3a3a3;
+  --color-muted-dark: #525252;
+  --color-border: var(--color-line);
+  --color-border-light: var(--color-line-light);
+  --color-primary: var(--color-brand-blue);
+  --color-primary-foreground: var(--color-paper);
+  --color-accent: var(--color-brand-cream);
+  --color-accent-foreground: var(--color-ink);
+  --color-ring: var(--color-brand-blue);
 
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  /* Radii */
+  --radius-card: 1rem;
+  --radius-panel: 1.5rem;
+  --radius-pill: 9999px;
 
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
-  }
+  /* Display scale */
+  --text-display: clamp(3.5rem, 9vw, 8rem);
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.05em;
+  --text-heading: clamp(2.35rem, 4.6vw, 4.25rem);
+  --text-heading--line-height: 1.02;
+  --text-heading--letter-spacing: -0.035em;
+  --text-subheading: clamp(1.5rem, 2.4vw, 2rem);
+  --text-subheading--line-height: 1.15;
+  --text-stat: clamp(3.5rem, 7vw, 6.5rem);
+  --text-stat--line-height: 0.9;
+  --text-stat--letter-spacing: -0.04em;
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-background font-sans text-foreground antialiased;
   }
+
+  ::selection {
+    @apply bg-brand-blue text-white;
+  }
+
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
 }
 
+/* Shared page container. */
 .container {
-  max-width: 1215px;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
 }
 
-@media (min-width: 576px) {
-  .container {
-    width: 540px;
-  }
+/* Topographic contour texture used inside the hero arch. */
+.arch-contour {
+  background-color: var(--color-brand-cream);
+  background-image:
+    repeating-radial-gradient(
+      ellipse 70% 60% at 46% 108%,
+      transparent 0 26px,
+      color-mix(in srgb, var(--color-brand-cream-deep) 48%, transparent) 27px 28px,
+      transparent 29px 54px
+    ),
+    repeating-radial-gradient(
+      ellipse 46% 38% at 78% 18%,
+      transparent 0 32px,
+      color-mix(in srgb, var(--color-brand-cream-deep) 28%, transparent) 33px 34px,
+      transparent 35px 66px
+    );
 }
 
-@media (min-width: 768px) {
-  .container {
-    width: 75%;
-  }
+/* Hide scrollbars on intentional horizontal galleries. */
+.scrollbar-none {
+  scrollbar-width: none;
 }
 
-@media (min-width: 992px) {
-  .container {
-    width: 83%;
-  }
-}
-
-@media (min-width: 1200px) {
-  .container {
-    width: 93%;
-  }
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-::-webkit-scrollbar {
+.scrollbar-none::-webkit-scrollbar {
   display: none;
 }

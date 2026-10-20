@@ -7,9 +7,20 @@ export const Route = createRootRoute({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Tech Ignite' },
-      { name: 'description', content: 'Built by GDSC Uniuyo' },
-      { name: 'theme-color', content: '#f5f9fe' },
+      { title: "Tech Ignite '26 — Are you actually Building?" },
+      {
+        name: 'description',
+        content:
+          "Join 1,500+ students, developers, and creators at Tech Ignite '26. 20 November 2026, University of Uyo.",
+      },
+      { name: 'theme-color', content: '#050505' },
+      { property: 'og:title', content: "Tech Ignite '26 — Are you actually Building?" },
+      {
+        property: 'og:description',
+        content:
+          'The annual GDSC UNIUYO flagship tech conference. 20 November 2026, University of Uyo.',
+      },
+      { property: 'og:type', content: 'website' },
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
@@ -43,7 +54,7 @@ function RootComponent() {
       <head>
         <HeadContent />
       </head>
-      <body className="bg-[#f5f9fe]">
+      <body className="bg-ink text-paper">
         <Outlet />
         <Scripts />
       </body>
