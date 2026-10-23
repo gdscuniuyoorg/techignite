@@ -1,4 +1,5 @@
 import { Navbar } from '@/features/landing/components/navbar';
+import { Footer } from '@/features/landing/components/footer';
 import appCss from '@/styles/globals.css?url';
 import '@fontsource-variable/google-sans';
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
@@ -53,6 +54,7 @@ function RootComponent() {
       <body className="bg-ink text-paper">
         <Navbar />
         <Outlet />
+        <Footer />
         <Scripts />
       </body>
     </html>

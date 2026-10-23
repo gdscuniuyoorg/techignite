@@ -1,29 +1,6 @@
 import { useState } from 'react';
-import { AnimatePresence, motion, stagger, type Variants } from 'framer-motion';
 import { Minus, Plus } from 'lucide-react';
 import { faqItems } from '@/utils/faq';
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      delayChildren: stagger(0.1),
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
 
 export function Faq() {
   const [openId, setOpenId] = useState<string | null>('vip-seating');
@@ -33,27 +10,22 @@ export function Faq() {
   };
 
   return (
-    <section
-      id="faq"
-      aria-labelledby="faq-title"
-      className="bg-ink py-16 sm:py-20 lg:py-24"
-    >
+    <section id="faq" aria-labelledby="faq-title" className="bg-ink py-20 sm:py-24">
       <div className="container">
-        {/* Top Eyebrow Divider */}
-        <div className="border-t border-border pt-6 sm:pt-8">
+        {/* Top eyebrow divider */}
+        <div className="border-t border-border pt-7 sm:pt-8">
           <p className="flex items-center gap-2.5 text-xs font-medium tracking-[0.14em] text-white uppercase sm:text-[13px]">
             <span aria-hidden="true" className="size-2 shrink-0 bg-primary" />
-            FREQUENTLY ASKED QUESTIONS
+            Frequently asked questions
           </p>
         </div>
 
-        {/* 2-Column Layout */}
-        <div className="mt-14 grid grid-cols-1 gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-16 xl:gap-20">
-          {/* Left: Heading */}
-          <div className="lg:col-span-5">
+        {/* Two-column layout */}
+        <div className="mt-12 grid grid-cols-1 gap-12 md:mt-14 md:grid-cols-2 md:gap-2.5">
+          <div>
             <h2
               id="faq-title"
-              className="sticky top-28 font-sans text-[36px] leading-[1.12] font-normal tracking-[-0.03em] text-white sm:text-[46px] lg:text-[54px] xl:text-[60px]"
+              className="font-sans text-[36px] leading-[1.1] font-normal tracking-[-0.03em] text-white sm:text-[46px] md:sticky md:top-28 md:text-[54px]"
             >
               Everything you
               <br />
@@ -61,70 +33,62 @@ export function Faq() {
             </h2>
           </div>
 
-          {/* Right: Accordion Cards */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={containerVariants}
-            className="space-y-4 lg:col-span-7"
-          >
+          <div className="space-y-2">
             {faqItems.map((item) => {
               const isOpen = openId === item.id;
 
               return (
-                <motion.div
+                <div
                   key={item.id}
-                  variants={itemVariants}
-                  className="overflow-hidden rounded-[20px] bg-[#131313] transition-colors hover:bg-[#181818]"
+                  className="overflow-hidden rounded-2xl bg-[#131313] transition-colors hover:bg-[#181818]"
                 >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      toggleItem(item.id);
-                    }}
-                    aria-expanded={isOpen}
-                    aria-controls={`faq-answer-${item.id}`}
-                    className="flex w-full cursor-pointer items-start justify-between gap-4 p-6 sm:px-7 sm:py-6"
-                  >
-                    <span className="pt-2 text-left font-sans text-base leading-snug font-normal text-white sm:text-[18px]">
-                      {item.question}
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className={`flex size-11 shrink-0 items-center justify-center rounded-full transition-colors ${
-                        isOpen
-                          ? 'bg-paper text-ink'
-                          : 'bg-primary text-primary-foreground hover:bg-brand-blue-strong'
-                      }`}
+                  <h3>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toggleItem(item.id);
+                      }}
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-answer-${item.id}`}
+                      className="flex w-full cursor-pointer items-start justify-between gap-4 px-4 py-5 text-left md:px-5"
                     >
-                      {isOpen ? (
-                        <Minus className="size-5" />
-                      ) : (
-                        <Plus className="size-5" />
-                      )}
-                    </span>
-                  </button>
-
-                  <AnimatePresence initial={false}>
-                    {isOpen ? (
-                      <motion.div
-                        id={`faq-answer-${item.id}`}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      <span className="font-sans text-base leading-[1.3] font-normal text-white md:text-[17px]">
+                        {item.question}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className={`flex size-10 shrink-0 items-center justify-center rounded-full transition-colors md:size-11 ${
+                          isOpen
+                            ? 'bg-paper text-ink'
+                            : 'bg-primary text-primary-foreground hover:bg-brand-blue-strong'
+                        }`}
                       >
-                        <div className="px-6 pt-0 pb-7 text-sm leading-relaxed text-[#a3a3a3] sm:px-7 sm:text-[15px]">
-                          <p className="max-w-[530px]">{item.answer}</p>
-                        </div>
-                      </motion.div>
-                    ) : null}
-                  </AnimatePresence>
-                </motion.div>
+                        {isOpen ? (
+                          <Minus className="size-5" />
+                        ) : (
+                          <Plus className="size-5" />
+                        )}
+                      </span>
+                    </button>
+                  </h3>
+
+                  <div
+                    id={`faq-answer-${item.id}`}
+                    aria-hidden={!isOpen}
+                    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="px-4 pb-4 text-sm leading-[1.45] text-[#a3a3a3] md:px-5 md:pb-5 md:text-[15px]">
+                        <p className="max-w-[30rem]">{item.answer}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               );
             })}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -17,6 +17,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Boldonse';
+  src: url('/custom-font/boldonse/Boldonse-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /*
  * Tech Ignite '26 design tokens.
  * Palettes are sampled from the event art direction: off-black canvas,
@@ -27,6 +35,7 @@
   --font-sans: 'Google Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Google Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-product-sans: 'Product Sans', 'Google Sans Variable', sans-serif;
+  --font-boldonse: 'Boldonse', sans-serif;
 
   /* Brand palette */
   --color-ink: #050505;

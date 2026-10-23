@@ -3,9 +3,9 @@ import { Link } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
 
 const navLinks = [
-  { label: 'Speakers', hash: 'speakers' },
-  { label: 'Hackathon', hash: 'hackathon' },
-  { label: 'Agenda', hash: 'agenda' },
+  { label: 'Speakers', hash: '/speakers' },
+  { label: 'Hackathon', hash: '/hackathon' },
+  { label: 'Agenda', hash: '/agenda' },
 ] as const;
 
 const TICKETS_URL = 'https://tickets.techignite.live';
@@ -63,8 +63,7 @@ export function Navbar() {
             {navLinks.map((link) => (
               <li key={link.hash}>
                 <Link
-                  to="/"
-                  hash={link.hash}
+                  to={link.hash}
                   className="text-label font-normal text-white transition-colors hover:text-brand-blue-soft"
                 >
                   {link.label}
@@ -125,7 +124,7 @@ export function Navbar() {
             {navLinks.map((link) => (
               <li key={link.hash}>
                 <Link
-                  to="/"
+                  to={}
                   hash={link.hash}
                   onClick={closeMenu}
                   className="block rounded-xs px-3 py-3 text-label font-normal text-foreground transition-colors hover:bg-surface"
