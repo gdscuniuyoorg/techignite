@@ -1,9 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+import { SpeakerHero } from '@/features/speakers/components/speaker-hero';
 
 export const Route = createFileRoute('/speakers')({
-  component: RouteComponent,
-})
+  component: Speakers,
+});
 
-function RouteComponent() {
-  return <div>Hello "/speakers"!</div>
+function Speakers() {
+  return (
+    <main id="main-content">
+      <SpeakerHero />
+    </main>
+  );
 }

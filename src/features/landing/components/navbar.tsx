@@ -124,7 +124,7 @@ export function Navbar() {
             {navLinks.map((link) => (
               <li key={link.hash}>
                 <Link
-                  to={}
+                  to="/"
                   hash={link.hash}
                   onClick={closeMenu}
                   className="block rounded-xs px-3 py-3 text-label font-normal text-foreground transition-colors hover:bg-surface"

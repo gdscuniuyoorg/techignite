@@ -16,10 +16,10 @@ export function WhatToExpect() {
 
           <h2
             id="what-to-expect-title"
-            className="mt-8 w-full align-middle font-sans text-[28px] leading-[36px] font-normal tracking-[0px] text-balance text-foreground not-italic sm:text-[36px] sm:leading-[46px] lg:text-[42px] lg:leading-[52px] xl:mt-10 xl:text-[60px] xl:leading-[70px]"
+            className="mt-8 w-full align-middle font-sans text-[28px] leading-[36px] font-normal tracking-[0px] text-foreground not-italic sm:text-[36px] sm:leading-[46px] lg:text-[42px] lg:leading-[52px] xl:mt-10 xl:text-[60px] xl:leading-[70px]"
           >
             A global stage where students, innovation, and technology come together to{' '}
-            <mark className="rounded-xs bg-primary px-1.5 text-primary-foreground">
+            <mark className="rounded-xs bg-primary px-1.5 whitespace-nowrap text-primary-foreground">
               build the future,
             </mark>{' '}
             and inspire what’s next.

@@ -25,7 +25,7 @@ export function Faq() {
           <div>
             <h2
               id="faq-title"
-              className="font-sans text-[36px] leading-[1.1] font-normal tracking-[-0.03em] text-white sm:text-[46px] md:sticky md:top-28 md:text-[54px]"
+              className="font-sans text-[36px] leading-[1.1] font-normal tracking-[-0.03em] text-white sm:text-[46px] md:sticky md:top-28 md:text-[54px] xl:text-[64px]"
             >
               Everything you
               <br />
@@ -52,7 +52,7 @@ export function Faq() {
                       aria-controls={`faq-answer-${item.id}`}
                       className="flex w-full cursor-pointer items-start justify-between gap-4 px-4 py-5 text-left md:px-5"
                     >
-                      <span className="font-sans text-base leading-[1.3] font-normal text-white md:text-[17px]">
+                      <span className="font-sans text-base leading-[1.3] font-normal text-white md:text-[17px] xl:text-[19px]">
                         {item.question}
                       </span>
                       <span

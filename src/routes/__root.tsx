@@ -1,5 +1,6 @@
 import { Navbar } from '@/features/landing/components/navbar';
 import { Footer } from '@/features/landing/components/footer';
+import { NotFound } from '@/features/landing/components/not-found';
 import appCss from '@/styles/globals.css?url';
 import '@fontsource-variable/google-sans';
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
@@ -43,6 +44,7 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootComponent,
+  notFoundComponent: NotFound,
 });
 
 function RootComponent() {

@@ -1,9 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+import { HackathonHero } from '@/features/hackathon/components/hero';
+import { HackathonStats } from '@/features/hackathon/components/hackathon-stats';
 
 export const Route = createFileRoute('/hackathon')({
-  component: RouteComponent,
-})
+  component: Hackathon,
+});
 
-function RouteComponent() {
-  return <div>Hello "/hackathon"!</div>
+function Hackathon() {
+  return (
+    <main id="main-content">
+      <HackathonHero />
+      <HackathonStats />
+    </main>
+  );
 }

@@ -1,9 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+import { AgendaHero } from '@/features/agenda/components/agenda-hero';
 
 export const Route = createFileRoute('/agenda')({
-  component: RouteComponent,
-})
+  component: Agenda,
+});
 
-function RouteComponent() {
-  return <div>Hello "/agenda"!</div>
+function Agenda() {
+  return (
+    <main id="main-content">
+      <AgendaHero />
+    </main>
+  );
 }
