@@ -33,15 +33,15 @@
   --color-ink-raised: #171717;
   --color-ink-soft: #202020;
   --color-paper: #ffffff;
-  --color-brand-blue: #2f6fed;
-  --color-brand-blue-strong: #2459c9;
+  --color-brand-blue: #3d7cf6;
+  --color-brand-blue-strong: #2f63d4;
   --color-brand-blue-soft: #8db2ff;
   --color-brand-blue-pale: #d7e4ff;
   --color-brand-green: #0a7a3c;
   --color-brand-green-bright: #22c55e;
   --color-brand-amber: #ffb020;
-  --color-brand-cream: #ffe08a;
-  --color-brand-cream-deep: #f2c95f;
+  --color-brand-cream: #feebb4;
+  --color-brand-cream-deep: #e8ce8b;
   --color-brand-red: #e1493c;
   --color-mist: #f2f4f7;
   --color-line: #2a2a2a;
@@ -76,18 +76,34 @@
   --text-heading--letter-spacing: -0.035em;
   --text-subheading: clamp(1.5rem, 2.4vw, 2rem);
   --text-subheading--line-height: 1.15;
+  --text-tagline: 1.75rem;
+  --text-tagline--line-height: 1.5625rem;
+  --text-tagline--letter-spacing: 0;
   --text-stat: clamp(3.5rem, 7vw, 6.5rem);
   --text-stat--line-height: 0.9;
   --text-stat--letter-spacing: -0.04em;
+  /* UI label — navbar links: 16/19.19, -0.32px. */
+  --text-label: 1rem;
+  --text-label--line-height: 1.199375rem;
+  --text-label--letter-spacing: -0.02em;
+  /* Button label — 16/16.8, +0.5px. */
+  --text-button: 1rem;
+  --text-button--line-height: 1.05rem;
+  --text-button--letter-spacing: 0.03125rem;
+  /* Eyebrow / section kicker — 12px uppercase, wide tracking. */
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1rem;
+  --text-eyebrow--letter-spacing: 0.1em;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: var(--color-ink);
   }
 
   body {
-    @apply bg-background font-sans text-foreground antialiased;
+    @apply bg-background font-product-sans text-foreground antialiased;
   }
 
   ::selection {
@@ -113,27 +129,14 @@
 /* Shared page container. */
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 5vw, 3rem);
+  padding-inline: clamp(1.25rem, 5vw, 1.5rem);
 }
 
 /* Topographic contour texture used inside the hero arch. */
 .arch-contour {
   background-color: var(--color-brand-cream);
-  background-image:
-    repeating-radial-gradient(
-      ellipse 70% 60% at 46% 108%,
-      transparent 0 26px,
-      color-mix(in srgb, var(--color-brand-cream-deep) 48%, transparent) 27px 28px,
-      transparent 29px 54px
-    ),
-    repeating-radial-gradient(
-      ellipse 46% 38% at 78% 18%,
-      transparent 0 32px,
-      color-mix(in srgb, var(--color-brand-cream-deep) 28%, transparent) 33px 34px,
-      transparent 35px 66px
-    );
 }
 
 /* Hide scrollbars on intentional horizontal galleries. */

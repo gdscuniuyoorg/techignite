@@ -1,3 +1,4 @@
+import { Navbar } from '@/features/landing/components/navbar';
 import appCss from '@/styles/globals.css?url';
 import '@fontsource-variable/google-sans';
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
@@ -24,19 +25,14 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
-      { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
       {
         rel: 'icon',
-        href: '/favicon-32x32.png',
         type: 'image/png',
-        sizes: '32x32',
+        href: '/favicon-96x96.png',
+        sizes: '96x96',
       },
-      {
-        rel: 'icon',
-        href: '/favicon-16x16.png',
-        type: 'image/png',
-        sizes: '16x16',
-      },
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+      { rel: 'shortcut icon', href: '/favicon.ico' },
       {
         rel: 'apple-touch-icon',
         href: '/apple-touch-icon.png',
@@ -50,11 +46,12 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-ink">
       <head>
         <HeadContent />
       </head>
       <body className="bg-ink text-paper">
+        <Navbar />
         <Outlet />
         <Scripts />
       </body>

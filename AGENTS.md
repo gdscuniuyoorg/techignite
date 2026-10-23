@@ -17,10 +17,6 @@ flagship event.
 | Lint/format | ESLint 10 flat config (`typescript-eslint` strict) + Prettier  |
 | Node        | >= 22 (CI uses 24)                                             |
 
-The `tickets.` subdomain is served by the same app: `src/routes/index.tsx`
-reads the `Host` header on the server and renders the embedded Luma ticket
-page instead of the home page. Do not move that decision to the client.
-
 ## 2. Package manager
 
 - **Canonical lockfile: `pnpm-lock.yaml`.** CI and deployments install with
@@ -103,17 +99,34 @@ Rules:
   (`index.tsx`, `__root.tsx`, `posts.$slug.tsx`). Route files export `Route`
   and may export the component; disable `react-refresh/only-export-components`
   only for route files.
+- Component files are **PascalCase-less kebab case**: the filename is the
+  lower-cased component name (`Navbar` → `navbar.tsx`,
+  `BrandLockup` → `brand-lockup.tsx`). One component per file, one named
+  export matching the filename case for the component itself.
 - Shared UI lives in `src/components/{sections,molecules,ui}`; constants in
-  `src/constants`; helpers in `src/lib`.
+  `src/constants`; helpers in `src/lib`. Feature-scoped components live in
+  `src/features/<feature>/components/`.
 - Client-only state uses React hooks. Do not add `'use client'` — it is a
   Next.js directive and has no meaning here.
 - Images are plain `<img>` with explicit `width`/`height` and meaningful
   `alt` text (empty `alt` for decoration). There is no Next image optimizer.
-- External links are plain `<a>` with `rel="noopener noreferrer"` when
-  `target="_blank"`.
+- Navigation component: **TanStack Router `Link`**, kebab-case IDs for
+  anchor targets.
+  - Internal navigation always uses `<Link to="…" hash="…">` from
+    `@tanstack/react-router` — never a bare `<a href="/…">`. Anchors use
+    the dedicated `hash` prop (`<Link to="/" hash="speakers" />`), not a
+    `/#fragment` string in `to`.
+  - Anchor targets are kebab-case element IDs: `#speakers`, `#hackathon`,
+    `#agenda`, `#sponsors`, `#faq`.
+  - External links are plain `<a target="_blank" rel="noopener noreferrer">`.
 - Tailwind v4 is configured in `src/styles/globals.css` (`@theme`), not in a
   `tailwind.config.ts`. Add design tokens there; never reintroduce a JS
   Tailwind config or PostCSS config.
+- **`DESIGN.md` (repo root) is the design-system source of truth**, derived
+  from the CSS tokens. Build every component from its tokens, motifs
+  (cream arch, checker mosaic, bracket lockup), component styling, and
+  banned-patterns lists; colors come from semantic aliases
+  (`primary`, `accent`, `surface`, `border`), not raw hexes.
 - Prefer existing sections/components over new abstractions. Keep diffs
   minimal and reviewable.
 
@@ -175,10 +188,11 @@ Report actual command output. Never claim a check passed without running it.
 
 ## 10. Artifacts
 
-| Artifact      | Path                    |
-| ------------- | ----------------------- |
-| Scope         | `docs/scope/`           |
-| Specs         | `docs/specs/`           |
-| Reviews       | `docs/reviews/`         |
-| Human docs    | `README.md`, PR body    |
-| Agent context | `AGENTS.md` (this file) |
+| Artifact      | Path                                      |
+| ------------- | ----------------------------------------- |
+| Design system | `DESIGN.md` (values live in CSS `@theme`) |
+| Scope         | `docs/scope/`                             |
+| Specs         | `docs/specs/`                             |
+| Reviews       | `docs/reviews/`                           |
+| Human docs    | `README.md`, PR body                      |
+| Agent context | `AGENTS.md` (this file)                   |
