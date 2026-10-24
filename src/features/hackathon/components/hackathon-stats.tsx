@@ -6,7 +6,7 @@ export function HackathonStats() {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.2 },
+      transition: { staggerChildren: 0.12 },
     },
   } as const;
 
@@ -15,7 +15,7 @@ export function HackathonStats() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
+      transition: { duration: 0.45, ease: 'easeOut' },
     },
   } as const;
 
@@ -23,7 +23,7 @@ export function HackathonStats() {
     <section
       id="hackathon-stats"
       aria-labelledby="hackathon-stats-title"
-      className="bg-ink text-paper py-20 sm:py-24"
+      className="bg-ink py-20 text-paper sm:py-24"
     >
       <motion.div
         variants={container}
@@ -32,44 +32,31 @@ export function HackathonStats() {
         viewport={{ once: true }}
         className="container"
       >
-        <h2
-          id="hackathon-stats-title"
-          className="sr-only"
-        >
+        <h2 id="hackathon-stats-title" className="sr-only">
           Hackathon Stats
         </h2>
 
-        <dl
-          className="grid grid-cols-1 gap-y-16 sm:grid-cols-3 sm:gap-x-12 text-center sm:text-left"
-        >
+        <dl className="grid grid-cols-1 gap-y-16 text-center sm:grid-cols-3 sm:gap-x-12 sm:text-left">
           {hackathonStats.map((stat) => (
             <motion.div
               key={stat.value}
               variants={item}
-              className="flex flex-col items-center sm:items-start border-b border-line/60 pb-12 sm:border-b-0 sm:border-r sm:pr-12 sm:pb-0"
+              className="flex flex-col items-center sm:items-start"
             >
-              <dt className="text-stat font-bold tracking-[-0.04em] text-paper">
+              <dt className="relative w-fit pb-3 text-[clamp(2.5rem,4.5vw,6.5rem)] leading-[0.9] font-normal tracking-[-0.04em] text-paper after:absolute after:top-full after:left-0 after:h-px after:w-[calc(100%+2.5rem)] after:bg-white/30">
                 {stat.value}
               </dt>
-              <dd className="mt-4 text-label text-muted">
-                {stat.label}
-              </dd>
+              <dd className="mt-4 text-label text-muted">{stat.label}</dd>
             </motion.div>
           ))}
         </dl>
 
-        <motion.div
-          variants={item}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-20 max-w-[56rem] mx-auto text-left"
-        >
-          <p className="leading-relaxed text-white/90">
-            The Tech Ignite Hackathon is where curious minds, creative thinkers,
-            and ambitious builders come together to solve problems through
-            technology. It&rsquo;s an opportunity to collaborate, experiment with
-            new ideas, and turn real-world challenges into innovative solutions.
+        <motion.div variants={item} className="mt-24 max-w-[1046px]">
+          <p className="text-subheading leading-normal text-white/90">
+            The Tech Ignite Hackathon is where curious minds, creative thinkers, and
+            ambitious builders come together to solve problems through technology.
+            It&rsquo;s an opportunity to collaborate, experiment with new ideas, and turn
+            real-world challenges into innovative solutions.
           </p>
         </motion.div>
       </motion.div>

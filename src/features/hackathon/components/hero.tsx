@@ -6,7 +6,7 @@ export function HackathonHero() {
     <section
       id="speakers"
       aria-labelledby="speakers-title"
-      className="relative flex flex-col overflow-hidden bg-ink"
+      className="relative flex min-h-[calc(100svh-5rem)] flex-col overflow-hidden bg-ink sm:min-h-[calc(100svh-6rem)]"
     >
       {/* Checker mosaic — transparent-backed artwork, ink shows through the gaps. */}
       <div
@@ -24,7 +24,7 @@ export function HackathonHero() {
 
       {/* Cream arch */}
       <div
-        className="relative mx-auto mt-32 flex w-full max-w-[1124px] flex-col items-center justify-center bg-[#FFFFFF] px-6 pt-24 pb-8 text-center min-[1124px]:w-[1124px] sm:h-[800px]"
+        className="relative mx-auto mt-24 flex w-full max-w-[1124px] flex-1 flex-col items-center justify-center bg-[#FFFFFF] px-6 pt-24 pb-10 text-center min-[1124px]:w-[1124px]"
         style={{
           borderTopLeftRadius: '500px',
           borderTopRightRadius: '500px',
