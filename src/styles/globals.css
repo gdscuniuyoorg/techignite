@@ -99,9 +99,9 @@
   --text-button: 1rem;
   --text-button--line-height: 1.05rem;
   --text-button--letter-spacing: 0.03125rem;
-  /* Eyebrow / section kicker — 12px uppercase, wide tracking. */
-  --text-eyebrow: 0.75rem;
-  --text-eyebrow--line-height: 1rem;
+  /* Eyebrow / section kicker — 14px uppercase, wide tracking. */
+  --text-eyebrow: 0.875rem;
+  --text-eyebrow--line-height: 1.25rem;
   --text-eyebrow--letter-spacing: 0.1em;
 }
 

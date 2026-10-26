@@ -14,7 +14,7 @@ export function Faq() {
       <div className="container">
         {/* Top eyebrow divider */}
         <div className="border-t border-border pt-7 sm:pt-8">
-          <p className="flex items-center gap-2.5 text-xs font-medium tracking-[0.14em] text-white uppercase sm:text-[13px]">
+          <p className="flex items-center gap-2 text-eyebrow font-normal text-paper uppercase">
             <span aria-hidden="true" className="size-2 shrink-0 bg-primary" />
             Frequently asked questions
           </p>

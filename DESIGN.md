@@ -89,7 +89,7 @@ Scale (all `clamp()`-fluid, defined in `@theme`):
 | `text-stat`       | `clamp(3.5rem, 7vw, 6.5rem)`     | 0.9              | `-0.04em`    |
 | `text-label`      | `1rem` (16px)                    | 1.199375rem      | `-0.02em`    |
 | `text-button`     | `1rem` (16px)                    | 1.05rem          | `0.03125rem` |
-| `text-eyebrow`    | `0.75rem` (12px)                 | 1rem             | `0.1em`      |
+| `text-eyebrow`    | `0.875rem` (14px)                | 1.25rem          | `0.1em`      |
 
 Rules:
 
