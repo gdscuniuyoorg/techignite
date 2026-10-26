@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as HackathonRouteImport } from './routes/hackathon'
 import { Route as PhotosRouteImport } from './routes/photos'
@@ -18,6 +19,11 @@ import { Route as SpeakersRouteImport } from './routes/speakers'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AgendaRoute = AgendaRouteImport.update({
@@ -43,6 +49,7 @@ const SpeakersRoute = SpeakersRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
   '/hackathon': typeof HackathonRoute
   '/photos': typeof PhotosRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
   '/hackathon': typeof HackathonRoute
   '/photos': typeof PhotosRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
   '/hackathon': typeof HackathonRoute
   '/photos': typeof PhotosRoute
@@ -65,14 +74,22 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/agenda' | '/hackathon' | '/photos' | '/speakers'
+  fullPaths: '/' | '/about' | '/agenda' | '/hackathon' | '/photos' | '/speakers'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/agenda' | '/hackathon' | '/photos' | '/speakers'
-  id: '__root__' | '/' | '/agenda' | '/hackathon' | '/photos' | '/speakers'
+  to: '/' | '/about' | '/agenda' | '/hackathon' | '/photos' | '/speakers'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/agenda'
+    | '/hackathon'
+    | '/photos'
+    | '/speakers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AgendaRoute: typeof AgendaRoute
   HackathonRoute: typeof HackathonRoute
   PhotosRoute: typeof PhotosRoute
@@ -86,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/agenda': {
@@ -121,6 +145,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AgendaRoute: AgendaRoute,
   HackathonRoute: HackathonRoute,
   PhotosRoute: PhotosRoute,
