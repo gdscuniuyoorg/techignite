@@ -6,7 +6,7 @@ export function SpeakerHero() {
     <section
       id="speakers"
       aria-labelledby="speakers-title"
-      className="relative flex flex-col overflow-hidden bg-ink"
+      className="relative flex flex-col overflow-hidden bg-ink pb-16 sm:pb-[9.5rem]"
     >
       {/* Checker mosaic — transparent-backed artwork, ink shows through the gaps. */}
       <div
@@ -24,7 +24,7 @@ export function SpeakerHero() {
 
       {/* Cream arch */}
       <div
-        className="relative mx-auto mt-32 flex w-full max-w-[1124px] flex-col items-center justify-center bg-[#FFFFFF] px-6 pt-24 pb-8 text-center min-[1124px]:w-[1124px] sm:h-[800px]"
+        className="relative mx-auto mt-16 flex w-full max-w-[1124px] flex-col items-center justify-center bg-paper px-6 pt-24 pb-8 text-center min-[1124px]:mt-[4.4375rem] min-[1124px]:w-[1124px] sm:h-[705px]"
         style={{
           borderTopLeftRadius: '500px',
           borderTopRightRadius: '500px',
@@ -39,12 +39,12 @@ export function SpeakerHero() {
           alt=""
           width={1124}
           height={705}
-          className="absolute inset-0 object-cover opacity-20"
+          className="absolute inset-0 size-full object-cover opacity-20"
         />
 
         <h1
           id="speakers-title"
-          className="relative z-10 text-heading font-bold tracking-[-0.05em] text-ink"
+          className="relative z-10 text-[clamp(3.5rem,7.4vw,6.875rem)] leading-[1.02] font-bold tracking-[-0.05em] text-ink"
         >
           Speaker Lineup
         </h1>
