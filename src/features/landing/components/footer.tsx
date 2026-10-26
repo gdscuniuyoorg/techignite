@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
 import {
-  TICKETS_URL,
+  REGISTER_URL,
   footerCopyright,
   footerNavLinks,
   footerSocialLinks,
@@ -34,7 +34,7 @@ export function Footer() {
             </p>
 
             <a
-              href={TICKETS_URL}
+              href={REGISTER_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-6 flex h-11 items-center gap-2 rounded-xs bg-paper px-6 text-button font-normal text-ink shadow-none transition-colors hover:bg-mist sm:mt-7"

@@ -1,6 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-
-const TICKETS_URL = 'https://tickets.techignite.live';
+import { REGISTER_URL } from '@/utils/footer';
 
 export function Hero() {
   return (
@@ -53,7 +52,7 @@ export function Hero() {
         </p>
 
         <a
-          href={TICKETS_URL}
+          href={REGISTER_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-6 flex h-13 items-center justify-center gap-2.5 rounded-xs bg-primary px-8 text-button font-normal text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong sm:mt-7 sm:h-14 sm:min-w-[220px] sm:px-10"

@@ -2,6 +2,7 @@
  * Content for the /about page. Links reuse the handles and URLs already
  * committed across the site (footer socials, past-photos album, tickets).
  */
+import { REGISTER_URL } from './footer';
 
 export interface AboutParagraph {
   readonly text: string;
@@ -74,7 +75,7 @@ export const communityExtraLinks: readonly CommunityLink[] = [
   },
   {
     label: 'Get Tickets',
-    href: 'https://tickets.techignite.live',
+    href: REGISTER_URL,
   },
   {
     label: 'Email Us',

@@ -17,7 +17,9 @@ export interface FooterSocialItem {
   readonly platform: 'linkedin' | 'twitter' | 'instagram' | 'facebook';
 }
 
-export const TICKETS_URL = 'https://tickets.techignite.live';
+/** Official registration page for Tech Ignite '26 (GDG community events). */
+export const REGISTER_URL =
+  'https://gdg.community.dev/events/details/google-gdg-on-campus-university-of-uyo-uyo-nigeria-presents-tech-ignite-26/';
 
 export const footerTagline =
   'Get your pass today and immerse yourself in a groundbreaking experience where the worlds of art, design, and cutting-edge technology come together to shape the future.';

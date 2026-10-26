@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
+import { REGISTER_URL } from '@/utils/footer';
 
 const navLinks = [
   { label: 'Speakers', hash: '/speakers' },
   { label: 'Hackathon', hash: '/hackathon' },
   { label: 'Agenda', hash: '/agenda' },
 ] as const;
-
-const TICKETS_URL = 'https://tickets.techignite.live';
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -83,7 +82,7 @@ export function Navbar() {
             Sponsor
           </Link>
           <a
-            href={TICKETS_URL}
+            href={REGISTER_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="flex h-11 items-center gap-2 rounded-xs bg-primary px-3 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong sm:px-4"
