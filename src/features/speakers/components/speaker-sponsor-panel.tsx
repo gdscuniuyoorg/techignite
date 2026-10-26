@@ -1,12 +1,17 @@
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { SPONSOR_MAILTO } from '@/utils/speakers';
 import {
   blurUp,
   dotPop,
   imageSettle,
   slideInRight,
+  springUp,
   staggerContainer,
   useScrollGate,
 } from '@/lib/motion';
+
+const MotionAnchor = motion.create('a');
 
 interface GalleryPhoto {
   readonly image: string;
@@ -116,6 +121,17 @@ export function SpeakerSponsorPanel() {
             connections, explore new opportunities, and grow within a community shaping
             the future of technology.
           </motion.p>
+
+          <MotionAnchor
+            variants={springUp}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            href={SPONSOR_MAILTO}
+            className="mt-8 flex h-11 w-fit items-center gap-2 rounded-xs bg-ink px-6 text-button font-normal text-paper transition-colors hover:bg-ink-soft sm:h-12 sm:px-8"
+          >
+            Become a Sponsor
+            <ArrowRight aria-hidden="true" className="size-4" />
+          </MotionAnchor>
         </div>
       </motion.div>
 
