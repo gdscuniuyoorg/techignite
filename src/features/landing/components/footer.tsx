@@ -122,11 +122,11 @@ export function Footer() {
         {/* Divider above watermark */}
         <div className="mt-14 border-t border-line/60 sm:mt-16 lg:mt-20" />
 
-        {/* Massive Display Watermark */}
+        {/* Massive Display Watermark — past-photos strip inscribed inside the letters */}
         <div className="overflow-hidden text-center">
           <p
             aria-hidden="true"
-            className="text-center font-boldonse text-[clamp(3.25rem,11.2vw,160px)] leading-[clamp(6.5rem,23.6vw,339.89px)] font-normal tracking-[0px] whitespace-nowrap text-white/[0.12] select-none"
+            className="bg-[url('/past-photos/footer-container.png')] bg-cover bg-clip-text bg-center text-center font-boldonse text-[clamp(4.5rem,15vw,220px)] leading-[clamp(9.5rem,31.8vw,467px)] font-normal tracking-[0px] whitespace-nowrap text-transparent select-none"
           >
             Tech ignite&apos;26
           </p>
