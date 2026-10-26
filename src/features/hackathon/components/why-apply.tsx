@@ -1,24 +1,10 @@
 import { motion } from 'framer-motion';
 import { hackathonBenefits } from '@/utils/hackathon';
-
-const container = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12 },
-  },
-} as const;
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: 'easeOut' },
-  },
-} as const;
+import { fadeUp, springUp, staggerContainer, useScrollGate } from '@/lib/motion';
 
 export function WhyApply() {
+  const userScrolled = useScrollGate();
+
   return (
     <section
       id="why-apply"
@@ -26,23 +12,23 @@ export function WhyApply() {
       className="bg-paper py-20 text-ink sm:py-24"
     >
       <motion.div
-        variants={container}
+        variants={staggerContainer(0.18)}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        whileInView={userScrolled ? 'visible' : 'hidden'}
+        viewport={{ once: false, amount: 0.25 }}
         className="container"
       >
         <div className="border-t border-line-light pt-10 sm:pt-14">
           <motion.p
-            variants={item}
-            className="flex items-center gap-2 text-eyebrow font-bold text-ink uppercase"
+            variants={fadeUp}
+            className="flex items-center gap-2 text-eyebrow font-normal text-ink uppercase"
           >
             <span aria-hidden="true" className="size-2 bg-[#FF84B3]" />
             Why apply?
           </motion.p>
 
           <motion.h2
-            variants={item}
+            variants={fadeUp}
             id="why-apply-title"
             className="mt-6 max-w-[80rem] text-heading font-bold text-ink"
           >
@@ -54,7 +40,8 @@ export function WhyApply() {
             {hackathonBenefits.map((benefit) => (
               <motion.li
                 key={benefit.title}
-                variants={item}
+                variants={springUp}
+                whileHover={{ y: -10 }}
                 className="flex flex-col gap-3 rounded-md bg-[#FF84B3] p-5 sm:p-6"
               >
                 <h3 className="text-lg font-bold text-paper">{benefit.title}</h3>

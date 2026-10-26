@@ -72,3 +72,74 @@ export const hackathonStats: readonly HackathonStat[] = [
     label: 'Final, in person in Uyo',
   },
 ];
+
+export interface HowItWorksStep {
+  readonly name: string;
+  readonly date: string;
+  readonly description: string;
+}
+
+export const howItWorksSteps: readonly HowItWorksStep[] = [
+  {
+    name: 'Apply',
+    date: 'Nov 1, 2026',
+    description: 'Complete the form, upload your pitch deck and share a 60-second video.',
+  },
+  {
+    name: 'Review',
+    date: 'Nov 14, 2026',
+    description:
+      'Reviewers score every eligible application and invite a shortlist of 20 to a 15-minute call.',
+  },
+  {
+    name: 'Pitch',
+    date: 'Nov 15, 2026',
+    description:
+      'Shortlisted teams get 15 minutes to pitch live and defend their solution before the judges.',
+  },
+  {
+    name: 'The Final',
+    date: 'Nov 19, 2026',
+    description:
+      'The best teams face off on the main stage — build fast, pitch hard, and take home the prize.',
+  },
+];
+
+export interface HackathonFaqItem {
+  readonly id: string;
+  readonly question: string;
+  readonly answer: string;
+}
+
+export const hackathonFaqItems: readonly HackathonFaqItem[] = [
+  {
+    id: 'who-can-participate',
+    question: 'Who can participate in the hackathon?',
+    answer:
+      'Students, developers, designers, and aspiring entrepreneurs passionate about technology and solving real-world problems are welcome to participate.',
+  },
+  {
+    id: 'team-requirement',
+    question: 'Do I need a team to apply?',
+    answer:
+      "No — you can apply solo or as a team of up to four. If you'd like a team but don't have one yet, we'll match solo applicants during the shortlist call.",
+  },
+  {
+    id: 'project-scope',
+    question: 'What kind of projects can I build?',
+    answer:
+      'Anything that solves a real problem — web or mobile apps, AI tools, hardware, or open-source contributions. Judges reward creativity and practical impact over polish.',
+  },
+  {
+    id: 'judging',
+    question: 'How will the projects be judged?',
+    answer:
+      'Reviewers score every eligible application on problem fit, creativity, and execution. Shortlisted teams then pitch live, where judges assess impact, technical depth, and presentation.',
+  },
+  {
+    id: 'registration',
+    question: 'How do I register?',
+    answer:
+      'Complete the application form, upload your pitch deck, and share a 60-second video — that secures your spot in the hackathon.',
+  },
+];
