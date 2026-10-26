@@ -1,0 +1,29 @@
+# Dependencies & build output — mounted/copied fresh inside the image
+node_modules
+.output
+dist
+build
+.vite
+.tanstack
+*.tsbuildinfo
+
+# Version control & editor state
+.git
+.gitignore
+.idea
+.vscode
+
+# Local env & secrets — never baked into images
+.env
+.env.*
+!.env.example
+
+# Lockfiles/package managers not used in Docker builds
+bun.lock
+bun.lockb
+
+# Docs & CI — not needed at build time
+README.md
+.github
+docs
+*.md
