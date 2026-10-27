@@ -1,0 +1,35 @@
+import * as React from "react";
+
+const FoundersIcon: React.FC<React.SVGProps<SVGElement>> = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="100"
+    height="100"
+    fill="none"
+    viewBox="0 0 100 100"
+  >
+    <path
+      stroke="#fff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2.5"
+      d="M84.552 15.448c8.035 8.035-.92 30.018-20.004 49.1-19.082 19.083-41.065 28.04-49.1 20.004s.92-30.018 20.004-49.1c19.082-19.083 41.066-28.04 49.1-20.004"
+    ></path>
+    <path
+      stroke="#fff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2.5"
+      d="M15.448 15.448c-8.035 8.035.92 30.018 20.004 49.1 19.082 19.083 41.066 28.04 49.1 20.004 8.035-8.035-.92-30.018-20.004-49.1-19.082-19.083-41.065-28.04-49.1-20.004"
+    ></path>
+    <path
+      stroke="#fff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2.5"
+      d="M58.333 50a8.333 8.333 0 1 1-16.667 0 8.333 8.333 0 0 1 16.667 0"
+    ></path>
+  </svg>
+);
+
+export default FoundersIcon;

@@ -58,6 +58,8 @@ Brand & accents (Google-derived, used sparingly — one accent per component):
 - **Brand Green** (`--color-brand-green #0a7a3c`) / **Green Bright**
   (`--color-brand-green-bright #22c55e`) — success states, lockup colors
 - **Brand Amber** (`--color-brand-amber #ffb020`) — decorative lockup color
+- **Amber Soft** (`--color-brand-amber-soft #fdd768`) / **Amber Highlight**
+  (`--color-brand-amber-highlight #fcc936`) — speaker mosaic fills
 - **Brand Cream** (`--color-brand-cream #feebb4`) — hero arch fill, accent on
   ink
 - **Brand Red** (`--color-brand-red #e1493c`) — decorative lockup color only

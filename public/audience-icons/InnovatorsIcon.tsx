@@ -1,0 +1,21 @@
+import * as React from "react";
+
+const InnovatorsIcon: React.FC<React.SVGProps<SVGElement>> = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="68"
+    height="78"
+    fill="none"
+    viewBox="0 0 68 78"
+  >
+    <path
+      stroke="#fff"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2.5"
+      d="m14.124 28.814-10.57 5.42c-2.998 1.498-3.09 5.741-.16 7.369l10.73 5.961 15.817 8.787a8.33 8.33 0 0 0 8.094 0l15.817-8.787 10.73-5.961c2.93-1.628 2.837-5.87-.16-7.37l-10.57-5.419m-39.728 0 15.817 8.787a8.33 8.33 0 0 0 8.094 0l15.817-8.787 10.73-5.961c2.93-1.628 2.837-5.87-.16-7.37L37.715 2.13a8.33 8.33 0 0 0-7.454 0L3.553 15.484c-2.997 1.498-3.089 5.741-.16 7.369zm39.728 18.75 10.57 5.42c2.997 1.498 3.09 5.741.16 7.369L38.035 75.1a8.33 8.33 0 0 1-8.094 0L3.393 60.353c-2.929-1.628-2.837-5.87.16-7.37l10.57-5.419"
+    ></path>
+  </svg>
+);
+
+export default InnovatorsIcon;
