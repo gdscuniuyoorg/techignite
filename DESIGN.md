@@ -24,8 +24,9 @@ Signature motifs (reuse, don't reinvent):
 
 - **Cream arch** — dome top, flat bottom edge-to-edge of the section, filled
   with a **flat** `#FEEBB4` (`bg-accent`) — no texture, grid, contour lines,
-  or background image inside it. Desktop geometry: `1124 × 705px`, top offset
-  `167px` from the page top, `500px` top-left/top-right radius (flat bottom)
+  or background image inside it. It fills the viewport height under the nav
+  (`min-h-[calc(100svh-6rem)]`, `mt-24` on the arch so the ink canvas shows
+  above the dome; content is vertically centered within it)
 - **Checker mosaic** — rectangles of `brand-blue`, `brand-blue-soft` and
   `brand-blue-pale` scattered on the ink canvas behind arches/sections
 - **Bracket lockup** — the `{TECH IGNITE '26}` artwork (`/icons/hero.svg`);
@@ -136,9 +137,8 @@ Rules:
   `padding-inline: clamp(1.25rem, 5vw, 1.5rem)` (tight 20–24px gutters so the
   desktop nav lockup and actions sit near the reference edges)
 - Full-height sections use `min-h-[100dvh]` (dvh, never `h-screen`);
-  the hero reserves the `h-24` desktop nav (`min-h-[calc(100dvh-6rem)]`) and
-  closes with a 6rem ink strip below the arch (`pb-24`), so the dome never
-  runs into the next section
+  the hero fills the viewport under the nav (`min-h-[calc(100svh-5rem)]`,
+  `-6rem` from `sm`) and the arch dome meets the next section directly
 - Sections are edge-to-edge colored bands (ink / paper / arch) stacked
   vertically; content sits inside the container
 - Grid-first responsive; no `calc()` percentage hacks beyond the fluid
