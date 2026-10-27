@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { FaLinkedin } from 'react-icons/fa6';
+import { lineupSpeakers } from '@/utils/speakers';
 import {
   imageSettle,
   slideInRight,
@@ -7,72 +8,6 @@ import {
   staggerContainer,
   useScrollGate,
 } from '@/lib/motion';
-
-const speakers = [
-  {
-    name: 'Temitope Omolere',
-    role: 'VP, Quality Engineering',
-    image: 'portrait-01.jpg',
-    width: 683,
-    height: 1024,
-  },
-  {
-    name: 'Diego Costa',
-    role: 'Founder, MotionFlow',
-    image: 'portrait-02.jpg',
-    width: 832,
-    height: 880,
-  },
-  {
-    name: 'Niyi Okeowo',
-    role: 'Creative Director, Kuda',
-    image: 'portrait-03.jpg',
-    width: 861,
-    height: 1024,
-  },
-  {
-    name: 'Ted Oladele',
-    role: 'Head of Product, Chowdeck',
-    image: 'portrait-04.jpg',
-    width: 882,
-    height: 1024,
-  },
-  {
-    name: 'Evana Eko (Razzo)',
-    role: 'Senior Brand Designer',
-    image: 'portrait-05.jpg',
-    width: 832,
-    height: 880,
-  },
-  {
-    name: 'Daniel Ife',
-    role: 'Designer | Canvassador',
-    image: 'portrait-05.jpg',
-    width: 832,
-    height: 880,
-  },
-  {
-    name: 'Wilfred Alfred',
-    role: 'Head of Business Development',
-    image: 'portrait-05.jpg',
-    width: 832,
-    height: 880,
-  },
-  {
-    name: 'Kachi Kalu',
-    role: 'Senior Product Designer',
-    image: 'portrait-05.jpg',
-    width: 832,
-    height: 880,
-  },
-  {
-    name: 'Samuel Lasisi',
-    role: 'Founder, Conectr',
-    image: 'portrait-05.jpg',
-    width: 832,
-    height: 880,
-  },
-] as const;
 
 export function SpeakerLineup() {
   const userScrolled = useScrollGate();
@@ -100,7 +35,7 @@ export function SpeakerLineup() {
         </motion.h2>
 
         <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-13 lg:gap-y-18">
-          {speakers.map((speaker) => (
+          {lineupSpeakers.map((speaker) => (
             <motion.li
               key={speaker.name}
               variants={springUp}
