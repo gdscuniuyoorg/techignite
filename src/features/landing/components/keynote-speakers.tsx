@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
-import { FaLinkedinIn } from 'react-icons/fa6';
+import { LinkedinIcon } from '@/components/ui/linkedin-icon';
 import { featuredSpeakers } from '@/constants/featured-speakers';
 
 const mosaicTiles = [
@@ -78,7 +78,7 @@ export function KeynoteSpeakers() {
                   aria-hidden="true"
                   className="flex size-8 shrink-0 items-center justify-center rounded-xs bg-surface-raised text-paper"
                 >
-                  <FaLinkedinIn className="size-4" />
+                  <LinkedinIcon className="size-[18px]" />
                 </span>
               </div>
             </li>
