@@ -14,7 +14,7 @@ interface AgendaDay {
 const agendaDays: readonly AgendaDay[] = [
   {
     id: 'hackathon-day',
-    label: 'Hackathon Day',
+    label: 'Hackathon Agenda',
     date: 'Thursday, 19th November',
     sessions: [
       {
@@ -45,7 +45,7 @@ const agendaDays: readonly AgendaDay[] = [
   },
   {
     id: 'conference-day',
-    label: 'Conference Day',
+    label: 'Main Conference Agenda',
     date: 'Friday, 20th November',
     sessions: [
       {
@@ -99,7 +99,7 @@ export function AgendaProgramme() {
 
           <h2
             id="programme-title"
-            className="mt-12 max-w-4xl text-heading font-normal text-paper sm:mt-16 sm:text-display"
+            className="mt-12 text-heading font-normal text-paper sm:mt-16"
           >
             What&rsquo;s On The Event{' '}
             <span className="inline-block -rotate-1 bg-brand-green-bright px-3 py-1 text-ink sm:px-5 sm:py-2">
@@ -121,12 +121,12 @@ export function AgendaProgramme() {
               <header className="grid overflow-hidden rounded-md bg-ink-raised sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
                 <h3
                   id={`${day.id}-title`}
-                  className="flex min-h-24 items-center bg-brand-green-bright px-5 py-6 text-2xl leading-tight font-normal text-ink sm:px-8 sm:text-3xl"
+                  className="flex min-h-20 items-center bg-brand-green-bright px-5 py-5 text-xl leading-tight font-normal text-ink sm:min-h-24 sm:px-8 sm:py-6 sm:text-2xl"
                 >
                   {day.label}
                 </h3>
 
-                <p className="flex items-center px-5 py-6 text-xl leading-tight text-paper sm:px-8 sm:text-2xl">
+                <p className="flex items-center px-5 py-5 text-base leading-tight text-paper sm:px-8 sm:py-6 sm:text-lg">
                   {day.date}
                 </p>
               </header>
@@ -151,11 +151,11 @@ export function AgendaProgramme() {
                         Session {String(index + 1).padStart(2, '0')}
                       </p>
 
-                      <h4 className="text-2xl leading-tight font-normal text-paper sm:text-3xl">
+                      <h4 className="text-xl leading-tight font-normal text-paper sm:text-2xl">
                         {session.title}
                       </h4>
 
-                      <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted sm:text-lg">
+                      <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted sm:text-base">
                         {session.description}
                       </p>
                     </article>

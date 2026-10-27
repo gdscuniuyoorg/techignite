@@ -126,7 +126,7 @@ export function Footer() {
         <div className="overflow-hidden text-center">
           <p
             aria-hidden="true"
-            className="bg-[url('/past-photos/footer-container.png')] bg-cover bg-clip-text bg-center text-center font-boldonse text-[clamp(4.5rem,15vw,220px)] leading-[clamp(9.5rem,31.8vw,467px)] font-normal tracking-[0px] whitespace-nowrap text-transparent select-none"
+            className="bg-[url('/past-photos/footer-container.png')] bg-cover bg-clip-text bg-center text-center font-boldonse text-[clamp(2.75rem,15vw,220px)] leading-[1.1] font-normal tracking-[0px] whitespace-nowrap text-transparent select-none sm:text-[clamp(4.5rem,15vw,220px)] sm:leading-[clamp(9.5rem,31.8vw,467px)]"
           >
             Tech ignite&apos;26
           </p>
