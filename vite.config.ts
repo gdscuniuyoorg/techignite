@@ -15,19 +15,19 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
-    tanstackStart({
-      // Prerender all routes into static HTML so the site works on Apache
-      // without a Node.js runtime.
+    tanstackStart(),
+    // Nitro with 'static' preset outputs pure HTML/JS/CSS to .output/public/.
+    // Every route must be listed explicitly so the prerenderer generates HTML
+    // for each page (crawlLinks alone misses routes behind client-side <Link>).
+    nitro({
+      preset: 'static',
       prerender: {
-        enabled: true,
         crawlLinks: true,
-        autoSubfolderIndex: true,
-        failOnError: true,
+        routes: ['/', '/about', '/agenda', '/hackathon', '/photos', '/speakers'],
       },
     }),
-    // Nitro with 'static' preset outputs pure HTML/JS/CSS to .output/public/
-    nitro({ preset: 'static' }),
     // React's Vite plugin must run after Start's plugin.
     viteReact(),
   ],
 });
+
