@@ -25,6 +25,11 @@ jobs:
       - name: Check build output
         run: ls -la .output/public
 
+      # The .htaccess lives in the repo root; copy it into the build output
+      # so rsync deploys it to public_html/ alongside the static files.
+      - name: Copy .htaccess into build output
+        run: cp .htaccess .output/public/.htaccess
+
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh

@@ -1,6 +1,46 @@
-RewriteEngine On
-RewriteBase /
-RewriteRule ^index\.html$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.html [L]
+# ── SPA Fallback ──────────────────────────────────────────────────────────
+# Route all non-file, non-directory requests to index.html so TanStack
+# Router's client-side routing can handle them.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # If the requested path is a real file or directory, serve it directly.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else falls through to the SPA entry point.
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# ── Compression ───────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ── Cache Control ─────────────────────────────────────────────────────────
+# Hashed assets (JS/CSS from Vite) can be cached aggressively.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType image/png                 "access plus 1 month"
+  ExpiresByType image/jpeg                "access plus 1 month"
+  ExpiresByType image/svg+xml             "access plus 1 month"
+  ExpiresByType image/webp                "access plus 1 month"
+  ExpiresByType font/woff2                "access plus 1 year"
+  ExpiresByType application/font-woff2    "access plus 1 year"
+
+  # HTML must revalidate so users always get the latest entry point.
+  ExpiresByType text/html                 "access plus 0 seconds"
+</IfModule>
+
+# ── Security Headers ─────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

@@ -15,9 +15,18 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
-    tanstackStart(),
-    // Nitro produces the deployable Node server in .output/
-    nitro(),
+    tanstackStart({
+      // Prerender all routes into static HTML so the site works on Apache
+      // without a Node.js runtime.
+      prerender: {
+        enabled: true,
+        crawlLinks: true,
+        autoSubfolderIndex: true,
+        failOnError: true,
+      },
+    }),
+    // Nitro with 'static' preset outputs pure HTML/JS/CSS to .output/public/
+    nitro({ preset: 'static' }),
     // React's Vite plugin must run after Start's plugin.
     viteReact(),
   ],
