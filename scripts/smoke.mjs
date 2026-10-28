@@ -5,7 +5,7 @@ import process from 'node:process';
 import { setTimeout as delay } from 'node:timers/promises';
 
 const PORT = Number(process.env.SMOKE_PORT ?? 4173);
-const HOST = 'techignite.live';
+const HOST = 'techignite.net';
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 
 const server = spawn(process.execPath, ['.output/server/index.mjs'], {

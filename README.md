@@ -1,4 +1,4 @@
-# techignite.live
+# techignite.net
 
 Source code for **Tech Ignite**, the annual GDSC UNIUYO flagship event.
 

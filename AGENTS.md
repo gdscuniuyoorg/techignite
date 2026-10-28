@@ -5,7 +5,7 @@ mandatory. If a request conflicts with them, stop and surface the conflict.
 
 ## 1. Project
 
-Marketing site for **Tech Ignite** (`techignite.live`), the annual GDSC UNIUYO
+Marketing site for **Tech Ignite** (`techignite.net`), the annual GDSC UNIUYO
 flagship event.
 
 | Concern     | Choice                                                         |

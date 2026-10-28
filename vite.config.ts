@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     port: 3000,
     // Allow the apex and the tickets subdomain when testing locally.
-    allowedHosts: ['techignite.live', '.techignite.live'],
+    allowedHosts: ['techignite.net', '.techignite.net'],
   },
   resolve: {
     tsconfigPaths: true,

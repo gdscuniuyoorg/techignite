@@ -60,7 +60,7 @@ redesign is in scope.
 3. `bun run format:check` exits 0.
 4. `bun run build` produces `.output/server/index.mjs`.
 5. `bun run dev` serves `/` with an empty main element; requesting
-   `/` with `Host: tickets.techignite.live` renders the ticket iframe.
+   `/` with `Host: tickets.techignite.net` renders the ticket iframe.
 6. No `next/*` imports, no `'use client'`, no Tailwind JS config remain.
 7. `pnpm install --frozen-lockfile` succeeds from a clean checkout.
 8. `bun.lock` is absent from the repository and git-ignored.
@@ -80,8 +80,8 @@ Run on 2026-10-19 (Node 24.12.0, Bun 1.3.13, pnpm 10.27.0):
 | `next/*` imports, `'use client'`, Tailwind JS config | none remain                                                                   |
 | `pnpm install --lockfile-only --frozen-lockfile`     | pass (lockfile v9.0 in sync)                                                  |
 | `bun.lock` absent and git-ignored                    | pass                                                                          |
-| Apex `GET /` (`Host: techignite.live`)               | 200, `<title>Tech Ignite</title>`, landing sections present                   |
-| Ticket `GET /` (`Host: tickets.techignite.live`)     | 200, Luma iframe present, landing sections absent                             |
+| Apex `GET /` (`Host: techignite.net`)               | 200, `<title>Tech Ignite</title>`, landing sections present                   |
+| Ticket `GET /` (`Host: tickets.techignite.net`)     | 200, Luma iframe present, landing sections absent                             |
 | CSS/font/static assets                               | 200 (`globals-*.css`, Product Sans `.ttf`, `/icons/wavy.svg`, speaker images) |
 
 Known notes:
