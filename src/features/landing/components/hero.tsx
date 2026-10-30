@@ -32,6 +32,8 @@ export function Hero() {
           alt=""
           width={1512}
           height={703}
+          fetchPriority="high"
+          decoding="async"
           style={{ y: mosaicY }}
           className="size-full object-cover object-top"
         />
@@ -50,8 +52,9 @@ export function Hero() {
           borderBottomRightRadius: 0,
         }}
       >
-        {/* Small sponsor sign parked on the arch's lower-right; desktop only. */}
-        <div className="absolute right-12 bottom-16 z-10 hidden lg:block xl:right-14">
+        {/* Small sponsor sign parked on the arch's lower-right; compact on
+            phones, full size from lg up. */}
+        <div className="absolute right-3 bottom-2 z-10 block lg:right-12 lg:bottom-16 xl:right-14">
           <HeroSponsorPin />
         </div>
         <motion.div
@@ -69,6 +72,8 @@ export function Hero() {
             alt="Tech Ignite '26"
             width={800}
             height={213}
+            fetchPriority="high"
+            decoding="async"
             variants={blurUp}
             className="mt-6 w-[79%] sm:mt-8 sm:w-[76%]"
           />

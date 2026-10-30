@@ -74,18 +74,25 @@ export function KeynoteSpeakers() {
           viewport={{ once: false, amount: 0.2 }}
           className="flex w-max items-start gap-4 pr-8 pl-[max(1.25rem,calc((100vw-90rem)/2+1.5rem))]"
         >
-          {lineupSpeakers.slice(0, 5).map((speaker, index) => (
+          {lineupSpeakers.slice(0, 1).map((speaker, index) => (
             <motion.li
               key={speaker.name}
               variants={springUp}
               className={index % 2 === 1 ? 'mt-11' : ''}
             >
-              <div className="w-[17.5rem] overflow-hidden rounded-lg">
+              <div
+                role="button"
+                tabIndex={speaker.bio ? 0 : undefined}
+                aria-label={speaker.bio ? `View bio for ${speaker.name}` : undefined}
+                className="group/speaker relative w-[17.5rem] overflow-visible rounded-lg outline-none"
+              >
                 <motion.img
                   src={`/images/speakers/${speaker.image}`}
                   alt={`Portrait of ${speaker.name}`}
                   width={speaker.width}
                   height={speaker.height}
+                  loading="lazy"
+                  decoding="async"
                   variants={imageSettle}
                   whileHover={{
                     scale: 1.05,
@@ -93,6 +100,13 @@ export function KeynoteSpeakers() {
                   }}
                   className="aspect-[39/50] w-full object-cover grayscale"
                 />
+                {speaker.bio ? (
+                  <div className="pointer-events-none absolute right-3 bottom-3 z-20 max-h-[72%] w-[calc(100%-1.5rem)] translate-y-2 overflow-hidden rounded-md bg-ink/95 p-4 text-left text-paper opacity-0 shadow-xl transition-all duration-300 group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100">
+                    <p className="max-h-56 overflow-y-auto text-xs leading-relaxed text-white/90 sm:text-sm">
+                      {speaker.bio}
+                    </p>
+                  </div>
+                ) : null}
               </div>
 
               <div className="mt-4 flex w-[17.5rem] items-start justify-between gap-3">
@@ -100,12 +114,24 @@ export function KeynoteSpeakers() {
                   <h3 className="text-xl font-normal text-paper">{speaker.name}</h3>
                   <p className="mt-1 text-label text-muted">{speaker.role}</p>
                 </div>
-                <span
-                  aria-hidden="true"
-                  className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-ink-soft text-paper"
-                >
-                  <FaLinkedin className="size-3.5" />
-                </span>
+                {speaker.linkedin ? (
+                  <a
+                    href={speaker.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${speaker.name} on LinkedIn`}
+                    className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-ink-soft text-paper transition-colors hover:bg-brand-amber hover:text-ink"
+                  >
+                    <FaLinkedin className="size-3.5" />
+                  </a>
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-md bg-ink-soft text-paper"
+                  >
+                    <FaLinkedin className="size-3.5" />
+                  </span>
+                )}
               </div>
             </motion.li>
           ))}
@@ -132,7 +158,9 @@ export function KeynoteSpeakers() {
         src="/icons/speakers-line.png"
         alt=""
         width={1510}
-        // height={333}
+        height={333}
+        loading="lazy"
+        decoding="async"
         className="block h-[4rem] w-full object-cover"
       />
     </section>

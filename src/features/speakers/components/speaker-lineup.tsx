@@ -40,7 +40,9 @@ export function SpeakerLineup() {
               key={speaker.name}
               variants={springUp}
               whileHover={{ y: -6 }}
-              className="min-w-0"
+              tabIndex={speaker.bio ? 0 : undefined}
+              aria-label={speaker.bio ? `View bio for ${speaker.name}` : undefined}
+              className="group/speaker relative min-w-0 outline-none"
             >
               <div className="overflow-hidden rounded-xs">
                 <motion.img
@@ -56,6 +58,13 @@ export function SpeakerLineup() {
                   }}
                   className="aspect-square w-full object-cover"
                 />
+                {speaker.bio ? (
+                  <div className="pointer-events-none absolute inset-0 z-10 flex translate-y-2 flex-col justify-end bg-ink/92 p-5 text-paper opacity-0 transition-all duration-300 group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100 sm:p-6">
+                    <p className="max-h-full overflow-y-auto text-sm leading-relaxed text-white/90 sm:text-base">
+                      {speaker.bio}
+                    </p>
+                  </div>
+                ) : null}
               </div>
               <div className="mt-4 flex items-start justify-between gap-3">
                 <div>
@@ -64,12 +73,24 @@ export function SpeakerLineup() {
                   </h3>
                   <p className="mt-1 text-label text-muted">{speaker.role}</p>
                 </div>
-                <span
-                  aria-hidden="true"
-                  className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-xs bg-ink-soft text-paper"
-                >
-                  <FaLinkedin className="size-4" />
-                </span>
+                {speaker.linkedin ? (
+                  <a
+                    href={speaker.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${speaker.name} on LinkedIn`}
+                    className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-xs bg-ink-soft text-paper transition-colors hover:bg-brand-amber hover:text-ink"
+                  >
+                    <FaLinkedin className="size-4" />
+                  </a>
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-xs bg-ink-soft text-paper"
+                  >
+                    <FaLinkedin className="size-4" />
+                  </span>
+                )}
               </div>
             </motion.li>
           ))}

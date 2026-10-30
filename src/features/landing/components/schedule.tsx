@@ -50,6 +50,7 @@ export function Schedule() {
               width={683}
               height={689}
               loading="lazy"
+              decoding="async"
               className="aspect-[304/306] w-full object-cover grayscale"
             />
           </motion.div>

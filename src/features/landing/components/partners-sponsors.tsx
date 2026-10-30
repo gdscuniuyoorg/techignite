@@ -73,19 +73,31 @@ export function PartnersSponsors() {
               variants={springUp}
               className={tierIndex === 0 ? '' : 'mt-14'}
             >
-              <h3 className="text-[21px] font-medium">{tier.label}</h3>
-              <ul className="mt-16 grid grid-cols-2 gap-3 lg:grid-cols-4">
+              <h3 className="text-2xl font-bold">{tier.label}</h3>
+              <ul className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
                 {tier.logos.map((logo, logoIndex) => (
                   <li
                     key={`${logo}-${String(logoIndex)}`}
                     className="flex h-40 items-center justify-center rounded-lg bg-mist px-6"
                   >
-                    <span
-                      aria-hidden="true"
-                      className="text-2xl font-bold tracking-tight text-ink"
-                    >
-                      {logo}
-                    </span>
+                    {tierIndex === 0 ? (
+                      <img
+                        src="/images/sponsors/chowdeck-sponsor.png"
+                        alt="Chowdeck"
+                        width={201}
+                        height={74}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-auto w-full max-w-40 object-contain"
+                      />
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="text-2xl font-bold tracking-tight text-ink"
+                      >
+                        {logo}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>

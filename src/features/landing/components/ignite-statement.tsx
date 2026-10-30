@@ -16,6 +16,8 @@ export function IgniteStatement() {
             alt=""
             width={1200}
             height={800}
+            loading="lazy"
+            decoding="async"
             className="absolute top-0 left-0 hidden aspect-[211/250] w-[2.11em] object-cover grayscale md:block"
           />
           <img
@@ -24,6 +26,8 @@ export function IgniteStatement() {
             alt=""
             width={1200}
             height={800}
+            loading="lazy"
+            decoding="async"
             className="absolute top-[1.34em] right-[0.65em] hidden aspect-[31/20] w-[1.8em] object-cover grayscale md:block"
           />
           <img
@@ -32,6 +36,8 @@ export function IgniteStatement() {
             alt=""
             width={1200}
             height={800}
+            loading="lazy"
+            decoding="async"
             className="absolute top-[3.92em] left-0 hidden aspect-[3/2] w-[2.11em] object-cover grayscale md:block"
           />
           <img
@@ -40,6 +46,8 @@ export function IgniteStatement() {
             alt=""
             width={1200}
             height={800}
+            loading="lazy"
+            decoding="async"
             className="absolute top-[3.93em] right-0 hidden aspect-[34/25] w-[2.38em] object-cover grayscale md:block"
           />
 

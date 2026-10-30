@@ -15,15 +15,13 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   return (
-    <main id="main-content">
+    <main id="main-content" className="w-full">
       <Hero />
       <WhatToExpect />
       <Audience />
       <IgniteStatement />
       <KeynoteSpeakers />
       <Schedule />
-      {/* Invisible-spacing nav anchor until this section is built. */}
-      <section id="hackathon" className="min-h-px bg-paper" aria-label="Hackathon" />
       <PartnersSponsors />
       {/* Sponsors anchor — the "Become a Sponsor" panel from /speakers. */}
       <SpeakerSponsorPanel />

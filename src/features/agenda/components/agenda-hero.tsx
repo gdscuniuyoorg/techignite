@@ -1,65 +1,96 @@
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { staggerContainer, wordReveal } from '@/lib/motion';
+
+const HERO_WORDS = ['Here’s', 'What’s', 'Going', 'Down'] as const;
+
 export function AgendaHero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  /** Mosaic drifts up slower than the page as you scroll away — depth. */
+  const mosaicY = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
+
   return (
     <section
+      ref={sectionRef}
       id="agenda"
       aria-labelledby="agenda-title"
-      className="relative isolate h-[22rem] overflow-hidden bg-ink sm:h-[25rem]"
+      className="relative flex min-h-[calc(100svh-5rem)] flex-col overflow-hidden bg-ink sm:min-h-[calc(100svh-6rem)]"
     >
-      {/* Decorative green geometric background */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        {/* Upper-left blocks */}
-        <span className="absolute top-0 left-0 h-12 w-[23%] bg-brand-green-bright sm:h-16 sm:w-[23%]" />
-
-        <span className="absolute top-0 left-[23%] h-16 w-[13%] bg-brand-green sm:h-20 sm:w-[12%]" />
-
-        {/* Upper-right blocks */}
-        <span className="absolute top-0 right-0 h-16 w-[11%] bg-brand-green sm:h-20 sm:w-[10%]" />
-
-        <span className="absolute top-16 right-[11%] h-12 w-[10%] bg-brand-green-bright sm:top-20 sm:h-16 sm:w-[10%]" />
-
-        {/* Middle-left blocks */}
-        <span className="absolute top-[30%] left-[11%] h-16 w-[11%] bg-brand-green sm:h-20 sm:w-[10%]" />
-
-        <span className="absolute top-[30%] left-0 h-16 w-[11%] bg-brand-green-bright sm:h-20 sm:w-[11%]" />
-
-        {/* Lower-left block */}
-        <span className="absolute bottom-0 left-[3%] h-16 w-[19%] bg-brand-green-bright sm:h-20 sm:w-[20%]" />
-
-        {/* Lower-right blocks */}
-        <span className="absolute right-0 bottom-0 h-20 w-[13%] bg-brand-green-bright sm:h-24 sm:w-[13%]" />
-
-        <span className="absolute right-[13%] bottom-20 h-16 w-[10%] bg-brand-green sm:bottom-24 sm:h-20 sm:w-[10%]" />
+      {/* Checker mosaic — transparent-backed artwork, ink shows through the gaps. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <motion.img
+          src="/icons/agenda-hero-section.png"
+          alt=""
+          width={1512}
+          height={705}
+          style={{ y: mosaicY }}
+          className="size-full object-cover object-top"
+        />
       </div>
 
-      {/* Central white dome */}
-      <div className="absolute inset-x-0 top-0 mx-auto h-full w-[94%] max-w-[58rem] overflow-hidden rounded-t-[50%] bg-paper text-ink sm:w-[82%]">
-        {/* Subtle background texture */}
-        <img
+      {/* Paper arch — rises into view on load, same geometry as the other page heroes */}
+      <motion.div
+        initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+        animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        className="relative mx-auto mt-24 flex w-full max-w-[1124px] flex-1 flex-col items-center justify-center bg-paper px-6 pt-24 pb-10 text-center min-[1124px]:w-[1124px]"
+        style={{
+          borderTopLeftRadius: '500px',
+          borderTopRightRadius: '500px',
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+        }}
+      >
+        {/* Topographic contour texture — slow ambient drift */}
+        <motion.img
           aria-hidden="true"
           src="/icons/transparent-background.png"
           alt=""
           width={1124}
           height={705}
-          className="pointer-events-none absolute inset-0 size-full object-cover opacity-[0.12]"
+          animate={{ scale: [1, 1.06, 1] }}
+          transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute inset-0 object-cover opacity-20"
         />
 
-        {/* Hero content */}
-        <div className="relative z-10 mx-auto flex h-full max-w-3xl flex-col items-center justify-center px-5 pt-10 pb-2 text-center sm:px-10 sm:pt-12">
-          <h1
-            id="agenda-title"
-            className="max-w-[14ch] text-3xl leading-[0.95] font-semibold tracking-tight text-ink sm:text-5xl lg:text-6xl"
-          >
-            Here&rsquo;s What&rsquo;s
-            <br />
-            Going Down
-          </h1>
-
-          <p className="mt-4 max-w-lg text-xs leading-relaxed text-ink sm:mt-5 sm:text-sm">
-            Hackathons, hot takes, big ideas, and the next wave of tech talent. Your guide
-            to everything happening at Tech Ignite starts here.
-          </p>
-        </div>
-      </div>
+        <motion.h1
+          id="agenda-title"
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer(0.16, 0.7)}
+          className="relative z-10 text-center text-heading font-bold text-ink"
+        >
+          {HERO_WORDS.map((word, index) => (
+            <span
+              key={word}
+              className="inline-block overflow-hidden pb-[0.12em] align-bottom"
+            >
+              <motion.span variants={wordReveal} className="inline-block">
+                {word}
+                {index < HERO_WORDS.length - 1 ? '\u00A0' : ''}
+              </motion.span>
+              {index < HERO_WORDS.length - 1 ? ' ' : ''}
+            </span>
+          ))}
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 1.7 }}
+          className="relative z-10 mt-4 max-w-[40rem] text-subheading leading-relaxed font-normal text-ink"
+        >
+          Hackathons, hot takes, big ideas, and the next wave of tech talent.
+          <br />
+          Your guide to everything happening at Tech Ignite.
+        </motion.p>
+      </motion.div>
     </section>
   );
 }

@@ -39,22 +39,27 @@ export function Navbar() {
     >
       <div className="relative z-20 container flex h-20 items-center justify-between gap-4 sm:h-24">
         {/* Brand lockup */}
-        <Link
-          to="/"
-          className="flex shrink-0 items-center gap-4"
-          aria-label="Tech Ignite '26 — home"
-        >
-          <picture>
-            <source media="(min-width: 640px)" srcSet="/icons/logo.png" />
-            <img
-              src="/icons/banner.png"
-              alt="Tech Ignite '26 — Google Developer Student Clubs, University of Uyo"
-              width={800}
-              height={213}
-              className="h-6 w-auto sm:h-8 lg:h-9"
-            />
-          </picture>
-        </Link>
+        <div className="flex shrink-0 flex-col items-start gap-1">
+          <Link
+            to="/"
+            className="flex shrink-0 items-center gap-4"
+            aria-label="Tech Ignite '26 — home"
+          >
+            <picture>
+              <source media="(min-width: 640px)" srcSet="/icons/logo.png" />
+              <img
+                src="/icons/banner.png"
+                alt="Tech Ignite '26 — Google Developer Student Clubs, University of Uyo"
+                width={800}
+                height={213}
+                className="h-6 w-auto sm:h-8 lg:h-9"
+              />
+            </picture>
+          </Link>
+          <span className="text-[9px] leading-none font-normal tracking-widest text-white/40 uppercase">
+            Powered by Chowdeck
+          </span>
+        </div>
 
         {/* Desktop nav */}
         <nav aria-label="Primary" className="max-lg:hidden">
@@ -85,10 +90,10 @@ export function Navbar() {
             href={REGISTER_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-11 items-center gap-2 rounded-xs bg-primary px-3 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong sm:px-4"
+            className="flex h-9 items-center gap-1.5 rounded-xs bg-primary px-3 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong sm:h-11 sm:gap-2 sm:px-4"
           >
             Register Now
-            <ArrowRight aria-hidden="true" className="size-4" />
+            <ArrowRight aria-hidden="true" className="size-3.5 sm:size-4" />
           </a>
           <button
             type="button"

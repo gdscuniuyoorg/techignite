@@ -114,6 +114,16 @@
 
   body {
     @apply bg-background font-product-sans text-foreground antialiased;
+    /*
+     * Framer Motion entrance variants park elements up to 5rem past the
+     * right edge while they wait to animate in. Without a clip they widen
+     * the document, and phones show the ink canvas as a black strip after
+     * a pinch zoom. The clip must sit on body: clipping the root element
+     * only turns into a hidden viewport, which still keeps a scrollable
+     * overflow region. `clip` on body removes the spill without creating
+     * a scroll container, so the sticky navbar keeps working.
+     */
+    overflow-x: clip;
   }
 
   ::selection {
@@ -127,6 +137,25 @@
 
   [id] {
     scroll-margin-top: 5.5rem;
+  }
+
+  /*
+   * Entrance animations park elements up to 5rem past the right edge while
+   * they wait to animate in. Clipping main removes that spill at the element
+   * level, so the document itself measures exactly one viewport wide and
+   * phones cannot zoom out past it. Elements are invisible while parked, and
+   * they slide in from the viewport edge, so nothing visible is cropped.
+   * The navbar and footer live outside main; the footer clips its own
+   * watermark with overflow hidden.
+   */
+  #main-content {
+    overflow-x: clip;
+  }
+
+  /* Keep below fold sections out of the first layout and paint pass. */
+  #main-content > section:not(:first-child) {
+    content-visibility: auto;
+    contain-intrinsic-size: 800px;
   }
 
   @media (prefers-reduced-motion: reduce) {

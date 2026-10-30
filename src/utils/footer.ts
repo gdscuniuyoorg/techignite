@@ -46,7 +46,7 @@ export const footerSocialLinks: readonly FooterSocialItem[] = [
   },
   {
     label: 'Twitter (X)',
-    href: 'https://www.twitter.com/gdscuniuyo',
+    href: 'https://x.com/gdgocuniuyo',
     platform: 'twitter',
   },
   {

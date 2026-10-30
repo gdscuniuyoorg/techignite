@@ -72,7 +72,7 @@ export function HeroSponsorPin() {
     <motion.figure
       {...revealProps}
       viewport={{ once: true, amount: 0.5 }}
-      className="relative w-52 shrink-0 select-none lg:w-60"
+      className="relative w-36 shrink-0 select-none lg:w-60"
     >
       <figcaption className="sr-only">Powered by Chowdeck</figcaption>
 
