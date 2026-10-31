@@ -1,17 +1,19 @@
 # ── SPA Fallback ──────────────────────────────────────────────────────────
-# Route all non-file, non-directory requests to index.html so TanStack
-# Router's client-side routing can handle them.
+DirectorySlash Off
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  # If the requested path is a real file or directory, serve it directly.
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
+  # Real files (JS, CSS, images) are served as they are.
+  RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
 
-  # Everything else falls through to the SPA entry point.
-  RewriteRule ^ index.html [L]
+  # Missing files under /assets return a real 404 instead of the app shell.
+  RewriteRule ^assets/ - [R=404,L]
+
+  # Everything else, including folder-named routes, goes to the SPA.
+  RewriteRule ^ /index.html [L]
 </IfModule>
 
 # ── Compression ───────────────────────────────────────────────────────────
