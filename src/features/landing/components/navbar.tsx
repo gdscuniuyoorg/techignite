@@ -147,6 +147,18 @@ export function Navbar() {
                 Sponsor
               </Link>
             </li>
+            <li>
+              <a
+                href={REGISTER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={closeMenu}
+                className="flex items-center gap-1.5 rounded-xs bg-primary px-3 py-3 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong"
+              >
+                Register Now
+                <ArrowRight aria-hidden="true" className="size-4" />
+              </a>
+            </li>
           </ul>
         </nav>
       ) : null}
