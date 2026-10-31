@@ -25,6 +25,18 @@
   font-display: swap;
 }
 
+/* BR Firma (Brink Type) — commercial face, licensed per-weight. Scoped to the
+ * Paga wordmark only; drop the licensed file at this path to activate it. */
+@font-face {
+  font-family: 'BR Firma';
+  src:
+    url('/custom-font/br-firma/BRFirma-Bold.woff2') format('woff2'),
+    url('/custom-font/br-firma/BRFirma-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /*
  * Tech Ignite '26 design tokens.
  * Palettes are sampled from the event art direction: off-black canvas,
@@ -36,6 +48,7 @@
   --font-display: 'Google Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-product-sans: 'Product Sans', 'Google Sans Variable', sans-serif;
   --font-boldonse: 'Boldonse', sans-serif;
+  --font-br-firma: 'BR Firma', 'Google Sans Variable', ui-sans-serif, sans-serif;
 
   /* Brand palette */
   --color-ink: #050505;

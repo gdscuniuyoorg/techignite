@@ -122,29 +122,32 @@ export function SpeakerSponsorPanel() {
             the future of technology.
           </motion.p>
 
-          <MotionAnchor
-            variants={springUp}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            href={SPONSOR_MAILTO}
-            className="mt-8 flex h-11 w-fit items-center gap-2 rounded-xs bg-ink px-6 text-button font-normal text-paper transition-colors hover:bg-ink-soft sm:h-12 sm:px-8"
-          >
-            Become a Sponsor
-            <ArrowRight aria-hidden="true" className="size-4" />
-          </MotionAnchor>
 
-          <MotionAnchor
-            variants={springUp}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            href="/tech-ignite-pitchdeck.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 flex h-11 w-fit items-center gap-2 rounded-xs border border-ink px-6 text-button font-normal text-paper transition-colors hover:bg-ink sm:h-12 sm:px-8"
-          >
-            Check our Pitchdeck
-            <ArrowRight aria-hidden="true" className="size-4" />
-          </MotionAnchor>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <MotionAnchor
+              variants={springUp}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              href={SPONSOR_MAILTO}
+              className="flex h-11 w-fit items-center gap-2 rounded-xs bg-ink px-6 text-button font-normal text-paper transition-colors hover:bg-ink-soft sm:h-12 sm:px-8"
+            >
+              Become a Sponsor
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </MotionAnchor>
+
+            <MotionAnchor
+              variants={springUp}
+              whileTap={{ scale: 0.96 }}
+              href="/tech-ignite-pitchdeck.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-11 w-fit items-center gap-2 rounded-xs bg-brand-green-bright px-6 text-button font-normal text-ink sm:h-12 sm:px-8"
+            >
+              Check our Pitchdeck
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </MotionAnchor>
+          </div>
+
         </div>
       </motion.div>
 

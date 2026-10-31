@@ -1,6 +1,9 @@
+import { useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
+import { ArrowRight, X } from 'lucide-react';
 import { FaLinkedin } from 'react-icons/fa6';
 import { lineupSpeakers } from '@/utils/speakers';
+import { REGISTER_URL } from '@/utils/footer';
 import {
   imageSettle,
   slideInRight,
@@ -11,6 +14,28 @@ import {
 
 export function SpeakerLineup() {
   const userScrolled = useScrollGate();
+  /** Speakers whose bio overlay the visitor explicitly dismissed with the X.
+   * Stored as a Set so dismissing one card never affects another. */
+  const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
+
+  const dismissBio = (name: string, event: ReactMouseEvent) => {
+    event.stopPropagation();
+    setDismissed((prev) => {
+      const next = new Set(prev);
+      next.add(name);
+      return next;
+    });
+  };
+
+  /** Tapping/clicking the card clears an earlier dismissal so the bio can reopen. */
+  const reopenBio = (name: string) => {
+    setDismissed((prev) => {
+      if (!prev.has(name)) return prev;
+      const next = new Set(prev);
+      next.delete(name);
+      return next;
+    });
+  };
 
   return (
     <section
@@ -44,7 +69,7 @@ export function SpeakerLineup() {
               aria-label={speaker.bio ? `View bio for ${speaker.name}` : undefined}
               className="group/speaker relative min-w-0 outline-none"
             >
-              <div className="overflow-hidden rounded-xs">
+              <div className="overflow-hidden rounded-xs" onClick={() => reopenBio(speaker.name)}>
                 <motion.img
                   src={`/images/speakers/${speaker.image}`}
                   alt={`Portrait of ${speaker.name}`}
@@ -58,11 +83,34 @@ export function SpeakerLineup() {
                   }}
                   className="aspect-square w-full object-cover"
                 />
-                {speaker.bio ? (
-                  <div className="pointer-events-none absolute inset-0 z-10 flex translate-y-2 flex-col justify-end bg-ink/92 p-5 text-paper opacity-0 transition-all duration-300 group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100 sm:p-6">
-                    <p className="max-h-full overflow-y-auto text-sm leading-relaxed text-white/90 sm:text-base">
-                      {speaker.bio}
-                    </p>
+
+                {speaker.bio && !dismissed.has(speaker.name) ? (
+                  <div className="pointer-events-none absolute inset-0 z-10 flex translate-y-2 flex-col bg-ink/92 p-5 text-paper opacity-0 transition-all duration-300 group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-hover/speaker:pointer-events-auto group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100 group-focus/speaker:pointer-events-auto group-focus-within/speaker:translate-y-0 group-focus-within/speaker:opacity-100 group-focus-within/speaker:pointer-events-auto sm:p-6">
+                    <button
+                      type="button"
+                      onClick={(event) => dismissBio(speaker.name, event)}
+                      aria-label={`Close bio for ${speaker.name}`}
+                      className="absolute top-3 right-3 z-10 flex size-7 shrink-0 items-center justify-center rounded-full bg-ink-soft/80 text-paper transition-colors hover:bg-paper hover:text-ink"
+                    >
+                      <X aria-hidden="true" className="size-4" />
+                    </button>
+
+                    {/* mt-auto keeps short bios bottom-aligned while letting long
+                        ones scroll instead of overflowing the card. */}
+                    <div className="mt-auto min-h-0 overflow-y-auto overscroll-contain pr-1">
+                      <p className="text-sm leading-relaxed text-white/90 sm:text-base">
+                        {speaker.bio}
+                      </p>
+                    </div>
+
+                    <a
+                      href={REGISTER_URL}
+                      className="mt-4 flex h-10 shrink-0 items-center justify-center gap-2 rounded-xs bg-brand-blue px-5 text-sm font-medium text-paper transition-colors hover:bg-brand-blue-strong lg:hidden"
+                    >
+                      Register Now
+                      <ArrowRight aria-hidden="true" className="size-4" />
+                    </a>
+
                   </div>
                 ) : null}
               </div>

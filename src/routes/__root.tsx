@@ -1,5 +1,6 @@
 import { Navbar } from '@/features/landing/components/navbar';
 import { Footer } from '@/features/landing/components/footer';
+import { ChowdeckPopup } from '@/features/landing/components/chowdeck-popup';
 import { NotFound } from '@/features/landing/components/not-found';
 import appCss from '@/styles/globals.css?url';
 import '@fontsource-variable/google-sans';
@@ -57,6 +58,8 @@ function RootComponent() {
         <Navbar />
         <Outlet />
         <Footer />
+        {/* GDG x Chowdeck co-branding — site-wide, persists while scrolling. */}
+        <ChowdeckPopup />
         <Scripts />
       </body>
     </html>
