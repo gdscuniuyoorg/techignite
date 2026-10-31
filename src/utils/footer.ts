@@ -1,7 +1,9 @@
 export type FooterLinkItem =
   | {
       readonly label: string;
-      readonly to: '/';
+      /** Internal route. Standalone pages link directly; sections still hosted
+       * on the home page use `'/'` together with `hash`. */
+      readonly to: '/' | '/about' | '/speakers';
       readonly hash?: string;
       readonly isExternal?: false;
     }
@@ -28,9 +30,9 @@ export const footerCopyright = '® 2026 Tech Ignite All rights reserved.';
 
 export const footerNavLinks: readonly FooterLinkItem[] = [
   { label: 'Home', to: '/' },
-  { label: 'About', to: '/', hash: 'about' },
+  { label: 'About', to: '/about' },
   { label: 'Agenda', to: '/', hash: 'agenda' },
-  { label: 'Speakers', to: '/', hash: 'speakers' },
+  { label: 'Speakers', to: '/speakers' },
   {
     label: 'Past Photos',
     href: 'https://photos.app.goo.gl/9y5H4u4u7N5bF3Y38',
