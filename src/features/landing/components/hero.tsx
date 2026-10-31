@@ -44,7 +44,7 @@ export function Hero() {
         initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
         animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="arch-contour relative mx-auto mt-24 flex w-full max-w-[1124px] flex-1 flex-col items-center justify-center bg-accent px-6 pt-24 pb-10 text-center min-[1124px]:w-[1124px]"
+        className="arch-contour relative mx-auto mt-24 flex w-full max-w-[1124px] flex-1 flex-col items-center justify-center bg-accent px-6 pt-44 pb-10 text-center min-[1124px]:w-[1124px] lg:pt-24"
         style={{
           borderTopLeftRadius: '500px',
           borderTopRightRadius: '500px',
@@ -52,9 +52,9 @@ export function Hero() {
           borderBottomRightRadius: 0,
         }}
       >
-        {/* Small sponsor sign parked on the arch's lower-right; compact on
-            phones, full size from lg up. */}
-        <div className="absolute right-3 bottom-2 z-10 block lg:right-12 lg:bottom-16 xl:right-14">
+        {/* Small sponsor sign parked at top-center on mobile;
+            lower-right from lg up. */}
+        <div className="absolute top-4 left-1/2 z-10 block -translate-x-1/2 lg:top-auto lg:right-12 lg:bottom-16 lg:left-auto lg:translate-x-0 xl:right-14">
           <HeroSponsorPin />
         </div>
         <motion.div
