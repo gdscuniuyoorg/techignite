@@ -129,7 +129,7 @@ export function KeynoteSpeakers() {
                   className="aspect-[39/50] w-full object-cover grayscale"
                 />
                 {speaker.bio && !dismissed.has(speaker.name) ? (
-                  <div className="pointer-events-none absolute right-3 bottom-3 z-20 flex max-h-[82%] w-[calc(100%-1.5rem)] translate-y-2 flex-col rounded-md bg-ink/95 p-4 text-left text-paper opacity-0 shadow-xl transition-all duration-300 group-hover/speaker:pointer-events-auto group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-focus/speaker:pointer-events-auto group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100 group-focus-within/speaker:pointer-events-auto group-focus-within/speaker:translate-y-0 group-focus-within/speaker:opacity-100">
+                  <div className="pointer-events-none absolute right-3 bottom-3 z-20 flex max-h-[82%] w-[calc(100%-1.5rem)] translate-y-2 flex-col rounded-md bg-ink/95 p-4 text-left text-paper opacity-0 shadow-xl transition-all duration-300 group-focus-within/speaker:pointer-events-auto group-focus-within/speaker:translate-y-0 group-focus-within/speaker:opacity-100 group-hover/speaker:pointer-events-auto group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-focus/speaker:pointer-events-auto group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100">
                     <button
                       type="button"
                       onClick={(event) => {
@@ -140,7 +140,7 @@ export function KeynoteSpeakers() {
                     >
                       <X aria-hidden="true" className="size-3.5" />
                     </button>
-                    <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2 touch-pan-y [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.35)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/35 [&::-webkit-scrollbar-track]:bg-transparent">
+                    <div className="min-h-0 flex-1 touch-pan-y [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.35)_transparent] overflow-y-auto overscroll-contain pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/35 [&::-webkit-scrollbar-track]:bg-transparent">
                       <p className="text-xs leading-relaxed whitespace-pre-line text-white/90 sm:text-sm">
                         {speaker.bio}
                       </p>
