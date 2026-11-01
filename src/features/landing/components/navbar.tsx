@@ -90,7 +90,7 @@ export function Navbar() {
             href={REGISTER_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-9 items-center gap-1.5 rounded-xs bg-primary px-3 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong sm:h-11 sm:gap-2 sm:px-4"
+            className="flex h-9 items-center gap-1.5 rounded-xs bg-primary px-3 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong max-xl:hidden sm:h-11 sm:gap-2 sm:px-4"
           >
             Register Now
             <ArrowRight aria-hidden="true" className="size-3.5 sm:size-4" />
