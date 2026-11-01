@@ -134,7 +134,6 @@ export function PartnersSponsors() {
                     key={`${logo.name}-${String(logoIndex)}`}
                     className="flex h-20 items-center justify-center gap-3 sm:h-24"
                   >
-
                     {logo.src === undefined ? (
                       <span className="text-2xl font-bold tracking-tight text-ink">
                         {logo.name}
@@ -160,7 +159,6 @@ export function PartnersSponsors() {
                           </span>
                         )}
                       </>
-
                     )}
                   </li>
                 ))}

@@ -122,7 +122,6 @@ export function SpeakerSponsorPanel() {
             the future of technology.
           </motion.p>
 
-
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <MotionAnchor
               variants={springUp}
@@ -147,7 +146,6 @@ export function SpeakerSponsorPanel() {
               <ArrowRight aria-hidden="true" className="size-4" />
             </MotionAnchor>
           </div>
-
         </div>
       </motion.div>
 

@@ -1,4 +1,3 @@
-
 import { useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, X } from 'lucide-react';
@@ -96,7 +95,7 @@ export function SpeakerLineup() {
                   </button>
 
                   {speaker.bio && !dismissed.has(speaker.name) ? (
-                    <div className="pointer-events-none absolute inset-0 z-10 flex translate-y-2 flex-col bg-ink/92 p-5 text-paper opacity-0 transition-all duration-300 group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-hover/speaker:pointer-events-auto group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100 group-focus/speaker:pointer-events-auto group-focus-within/speaker:translate-y-0 group-focus-within/speaker:opacity-100 group-focus-within/speaker:pointer-events-auto sm:p-6">
+                    <div className="pointer-events-none absolute inset-0 z-10 flex translate-y-2 flex-col bg-ink/92 p-5 text-paper opacity-0 transition-all duration-300 group-focus-within/speaker:pointer-events-auto group-focus-within/speaker:translate-y-0 group-focus-within/speaker:opacity-100 group-hover/speaker:pointer-events-auto group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-focus/speaker:pointer-events-auto group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100 sm:p-6">
                       <button
                         type="button"
                         onClick={(event) => {
