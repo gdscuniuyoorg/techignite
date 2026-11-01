@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AgendaRouteImport } from './routes/agenda'
+import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as HackathonRouteImport } from './routes/hackathon'
 import { Route as PhotosRouteImport } from './routes/photos'
 import { Route as SpeakersRouteImport } from './routes/speakers'
@@ -29,6 +30,11 @@ const AboutRoute = AboutRouteImport.update({
 const AgendaRoute = AgendaRouteImport.update({
   id: '/agenda',
   path: '/agenda',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyRoute = ApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HackathonRoute = HackathonRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
+  '/apply': typeof ApplyRoute
   '/hackathon': typeof HackathonRoute
   '/photos': typeof PhotosRoute
   '/speakers': typeof SpeakersRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
+  '/apply': typeof ApplyRoute
   '/hackathon': typeof HackathonRoute
   '/photos': typeof PhotosRoute
   '/speakers': typeof SpeakersRoute
@@ -68,20 +76,36 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
+  '/apply': typeof ApplyRoute
   '/hackathon': typeof HackathonRoute
   '/photos': typeof PhotosRoute
   '/speakers': typeof SpeakersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/agenda' | '/hackathon' | '/photos' | '/speakers'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/agenda'
+    | '/apply'
+    | '/hackathon'
+    | '/photos'
+    | '/speakers'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/agenda' | '/hackathon' | '/photos' | '/speakers'
+  to:
+    | '/'
+    | '/about'
+    | '/agenda'
+    | '/apply'
+    | '/hackathon'
+    | '/photos'
+    | '/speakers'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/agenda'
+    | '/apply'
     | '/hackathon'
     | '/photos'
     | '/speakers'
@@ -91,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AgendaRoute: typeof AgendaRoute
+  ApplyRoute: typeof ApplyRoute
   HackathonRoute: typeof HackathonRoute
   PhotosRoute: typeof PhotosRoute
   SpeakersRoute: typeof SpeakersRoute
@@ -117,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/agenda'
       fullPath: '/agenda'
       preLoaderRoute: typeof AgendaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apply': {
+      id: '/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof ApplyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hackathon': {
@@ -147,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AgendaRoute: AgendaRoute,
+  ApplyRoute: ApplyRoute,
   HackathonRoute: HackathonRoute,
   PhotosRoute: PhotosRoute,
   SpeakersRoute: SpeakersRoute,
