@@ -1,5 +1,6 @@
+import { useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { FaLinkedin } from 'react-icons/fa6';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from '@tanstack/react-router';
 import { lineupSpeakers } from '@/utils/speakers';
@@ -16,6 +17,25 @@ const MotionLink = motion.create(Link);
 
 export function KeynoteSpeakers() {
   const userScrolled = useScrollGate();
+  const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
+
+  const dismissBio = (name: string, event: ReactMouseEvent) => {
+    event.stopPropagation();
+    setDismissed((prev) => {
+      const next = new Set(prev);
+      next.add(name);
+      return next;
+    });
+  };
+
+  const reopenBio = (name: string) => {
+    setDismissed((prev) => {
+      if (!prev.has(name)) return prev;
+      const next = new Set(prev);
+      next.delete(name);
+      return next;
+    });
+  };
 
   return (
     <section
@@ -83,6 +103,14 @@ export function KeynoteSpeakers() {
               <div
                 role="button"
                 tabIndex={speaker.bio ? 0 : undefined}
+                onClick={() => {
+                  reopenBio(speaker.name);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    reopenBio(speaker.name);
+                  }
+                }}
                 aria-label={speaker.bio ? `View bio for ${speaker.name}` : undefined}
                 className="group/speaker relative w-[17.5rem] overflow-visible rounded-lg outline-none"
               >
@@ -100,11 +128,23 @@ export function KeynoteSpeakers() {
                   }}
                   className="aspect-[39/50] w-full object-cover grayscale"
                 />
-                {speaker.bio ? (
-                  <div className="pointer-events-none absolute right-3 bottom-3 z-20 max-h-[72%] w-[calc(100%-1.5rem)] translate-y-2 overflow-hidden rounded-md bg-ink/95 p-4 text-left text-paper opacity-0 shadow-xl transition-all duration-300 group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100">
-                    <p className="max-h-56 overflow-y-auto text-xs leading-relaxed text-white/90 sm:text-sm">
-                      {speaker.bio}
-                    </p>
+                {speaker.bio && !dismissed.has(speaker.name) ? (
+                  <div className="pointer-events-none absolute right-3 bottom-3 z-20 flex max-h-[82%] w-[calc(100%-1.5rem)] translate-y-2 flex-col rounded-md bg-ink/95 p-4 text-left text-paper opacity-0 shadow-xl transition-all duration-300 group-focus-within/speaker:pointer-events-auto group-focus-within/speaker:translate-y-0 group-focus-within/speaker:opacity-100 group-hover/speaker:pointer-events-auto group-hover/speaker:translate-y-0 group-hover/speaker:opacity-100 group-focus/speaker:pointer-events-auto group-focus/speaker:translate-y-0 group-focus/speaker:opacity-100">
+                    <button
+                      type="button"
+                      onClick={(event) => {
+                        dismissBio(speaker.name, event);
+                      }}
+                      aria-label={`Close bio for ${speaker.name}`}
+                      className="absolute top-2.5 right-2.5 z-10 flex size-6 shrink-0 items-center justify-center rounded-full bg-ink-soft/80 text-paper transition-colors hover:bg-paper hover:text-ink"
+                    >
+                      <X aria-hidden="true" className="size-3.5" />
+                    </button>
+                    <div className="min-h-0 flex-1 touch-pan-y [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.35)_transparent] overflow-y-auto overscroll-contain pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/35 [&::-webkit-scrollbar-track]:bg-transparent">
+                      <p className="text-xs leading-relaxed whitespace-pre-line text-white/90 sm:text-sm">
+                        {speaker.bio}
+                      </p>
+                    </div>
                   </div>
                 ) : null}
               </div>

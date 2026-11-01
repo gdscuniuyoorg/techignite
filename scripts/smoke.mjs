@@ -1,4 +1,4 @@
-// Fast production smoke test: boots the Nitro server, checks the built page
+// Fast production smoke test: boots the preview server, checks the built page
 // and its stylesheet, then exits. Uses only Node built-ins.
 import { spawn } from 'node:child_process';
 import process from 'node:process';
@@ -8,10 +8,24 @@ const PORT = Number(process.env.SMOKE_PORT ?? 4173);
 const HOST = 'techignite.net';
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 
-const server = spawn(process.execPath, ['.output/server/index.mjs'], {
-  env: { ...process.env, PORT: String(PORT) },
-  stdio: ['ignore', 'pipe', 'pipe'],
-});
+const server = spawn(
+  process.execPath,
+  [
+    'node_modules/vite/bin/vite.js',
+    'preview',
+    '--host',
+    '127.0.0.1',
+    '--port',
+    String(PORT),
+    '--strictPort',
+    '--outDir',
+    '.output/public',
+  ],
+  {
+    env: { ...process.env },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  },
+);
 
 let serverOutput = '';
 server.stdout.on('data', (chunk) => {

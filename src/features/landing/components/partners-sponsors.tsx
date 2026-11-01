@@ -34,10 +34,10 @@ const sponsorTiers: readonly SponsorTier[] = [
     logos: [
       { name: 'Vistapay', src: '/images/sponsors/vistapay.png' },
       {
-        name: 'Paga',
+        name: 'Paga Engine',
         src: '/images/sponsors/paga.png',
         sizeClass: 'size-10',
-        wordmark: 'Paga',
+        wordmark: 'Paga Engine',
         wordmarkClass: 'font-br-firma',
       },
     ],
@@ -48,13 +48,13 @@ const sponsorTiers: readonly SponsorTier[] = [
       {
         name: 'Jobberman',
         src: '/images/sponsors/jobberman.jpg',
-        sizeClass: 'size-20',
+        sizeClass: 'size-14 sm:size-16',
       },
       { name: 'SwiftXr', src: '/images/sponsors/Full%20Logo.svg' },
       {
         name: 'Coincola',
         src: '/images/sponsors/coin-cola.jpg',
-        sizeClass: 'size-20',
+        sizeClass: 'size-14 sm:size-16',
       },
       { name: 'Litehost', src: '/images/sponsors/litehost-wordmark.svg' },
     ],
@@ -63,10 +63,10 @@ const sponsorTiers: readonly SponsorTier[] = [
     label: 'Hackathon Sponsor',
     logos: [
       {
-        name: 'Paga',
+        name: 'Paga Engine',
         src: '/images/sponsors/paga.png',
         sizeClass: 'size-10',
-        wordmark: 'Paga',
+        wordmark: 'Paga Engine',
         wordmarkClass: 'font-br-firma',
       },
     ],
@@ -128,13 +128,12 @@ export function PartnersSponsors() {
               className={tierIndex === 0 ? '' : 'mt-14'}
             >
               <h3 className="text-2xl font-bold">{tier.label}</h3>
-              <ul className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+              <ul className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
                 {tier.logos.map((logo, logoIndex) => (
                   <li
                     key={`${logo.name}-${String(logoIndex)}`}
-                    className="flex h-40 items-center justify-center gap-3 rounded-lg bg-mist px-6"
+                    className="flex h-20 items-center justify-center gap-3 sm:h-24"
                   >
-
                     {logo.src === undefined ? (
                       <span className="text-2xl font-bold tracking-tight text-ink">
                         {logo.name}
@@ -160,7 +159,6 @@ export function PartnersSponsors() {
                           </span>
                         )}
                       </>
-
                     )}
                   </li>
                 ))}
