@@ -22,21 +22,23 @@ export function Hero() {
       aria-labelledby="hero-title"
       className="relative flex min-h-[calc(100svh-5rem)] flex-col overflow-hidden bg-ink sm:min-h-[calc(100svh-6rem)]"
     >
-      {/* Checker mosaic — transparent-backed artwork, ink shows through the gaps. */}
+      {/* Tech Ignite '24 family photo — low-angle parallax, domed arch floats above it. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"
       >
         <motion.img
-          src="/icons/hero.png"
+          src="/past-photos/past-photo.jpg"
           alt=""
-          width={1512}
-          height={703}
+          width={1280}
+          height={853}
           fetchPriority="high"
           decoding="async"
           style={{ y: mosaicY }}
           className="size-full object-cover object-top"
         />
+        {/* Dark ink overlay — keeps the arch lockup readable over the bright photo */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/50 via-ink/30 to-ink/60" />
       </div>
 
       {/* Cream arch — rises into view on load, same geometry as the speaker hero */}
