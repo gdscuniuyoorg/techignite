@@ -27,6 +27,7 @@ export interface LineupSpeaker {
   readonly height: number;
   readonly linkedin?: string;
   readonly bio?: string;
+  readonly isDummy?: boolean;
 }
 
 /** Keynote lineup shown in the "Our Speaker Lineup" carousel. Source data is
@@ -45,23 +46,26 @@ export const lineupSpeakers: readonly LineupSpeaker[] = [
   {
     name: 'Diego Costa',
     role: 'Founder, MotionFlow',
-    image: 'portrait-02.jpg',
+    image: 'portrait-05.jpg',
     width: 832,
     height: 880,
+    isDummy: true,
   },
   {
     name: 'Niyi Okeowo',
     role: 'Creative Director, Kuda',
-    image: 'portrait-03.jpg',
-    width: 861,
+    image: 'portrait-05.jpg',
+    width: 832,
     height: 1024,
+    isDummy: true,
   },
   {
     name: 'Ted Oladele',
     role: 'Head of Product, Chowdeck',
-    image: 'portrait-04.jpg',
-    width: 882,
+    image: 'portrait-05.jpg',
+    width: 832,
     height: 1024,
+    isDummy: true,
   },
   {
     name: 'Evana Eko (Razzo)',
@@ -69,6 +73,7 @@ export const lineupSpeakers: readonly LineupSpeaker[] = [
     image: 'portrait-05.jpg',
     width: 832,
     height: 880,
+    isDummy: true,
   },
   {
     name: 'Daniel Ife',
@@ -76,6 +81,7 @@ export const lineupSpeakers: readonly LineupSpeaker[] = [
     image: 'portrait-05.jpg',
     width: 832,
     height: 880,
+    isDummy: true,
   },
   {
     name: 'Wilfred Alfred',
@@ -83,6 +89,7 @@ export const lineupSpeakers: readonly LineupSpeaker[] = [
     image: 'portrait-05.jpg',
     width: 832,
     height: 880,
+    isDummy: true,
   },
   {
     name: 'Kachi Kalu',
@@ -90,6 +97,7 @@ export const lineupSpeakers: readonly LineupSpeaker[] = [
     image: 'portrait-05.jpg',
     width: 832,
     height: 880,
+    isDummy: true,
   },
   {
     name: 'Samuel Lasisi',
@@ -97,5 +105,6 @@ export const lineupSpeakers: readonly LineupSpeaker[] = [
     image: 'portrait-05.jpg',
     width: 832,
     height: 880,
+    isDummy: true,
   },
 ];

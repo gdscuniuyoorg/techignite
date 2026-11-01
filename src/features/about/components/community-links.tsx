@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
+import { FaFacebook, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
 import { ArrowUpRight, Image as ImageIcon, Mail, Ticket } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { footerSocialLinks } from '@/utils/footer';
@@ -17,7 +17,6 @@ type PlatformIcon = ComponentType<{ className?: string }>;
 const socialIcons: Record<string, PlatformIcon> = {
   linkedin: FaLinkedin,
   twitter: FaXTwitter,
-  instagram: FaInstagram,
   facebook: FaFacebook,
 };
 

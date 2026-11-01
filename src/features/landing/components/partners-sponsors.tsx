@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
 import { slideInRight, springUp, staggerContainer, useScrollGate } from '@/lib/motion';
 
-/** A single sponsor entry. Entries without `src` fall back to plain text,
- * which is also the placeholder until real artwork is supplied. */
+const DUMMY_LOGO_SRC = '/icons/logo.png';
+
+/** A single sponsor entry. Entries without `src` render the name as text. */
 interface SponsorLogo {
   readonly name: string;
   /** Path to the sponsor artwork. Omit to render the name as text. */
   readonly src?: string;
-  /** Tailwind size for square icon-only artwork, which must sit at a fixed
-   * size rather than stretch to the full tile width. Entries without it render
-   * as a full-width lockup. */
+  /** Tailwind size for square icon-only artwork. Entries without it render as
+   * a full-width lockup. */
   readonly sizeClass?: string;
   /** Brand name set beside icon-only artwork, which carries no text of its own. */
   readonly wordmark?: string;
@@ -27,12 +27,12 @@ interface SponsorTier {
 const sponsorTiers: readonly SponsorTier[] = [
   {
     label: 'Title Sponsor',
-    logos: [{ name: 'Chowdeck', src: '/images/sponsors/chowdeck-sponsor.png' }],
+    logos: [{ name: 'Chowdeck', src: DUMMY_LOGO_SRC }],
   },
   {
     label: 'Diamond Sponsors',
     logos: [
-      { name: 'Vistapay', src: '/images/sponsors/vistapay.png' },
+      { name: 'Vistapay', src: DUMMY_LOGO_SRC },
       {
         name: 'Paga Engine',
         src: '/images/sponsors/paga.png',
@@ -47,16 +47,14 @@ const sponsorTiers: readonly SponsorTier[] = [
     logos: [
       {
         name: 'Jobberman',
-        src: '/images/sponsors/jobberman.jpg',
-        sizeClass: 'size-14 sm:size-16',
+        src: DUMMY_LOGO_SRC,
       },
-      { name: 'SwiftXr', src: '/images/sponsors/Full%20Logo.svg' },
+      { name: 'SwiftXr', src: DUMMY_LOGO_SRC },
       {
         name: 'Coincola',
-        src: '/images/sponsors/coin-cola.jpg',
-        sizeClass: 'size-14 sm:size-16',
+        src: DUMMY_LOGO_SRC,
       },
-      { name: 'Litehost', src: '/images/sponsors/litehost-wordmark.svg' },
+      { name: 'Litehost', src: DUMMY_LOGO_SRC },
     ],
   },
   {

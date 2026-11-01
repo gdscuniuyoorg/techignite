@@ -16,7 +16,7 @@ export type FooterLinkItem =
 export interface FooterSocialItem {
   readonly label: string;
   readonly href: string;
-  readonly platform: 'linkedin' | 'twitter' | 'instagram' | 'facebook';
+  readonly platform: 'linkedin' | 'twitter' | 'facebook';
 }
 
 /** Official registration page for Tech Ignite '26 (GDG community events). */
@@ -50,11 +50,6 @@ export const footerSocialLinks: readonly FooterSocialItem[] = [
     label: 'Twitter (X)',
     href: 'https://x.com/gdgocuniuyo',
     platform: 'twitter',
-  },
-  {
-    label: 'Instagram',
-    href: 'https://www.instagram.com/gdscuniuyo',
-    platform: 'instagram',
   },
   {
     label: 'Facebook',

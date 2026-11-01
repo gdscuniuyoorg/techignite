@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, X } from 'lucide-react';
 import { FaLinkedin } from 'react-icons/fa6';
 import { lineupSpeakers } from '@/utils/speakers';
+import { DummySpeakerCard } from '@/features/speakers/components/dummy-speaker-card';
 import { REGISTER_URL } from '@/utils/footer';
 import {
   imageSettle,
@@ -60,7 +61,20 @@ export function SpeakerLineup() {
         </motion.h2>
 
         <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-13 lg:gap-y-18">
-          {lineupSpeakers.map((speaker) => {
+          {lineupSpeakers.map((speaker, index) => {
+            if (speaker.isDummy) {
+              return (
+                <motion.li
+                  key={speaker.name}
+                  variants={springUp}
+                  whileHover={{ y: -6 }}
+                  className="relative min-w-0"
+                >
+                  <DummySpeakerCard colorIndex={index - 1} />
+                </motion.li>
+              );
+            }
+
             return (
               <motion.li
                 key={speaker.name}

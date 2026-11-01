@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Link } from '@tanstack/react-router';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { SponsorPin } from '@/components/molecules/sponsor-pin';
 import { SPRING_POP, staggerContainer, wordReveal } from '@/lib/motion';
 
 const MotionLink = motion.create(Link);
@@ -64,6 +65,16 @@ export function HackathonHero() {
           className="absolute inset-0 object-cover opacity-20"
         />
 
+        <div className="absolute right-4 bottom-5 z-20 origin-bottom-right scale-[0.68] sm:right-6 sm:bottom-6 sm:scale-90 lg:right-10 lg:bottom-8 lg:scale-100">
+          <SponsorPin
+            sponsorName="Paga Engine"
+            logoSrc="/images/sponsors/paga-engine.png"
+            logoWidth={1352}
+            logoHeight={219}
+            logoClassName="mt-2 h-auto w-[80%]"
+          />
+        </div>
+
         <motion.h1
           id="hackathon-title"
           initial="hidden"
@@ -92,8 +103,8 @@ export function HackathonHero() {
         >
           Bring your skills, find your people, and build something amazing.
           <br />
-          The Tech Ignite Hackathon is where creativity meets code and big ideas become
-          reality.
+          The Build with Paga Shipathon is where creativity meets code and big ideas
+          become reality.
         </motion.p>
 
         <MotionLink
