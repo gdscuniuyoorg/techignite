@@ -68,7 +68,7 @@ export const hackathonStats: readonly HackathonStat[] = [
     label: 'Pitch live on the main stage',
   },
   {
-    value: '19th Nov',
+    value: '20th Nov',
     label: 'Final, in person in Uyo',
   },
 ];

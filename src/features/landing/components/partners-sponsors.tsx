@@ -34,10 +34,10 @@ const sponsorTiers: readonly SponsorTier[] = [
     logos: [
       { name: 'Vistapay', src: '/images/sponsors/vistapay.png' },
       {
-        name: 'Paga',
+        name: 'Paga Engine',
         src: '/images/sponsors/paga.png',
         sizeClass: 'size-10',
-        wordmark: 'Paga',
+        wordmark: 'Paga Engine',
         wordmarkClass: 'font-br-firma',
       },
     ],
@@ -63,10 +63,10 @@ const sponsorTiers: readonly SponsorTier[] = [
     label: 'Hackathon Sponsor',
     logos: [
       {
-        name: 'Paga',
+        name: 'Paga Engine',
         src: '/images/sponsors/paga.png',
         sizeClass: 'size-10',
-        wordmark: 'Paga',
+        wordmark: 'Paga Engine',
         wordmarkClass: 'font-br-firma',
       },
     ],
