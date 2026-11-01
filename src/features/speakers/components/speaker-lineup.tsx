@@ -109,8 +109,8 @@ export function SpeakerLineup() {
 
                       {/* mt-auto keeps short bios bottom-aligned while letting long
                           ones scroll instead of overflowing the card. */}
-                      <div className="mt-auto min-h-0 overflow-y-auto overscroll-contain pr-1">
-                        <p className="text-sm leading-relaxed text-white/90 sm:text-base">
+                      <div className="mt-auto min-h-0 overflow-y-auto overscroll-contain pr-2 touch-pan-y [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.35)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/35 [&::-webkit-scrollbar-track]:bg-transparent">
+                        <p className="text-sm leading-relaxed whitespace-pre-line text-white/90 sm:text-base">
                           {speaker.bio}
                         </p>
                       </div>
