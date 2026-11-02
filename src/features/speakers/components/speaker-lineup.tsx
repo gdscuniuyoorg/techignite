@@ -47,8 +47,8 @@ export function SpeakerLineup() {
       <motion.div
         variants={staggerContainer(0.1)}
         initial="hidden"
-        whileInView={userScrolled ? 'visible' : 'hidden'}
-        viewport={{ once: false, amount: 0.15 }}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
         className="container"
       >
         <motion.h2
@@ -71,9 +71,9 @@ export function SpeakerLineup() {
                   className="relative min-w-0"
                 >
                   <DummySpeakerCard
-                    colorIndex={index - 1}
-                    name={speaker.name}
-                    role={speaker.role}
+                    colorIndex={index}
+
+
                   />
                 </motion.li>
               );
