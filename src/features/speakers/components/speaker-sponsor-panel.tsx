@@ -155,8 +155,8 @@ export function SpeakerSponsorPanel() {
             key={row.label}
             variants={staggerContainer(0.09)}
             initial="hidden"
-            whileInView={userScrolled ? 'visible' : 'hidden'}
-            viewport={{ once: false, amount: 0.3 }}
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
             role="region"
             aria-label={row.label}
             className="scrollbar-none overflow-x-auto"

@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { blurUp, fadeUp, springUp, staggerContainer } from '@/lib/motion';
-import { HeroSponsorPin } from '@/features/landing/components/hero-sponsor-pin';
+import { SponsorPin } from '@/components/molecules/sponsor-pin';
 import { REGISTER_URL } from '@/utils/footer';
 
 const MotionAnchor = motion.create('a');
@@ -57,7 +57,10 @@ export function Hero() {
         {/* Small sponsor sign parked at top-center on mobile;
             lower-right from lg up. */}
         <div className="absolute top-4 left-1/2 z-10 block -translate-x-1/2 lg:top-auto lg:right-12 lg:bottom-16 lg:left-auto lg:translate-x-0 xl:right-14">
-          <HeroSponsorPin />
+          <SponsorPin
+            sponsorName="Chowdeck"
+            logoSrc="/images/sponsors/chowdeck-sponsor.png"
+          />
         </div>
         <motion.div
           initial="hidden"

@@ -3,17 +3,11 @@ import { motion } from 'framer-motion';
 import { ArrowRight, X } from 'lucide-react';
 import { FaLinkedin } from 'react-icons/fa6';
 import { lineupSpeakers } from '@/utils/speakers';
+import { DummySpeakerCard } from '@/features/speakers/components/dummy-speaker-card';
 import { REGISTER_URL } from '@/utils/footer';
-import {
-  imageSettle,
-  slideInRight,
-  springUp,
-  staggerContainer,
-  useScrollGate,
-} from '@/lib/motion';
+import { imageSettle, slideInRight, springUp, staggerContainer } from '@/lib/motion';
 
 export function SpeakerLineup() {
-  const userScrolled = useScrollGate();
   /** Speakers whose bio overlay the visitor explicitly dismissed with the X.
    * Stored as a Set so dismissing one card never affects another. */
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
@@ -46,8 +40,8 @@ export function SpeakerLineup() {
       <motion.div
         variants={staggerContainer(0.1)}
         initial="hidden"
-        whileInView={userScrolled ? 'visible' : 'hidden'}
-        viewport={{ once: false, amount: 0.15 }}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
         className="container"
       >
         <motion.h2
@@ -60,7 +54,20 @@ export function SpeakerLineup() {
         </motion.h2>
 
         <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-13 lg:gap-y-18">
-          {lineupSpeakers.map((speaker) => {
+          {lineupSpeakers.map((speaker, index) => {
+            if (speaker.isDummy) {
+              return (
+                <motion.li
+                  key={speaker.name}
+                  variants={springUp}
+                  whileHover={{ y: -6 }}
+                  className="relative min-w-0"
+                >
+                  <DummySpeakerCard colorIndex={index} />
+                </motion.li>
+              );
+            }
+
             return (
               <motion.li
                 key={speaker.name}

@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Link } from '@tanstack/react-router';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { SponsorPin } from '@/components/molecules/sponsor-pin';
 import { SPRING_POP, staggerContainer, wordReveal } from '@/lib/motion';
 
 const MotionLink = motion.create(Link);
@@ -44,7 +45,7 @@ export function HackathonHero() {
         initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
         animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="relative mx-auto mt-24 flex w-full max-w-[1124px] flex-1 flex-col items-center justify-center bg-[#FFFFFF] px-6 pt-24 pb-10 text-center min-[1124px]:w-[1124px]"
+        className="relative mx-auto mt-24 flex w-full max-w-[1124px] flex-1 flex-col items-center justify-center bg-[#FFFFFF] px-6 pt-44 pb-10 text-center min-[1124px]:w-[1124px] lg:pt-24"
         style={{
           borderTopLeftRadius: '500px',
           borderTopRightRadius: '500px',
@@ -63,6 +64,18 @@ export function HackathonHero() {
           transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute inset-0 object-cover opacity-20"
         />
+
+        {/* Small sponsor sign parked at top-center on mobile;
+            lower-right from lg up. */}
+        <div className="absolute top-4 left-1/2 z-20 block -translate-x-1/2 lg:top-auto lg:right-10 lg:bottom-8 lg:left-auto lg:translate-x-0 xl:right-14">
+          <SponsorPin
+            sponsorName="Paga Engine"
+            logoSrc="/images/sponsors/paga-engine.png"
+            logoWidth={1352}
+            logoHeight={219}
+            logoClassName="mt-2 h-auto w-[80%]"
+          />
+        </div>
 
         <motion.h1
           id="hackathon-title"
@@ -92,8 +105,8 @@ export function HackathonHero() {
         >
           Bring your skills, find your people, and build something amazing.
           <br />
-          The Tech Ignite Hackathon is where creativity meets code and big ideas become
-          reality.
+          The Build with Paga Shipathon is where creativity meets code and big ideas
+          become reality.
         </motion.p>
 
         <MotionLink

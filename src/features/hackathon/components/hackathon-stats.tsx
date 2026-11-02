@@ -40,10 +40,10 @@ export function HackathonStats() {
 
         <motion.div variants={blurUp} className="mt-24 max-w-[1046px]">
           <p className="text-subheading leading-normal text-white/90">
-            The Tech Ignite Hackathon is where curious minds, creative thinkers, and
-            ambitious builders come together to solve problems through technology.
-            It&rsquo;s an opportunity to collaborate, experiment with new ideas, and turn
-            real-world challenges into innovative solutions.
+            The Build with Paga Shipathon is a high-impact innovation challenge designed
+            to empower the brightest builders to create practical solutions to real-world
+            problems. The goal is a working prototype with a credible path to becoming a
+            real product, not a weekend demo.
           </p>
         </motion.div>
       </motion.div>

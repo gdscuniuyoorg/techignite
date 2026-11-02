@@ -1,13 +1,25 @@
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
 
 /**
- * Small "Powered by Chowdeck" sign hanging from a pushpin, parked on the
- * right side of the hero arch. A single, short choreography that runs once:
+ * A small sponsor sign hanging from a pushpin. A single, short choreography
+ * that runs once:
  * pin falls and bites → board swings on it → the wordmark fades in.
  * No idle loop.
  */
 
-const LOGO_SRC = '/images/sponsors/chowdeck-sponsor.png';
+interface SponsorPinProps {
+  readonly sponsorName: string;
+  readonly logoSrc: string;
+  readonly logoWidth?: number;
+  readonly logoHeight?: number;
+  readonly className?: string;
+  readonly logoClassName?: string;
+}
+
+const delayedReveal: Variants = {
+  hidden: {},
+  visible: { transition: { delayChildren: 2 } },
+};
 
 const pinDrop: Variants = {
   hidden: { opacity: 0, y: -40, rotate: -14 },
@@ -59,7 +71,14 @@ const hoverPush = {
   },
 };
 
-export function HeroSponsorPin() {
+export function SponsorPin({
+  sponsorName,
+  logoSrc,
+  logoWidth = 201,
+  logoHeight = 74,
+  className,
+  logoClassName,
+}: SponsorPinProps) {
   const shouldReduceMotion = useReducedMotion() ?? false;
 
   const revealProps = shouldReduceMotion
@@ -71,10 +90,11 @@ export function HeroSponsorPin() {
   return (
     <motion.figure
       {...revealProps}
+      variants={delayedReveal}
       viewport={{ once: true, amount: 0.5 }}
-      className="relative w-28 shrink-0 select-none sm:w-32 lg:w-44"
+      className={`relative w-28 shrink-0 select-none sm:w-32 lg:w-44 ${className ?? ''}`}
     >
-      <figcaption className="sr-only">Powered by Chowdeck</figcaption>
+      <figcaption className="sr-only">Powered by {sponsorName}</figcaption>
 
       {/* Everything below the pin swings on it. Moving the mouse over the
           sign pushes it — it wobbles on the pin and settles back. */}
@@ -136,13 +156,13 @@ export function HeroSponsorPin() {
               <div className="mt-1.5 h-px w-2/5 bg-ink/15 lg:mt-2" />
 
               <img
-                src={LOGO_SRC}
+                src={logoSrc}
                 alt=""
-                width={201}
-                height={74}
+                width={logoWidth}
+                height={logoHeight}
                 loading="lazy"
                 decoding="async"
-                className="mt-1.5 h-auto w-[56%] lg:mt-2"
+                className={logoClassName ?? 'mt-1.5 h-auto w-[56%] lg:mt-2'}
               />
             </motion.div>
           </div>

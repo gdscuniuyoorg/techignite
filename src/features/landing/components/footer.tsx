@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
 import type { ComponentType } from 'react';
-import { FaFacebook, FaInstagram, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
+import { FaFacebook, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
 import {
   REGISTER_URL,
   footerCopyright,
@@ -17,7 +17,6 @@ const socialIcons: Record<
 > = {
   linkedin: FaLinkedin,
   twitter: FaXTwitter,
-  instagram: FaInstagram,
   facebook: FaFacebook,
 };
 
