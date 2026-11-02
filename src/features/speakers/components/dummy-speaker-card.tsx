@@ -36,7 +36,7 @@ export function DummySpeakerCard({
       <div
         className={`flex aspect-[4/4.1] w-full items-center justify-center p-6 ${bgClass}`}
       >
-        <div className="flex w-[60%] aspect-square items-center justify-center rounded-full border-2 border-dashed border-[#475467]/40 p-2 sm:p-2.5">
+        <div className="flex aspect-square w-[60%] items-center justify-center rounded-full border-2 border-dashed border-[#475467]/40 p-2 sm:p-2.5">
           <div className="flex size-full items-end justify-center overflow-hidden rounded-full bg-[#D1D5DB]">
             <svg
               viewBox="0 0 120 120"
@@ -55,9 +55,7 @@ export function DummySpeakerCard({
         <h3 className="font-product-sans text-base font-bold tracking-wider text-ink uppercase sm:text-lg">
           {name}
         </h3>
-        <p className="mt-0.5 text-xs font-normal text-muted-dark sm:text-sm">
-          {role}
-        </p>
+        <p className="mt-0.5 text-xs font-normal text-muted-dark sm:text-sm">{role}</p>
       </div>
     </div>
   );

@@ -5,16 +5,9 @@ import { FaLinkedin } from 'react-icons/fa6';
 import { lineupSpeakers } from '@/utils/speakers';
 import { DummySpeakerCard } from '@/features/speakers/components/dummy-speaker-card';
 import { REGISTER_URL } from '@/utils/footer';
-import {
-  imageSettle,
-  slideInRight,
-  springUp,
-  staggerContainer,
-  useScrollGate,
-} from '@/lib/motion';
+import { imageSettle, slideInRight, springUp, staggerContainer } from '@/lib/motion';
 
 export function SpeakerLineup() {
-  const userScrolled = useScrollGate();
   /** Speakers whose bio overlay the visitor explicitly dismissed with the X.
    * Stored as a Set so dismissing one card never affects another. */
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
@@ -70,11 +63,7 @@ export function SpeakerLineup() {
                   whileHover={{ y: -6 }}
                   className="relative min-w-0"
                 >
-                  <DummySpeakerCard
-                    colorIndex={index}
-
-
-                  />
+                  <DummySpeakerCard colorIndex={index} />
                 </motion.li>
               );
             }
