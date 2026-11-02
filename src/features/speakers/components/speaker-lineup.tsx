@@ -70,7 +70,11 @@ export function SpeakerLineup() {
                   whileHover={{ y: -6 }}
                   className="relative min-w-0"
                 >
-                  <DummySpeakerCard colorIndex={index - 1} />
+                  <DummySpeakerCard
+                    colorIndex={index - 1}
+                    name={speaker.name}
+                    role={speaker.role}
+                  />
                 </motion.li>
               );
             }

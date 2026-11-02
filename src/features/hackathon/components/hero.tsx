@@ -45,7 +45,7 @@ export function HackathonHero() {
         initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
         animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="relative mx-auto mt-24 flex w-full max-w-[1124px] flex-1 flex-col items-center justify-center bg-[#FFFFFF] px-6 pt-24 pb-10 text-center min-[1124px]:w-[1124px]"
+        className="relative mx-auto mt-24 flex w-full max-w-[1124px] flex-1 flex-col items-center justify-center bg-[#FFFFFF] px-6 pt-44 pb-10 text-center min-[1124px]:w-[1124px] lg:pt-24"
         style={{
           borderTopLeftRadius: '500px',
           borderTopRightRadius: '500px',
@@ -65,7 +65,9 @@ export function HackathonHero() {
           className="absolute inset-0 object-cover opacity-20"
         />
 
-        <div className="absolute right-4 bottom-5 z-20 origin-bottom-right scale-[0.68] sm:right-6 sm:bottom-6 sm:scale-90 lg:right-10 lg:bottom-8 lg:scale-100">
+        {/* Small sponsor sign parked at top-center on mobile;
+            lower-right from lg up. */}
+        <div className="absolute top-4 left-1/2 z-20 block -translate-x-1/2 lg:top-auto lg:right-10 lg:bottom-8 lg:left-auto lg:translate-x-0 xl:right-14">
           <SponsorPin
             sponsorName="Paga Engine"
             logoSrc="/images/sponsors/paga-engine.png"
@@ -113,7 +115,7 @@ export function HackathonHero() {
           transition={{ ...SPRING_POP, delay: 2 }}
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
-          to="/"
+          to="/apply"
           className="relative z-10 mt-6 flex h-13 items-center justify-center gap-2.5 rounded-xs bg-[#FF84B3] px-8 text-button font-normal text-ink shadow-none transition-colors hover:bg-[#FF84B3]/90 sm:mt-7 sm:h-14 sm:min-w-[220px] sm:px-10"
         >
           Apply Now

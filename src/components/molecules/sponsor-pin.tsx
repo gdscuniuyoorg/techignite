@@ -92,7 +92,7 @@ export function SponsorPin({
       {...revealProps}
       variants={delayedReveal}
       viewport={{ once: true, amount: 0.5 }}
-      className={`relative w-36 shrink-0 select-none lg:w-60 ${className ?? ''}`}
+      className={`relative w-28 shrink-0 select-none sm:w-32 lg:w-44 ${className ?? ''}`}
     >
       <figcaption className="sr-only">Powered by {sponsorName}</figcaption>
 
@@ -109,7 +109,7 @@ export function SponsorPin({
           aria-hidden="true"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
-          className="absolute inset-x-0 top-[36px] h-[36px] w-full text-ink/50"
+          className="absolute inset-x-0 top-[36px] h-5 w-full text-ink/50 lg:h-[36px]"
         >
           <line
             x1="50"
@@ -134,8 +134,8 @@ export function SponsorPin({
         </svg>
 
         {/* The board itself. */}
-        <div className="relative mt-[72px]">
-          <div className="relative flex aspect-[2/1] w-full flex-col items-center justify-center rounded-[5px] border border-ink/15 bg-paper px-4 text-ink shadow-[0_18px_36px_-20px_rgba(5,5,5,0.45)]">
+        <div className="relative mt-[56px] lg:mt-[72px]">
+          <div className="relative flex aspect-[2/1] w-full flex-col items-center justify-center rounded-[5px] border border-ink/15 bg-paper px-3 text-ink shadow-[0_18px_36px_-20px_rgba(5,5,5,0.45)] lg:px-4">
             <span
               aria-hidden="true"
               className="absolute -top-[5px] left-[5%] size-2.5 -translate-x-1/2 rounded-full border-2 border-ink/35 bg-mist"
@@ -149,18 +149,20 @@ export function SponsorPin({
               variants={signReveal}
               className="flex w-full flex-col items-center"
             >
-              <p className="text-[0.625rem] font-medium tracking-[0.28em] text-ink/70 uppercase">
+              <p className="text-[0.625rem] font-medium tracking-[0.18em] whitespace-nowrap text-ink/70 uppercase lg:tracking-[0.28em]">
                 Powered by
               </p>
 
-              <div className="mt-2 h-px w-2/5 bg-ink/15" />
+              <div className="mt-1.5 h-px w-2/5 bg-ink/15 lg:mt-2" />
 
               <img
                 src={logoSrc}
                 alt=""
                 width={logoWidth}
                 height={logoHeight}
-                className={logoClassName ?? 'mt-2 h-auto w-[56%]'}
+                loading="lazy"
+                decoding="async"
+                className={logoClassName ?? 'mt-1.5 h-auto w-[56%] lg:mt-2'}
               />
             </motion.div>
           </div>
@@ -168,11 +170,14 @@ export function SponsorPin({
       </motion.div>
 
       {/* Pushpin at the apex: rounded head, darker rim, highlight, short neck. */}
-      <motion.div variants={pinDrop} className="absolute top-0 left-1/2 z-30 -ml-4.5">
-        <div className="relative size-9 rounded-full bg-brand-blue shadow-[0_8px_14px_-6px_rgba(5,5,5,0.5)] ring-[3px] ring-brand-blue-strong">
+      <motion.div
+        variants={pinDrop}
+        className="absolute top-0 left-1/2 z-30 -ml-3.5 lg:-ml-4.5"
+      >
+        <div className="relative size-7 rounded-full bg-brand-blue shadow-[0_8px_14px_-6px_rgba(5,5,5,0.5)] ring-[3px] ring-brand-blue-strong lg:size-9">
           <span
             aria-hidden="true"
-            className="absolute top-[7px] left-[7px] size-2.5 rounded-full bg-brand-blue-soft"
+            className="absolute top-[5px] left-[5px] size-2 rounded-full bg-brand-blue-soft lg:top-[7px] lg:left-[7px] lg:size-2.5"
           />
         </div>
 

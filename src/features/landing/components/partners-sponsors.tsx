@@ -11,11 +11,6 @@ interface SponsorLogo {
   /** Tailwind size for square icon-only artwork. Entries without it render as
    * a full-width lockup. */
   readonly sizeClass?: string;
-  /** Brand name set beside icon-only artwork, which carries no text of its own. */
-  readonly wordmark?: string;
-  /** Tailwind font utility applied to the wordmark text. Scoped per-sponsor so
-   * only Paga is set in BR Firma while other wordmarks keep the site face. */
-  readonly wordmarkClass?: string;
 }
 
 /** Sponsor tiers shown in the partners section. */
@@ -33,13 +28,7 @@ const sponsorTiers: readonly SponsorTier[] = [
     label: 'Diamond Sponsors',
     logos: [
       { name: 'Vistapay', src: DUMMY_LOGO_SRC },
-      {
-        name: 'Paga Engine',
-        src: '/images/sponsors/paga.png',
-        sizeClass: 'size-10',
-        wordmark: 'Paga Engine',
-        wordmarkClass: 'font-br-firma',
-      },
+      { name: 'Paga Engine', src: '/images/sponsors/paga-engine.png' },
     ],
   },
   {
@@ -59,15 +48,7 @@ const sponsorTiers: readonly SponsorTier[] = [
   },
   {
     label: 'Hackathon Sponsor',
-    logos: [
-      {
-        name: 'Paga Engine',
-        src: '/images/sponsors/paga.png',
-        sizeClass: 'size-10',
-        wordmark: 'Paga Engine',
-        wordmarkClass: 'font-br-firma',
-      },
-    ],
+    logos: [{ name: 'Paga Engine', src: '/images/sponsors/paga-engine.png' }],
   },
 ];
 
@@ -137,26 +118,17 @@ export function PartnersSponsors() {
                         {logo.name}
                       </span>
                     ) : (
-                      <>
-                        <img
-                          src={logo.src}
-                          alt={logo.wordmark === undefined ? logo.name : ''}
-                          loading="lazy"
-                          decoding="async"
-                          className={
-                            logo.sizeClass === undefined
-                              ? 'h-auto w-full max-w-40 object-contain'
-                              : `${logo.sizeClass} shrink-0 object-contain`
-                          }
-                        />
-                        {logo.wordmark !== undefined && (
-                          <span
-                            className={`text-2xl font-bold text-ink ${logo.wordmarkClass ?? 'tracking-tight'}`}
-                          >
-                            {logo.wordmark}
-                          </span>
-                        )}
-                      </>
+                      <img
+                        src={logo.src}
+                        alt={logo.name}
+                        loading="lazy"
+                        decoding="async"
+                        className={
+                          logo.sizeClass === undefined
+                            ? 'h-auto w-full max-w-40 object-contain'
+                            : `${logo.sizeClass} shrink-0 object-contain`
+                        }
+                      />
                     )}
                   </li>
                 ))}

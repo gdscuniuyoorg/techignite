@@ -132,7 +132,7 @@ export function ChowdeckPopup() {
           initial={shouldReduceMotion ? false : 'hidden'}
           animate="visible"
           exit="exit"
-          className="fixed top-1/2 right-0 z-50 -translate-y-1/2"
+          className="fixed top-1/2 right-0 z-50 hidden -translate-y-1/2 md:block"
         >
           <motion.div
             variants={driftVariants}

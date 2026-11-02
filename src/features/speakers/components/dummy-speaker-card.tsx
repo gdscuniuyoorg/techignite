@@ -1,4 +1,4 @@
-export const DUMMY_SPEAKER_COLORS = [
+const DUMMY_SPEAKER_COLORS = [
   'bg-[#FEF0C7]', // warm pastel yellow / cream
   'bg-[#D1FADF]', // soft pastel mint green
   'bg-[#DBEAFE]', // soft pastel sky blue
