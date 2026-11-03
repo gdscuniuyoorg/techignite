@@ -1,7 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from '@tanstack/react-router';
-import { DummySpeakerCard } from '@/features/speakers/components/dummy-speaker-card';
 import {
   blurUp,
   slideInRight,
@@ -63,22 +62,26 @@ export function KeynoteSpeakers() {
         </div>
       </motion.div>
 
-      {/* Featured speaker: single dummy teaser card. */}
-      <div className="mt-16 scrollbar-none overflow-x-auto sm:mt-20">
-        <motion.ul
-          variants={staggerContainer(0.09)}
-          initial="hidden"
-          whileInView={userScrolled ? 'visible' : 'hidden'}
-          viewport={{ once: false, amount: 0.2 }}
-          className="flex w-max items-start gap-4 pr-8 pl-[max(1.25rem,calc((100vw-90rem)/2+1.5rem))]"
+      {/* No teaser cards — the lineup itself says "To Be Announced" for now. */}
+      <motion.div
+        variants={staggerContainer(0.16)}
+        initial="hidden"
+        whileInView={userScrolled ? 'visible' : 'hidden'}
+        viewport={{ once: false, amount: 0.2 }}
+        className="container"
+      >
+        <motion.div
+          variants={blurUp}
+          className="mt-14 flex flex-col items-center rounded-card border border-line bg-surface px-6 py-14 text-center sm:mt-16 sm:py-16"
         >
-          <motion.li variants={springUp}>
-            <div className="w-[17.5rem]">
-              <DummySpeakerCard colorIndex={0} />
-            </div>
-          </motion.li>
-        </motion.ul>
-      </div>
+          <p className="font-product-sans text-[clamp(1.5rem,4.5vw,3rem)] leading-[0.95] font-bold tracking-tight text-paper">
+            TO BE ANNOUNCED
+          </p>
+          <p className="mt-3 text-label text-muted">
+            The keynote lineup will be revealed here.
+          </p>
+        </motion.div>
+      </motion.div>
 
       <div className="container">
         <div className="flex justify-center pb-20 sm:pb-24">
