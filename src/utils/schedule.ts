@@ -31,10 +31,14 @@ export const scheduleDays: readonly ScheduleDay[] = [
     theme: 'Conference',
     date: 'Nov 20, 2026',
     sessions: [
-      { time: '09:00', title: 'Opening Ceremony & Keynote – Temitope Omolere' },
-      { time: '11:00', title: "Panel: Building for Africa's Next Million Users" },
-      { time: '14:00', title: 'Workshop: Motion & Interactive Design – Diego Costa' },
-      { time: '16:00', title: 'Closing Remarks & Afterparty' },
+      { time: '09:00', title: 'Door opens, Arrival' },
+      { time: '11:00', title: 'Opening address by Head of Depts.(Uniuyo)' },
+      {
+        time: '14:00',
+        title:
+          'Welcome address by the TechIgnite Team on “The Journey so far” & SUG address',
+      },
+      { time: '16:00', title: 'Closing Remark and Afterparty' },
     ],
   },
 ];

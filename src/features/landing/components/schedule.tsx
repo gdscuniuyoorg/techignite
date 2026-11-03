@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { scheduleDays } from '@/utils/schedule';
 import {
@@ -7,6 +9,8 @@ import {
   staggerContainer,
   useScrollGate,
 } from '@/lib/motion';
+
+const MotionLink = motion.create(Link);
 
 export function Schedule() {
   const userScrolled = useScrollGate();
@@ -98,6 +102,24 @@ export function Schedule() {
                 </div>
               </motion.div>
             ))}
+
+            <motion.div
+              variants={springUp}
+              className="mt-10 grid gap-8 sm:mt-12 sm:grid-cols-[13.5rem_minmax(0,1fr)]"
+            >
+              <div className="hidden sm:block" aria-hidden="true" />
+              <div>
+                <MotionLink
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  to="/agenda"
+                  className="inline-flex h-12 items-center gap-2.5 rounded-md bg-brand-green-vivid px-7 text-button font-normal text-paper transition-colors hover:bg-brand-green"
+                >
+                  View Full Agenda
+                  <ArrowRight aria-hidden="true" className="size-4" />
+                </MotionLink>
+              </div>
+            </motion.div>
           </div>
         </div>
       </motion.div>
