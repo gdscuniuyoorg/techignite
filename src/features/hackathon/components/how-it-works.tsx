@@ -69,7 +69,7 @@ export function HowItWorks() {
         <div className="mt-14 grid grid-cols-1 gap-12 sm:mt-20 lg:grid-cols-[24rem_1fr] lg:gap-20">
           <motion.div variants={clipRevealDown}>
             <motion.img
-              src="/past-photos/hackathon.png"
+              src="/past-photos/hackathoncheque.png"
               alt="Hackathon participants collaborating on a laptop during Tech Ignite"
               width={384}
               height={448}
