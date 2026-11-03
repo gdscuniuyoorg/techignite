@@ -6,8 +6,10 @@ import { WhyApply } from '@/features/hackathon/components/why-apply';
 import { Prizes } from '@/features/hackathon/components/prizes';
 import { HowItWorks } from '@/features/hackathon/components/how-it-works';
 import { HackathonFaq } from '@/features/hackathon/components/faq';
+import { seoHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/hackathon')({
+  head: () => seoHead('/hackathon'),
   component: Hackathon,
 });
 

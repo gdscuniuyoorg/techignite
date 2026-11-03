@@ -5,8 +5,10 @@ import { AboutUs } from '@/features/about/components/about-us';
 import { WhatWeDo } from '@/features/about/components/what-we-do';
 import { Organizers } from '@/features/about/components/organizers';
 import { CommunityLinks } from '@/features/about/components/community-links';
+import { seoHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/about')({
+  head: () => seoHead('/about'),
   component: About,
 });
 

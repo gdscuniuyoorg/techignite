@@ -23,7 +23,18 @@ export default defineConfig({
       preset: 'static',
       prerender: {
         crawlLinks: true,
-        routes: ['/', '/about', '/agenda', '/hackathon', '/photos', '/speakers'],
+        routes: [
+          '/',
+          '/about',
+          '/agenda',
+          '/apply',
+          '/hackathon',
+          '/photos',
+          '/speakers',
+          '/sitemap.xml',
+          '/robots.txt',
+          '/llms.txt',
+        ],
       },
     }),
     // React's Vite plugin must run after Start's plugin.

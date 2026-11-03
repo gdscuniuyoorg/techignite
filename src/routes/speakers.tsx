@@ -3,8 +3,10 @@ import { MotionConfig } from 'framer-motion';
 import { SpeakerHero } from '@/features/speakers/components/speaker-hero';
 import { SpeakerLineup } from '@/features/speakers/components/speaker-lineup';
 import { SpeakerSponsorPanel } from '@/features/speakers/components/speaker-sponsor-panel';
+import { seoHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/speakers')({
+  head: () => seoHead('/speakers'),
   component: Speakers,
 });
 

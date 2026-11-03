@@ -10,16 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as HackathonRouteImport } from './routes/hackathon'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as PhotosRouteImport } from './routes/photos'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -42,9 +51,24 @@ const HackathonRoute = HackathonRouteImport.update({
   path: '/hackathon',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PhotosRoute = PhotosRouteImport.update({
   id: '/photos',
   path: '/photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpeakersRoute = SpeakersRouteImport.update({
@@ -55,69 +79,97 @@ const SpeakersRoute = SpeakersRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
   '/hackathon': typeof HackathonRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
   '/hackathon': typeof HackathonRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
   '/hackathon': typeof HackathonRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$'
     | '/about'
     | '/agenda'
     | '/apply'
     | '/hackathon'
+    | '/llms.txt'
     | '/photos'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/speakers'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$'
     | '/about'
     | '/agenda'
     | '/apply'
     | '/hackathon'
+    | '/llms.txt'
     | '/photos'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/speakers'
   id:
     | '__root__'
     | '/'
+    | '/$'
     | '/about'
     | '/agenda'
     | '/apply'
     | '/hackathon'
+    | '/llms.txt'
     | '/photos'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/speakers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   AgendaRoute: typeof AgendaRoute
   ApplyRoute: typeof ApplyRoute
   HackathonRoute: typeof HackathonRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   PhotosRoute: typeof PhotosRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SpeakersRoute: typeof SpeakersRoute
 }
 
@@ -128,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -158,11 +217,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HackathonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/photos': {
       id: '/photos'
       path: '/photos'
       fullPath: '/photos'
       preLoaderRoute: typeof PhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/speakers': {
@@ -177,11 +257,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   AgendaRoute: AgendaRoute,
   ApplyRoute: ApplyRoute,
   HackathonRoute: HackathonRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   PhotosRoute: PhotosRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SpeakersRoute: SpeakersRoute,
 }
 export const routeTree = rootRouteImport

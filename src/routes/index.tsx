@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Hero } from '@/features/landing/components/hero';
+import { seoHead } from '@/lib/seo';
 import { WhatToExpect } from '@/features/landing/components/what-to-expect';
 import { Audience } from '@/features/landing/components/audience';
 import { IgniteStatement } from '@/features/landing/components/ignite-statement';
@@ -10,6 +11,7 @@ import { PartnersSponsors } from '@/features/landing/components/partners-sponsor
 import { Faq } from '@/features/landing/components/faq';
 
 export const Route = createFileRoute('/')({
+  head: () => seoHead('/'),
   component: Home,
 });
 

@@ -10,8 +10,10 @@ import { ShipathonJudges } from '@/features/apply/components/shipathon-judges';
 import { ShipathonPrizes } from '@/features/apply/components/shipathon-prizes';
 import { AiEncouraged } from '@/features/apply/components/ai-encouraged';
 import { ShipathonHashtags } from '@/features/apply/components/shipathon-hashtags';
+import { seoHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/apply')({
+  head: () => seoHead('/apply'),
   component: Apply,
 });
 

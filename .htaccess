@@ -45,4 +45,12 @@ DirectorySlash Off
   Header set X-Content-Type-Options "nosniff"
   Header set X-Frame-Options "SAMEORIGIN"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Generated files must carry explicit charsets (spec 0002, AC-3..5).
+  <FilesMatch "^sitemap\.xml$">
+    Header set Content-Type "application/xml; charset=utf-8"
+  </FilesMatch>
+  <FilesMatch "^(robots|llms)\.txt$">
+    Header set Content-Type "text/plain; charset=utf-8"
+  </FilesMatch>
 </IfModule>
