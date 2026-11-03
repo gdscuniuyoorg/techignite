@@ -288,30 +288,6 @@ export function robotsTxt(): string {
   return `User-agent: *
 Allow: /
 
-User-agent: GPTBot
-Disallow: /
-
-User-agent: ClaudeBot
-Disallow: /
-
-User-agent: anthropic-ai
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: Applebot-Extended
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-User-agent: meta-externalagent
-Disallow: /
-
 Sitemap: ${SITE_ORIGIN}/sitemap.xml
 `;
 }
