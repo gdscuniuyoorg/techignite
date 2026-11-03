@@ -82,26 +82,33 @@ export interface HowItWorksStep {
 export const howItWorksSteps: readonly HowItWorksStep[] = [
   {
     name: 'Apply',
-    date: 'Nov 1, 2026',
-    description: 'Complete the form, upload your pitch deck and share a 60-second video.',
+    date: 'Nov 2, 2026',
+    description:
+      'Register your team, tell us about the problem you are solving, and submit your proposed solution.',
   },
   {
-    name: 'Review',
-    date: 'Nov 14, 2026',
+    name: 'Brief',
+    date: 'Nov 9, 2026',
     description:
-      'Reviewers score every eligible application and invite a shortlist of 20 to a 15-minute call.',
+      'Get full details on the hackathon guidelines, judging criteria, and key expectations to set your project up for success.',
   },
   {
     name: 'Pitch',
-    date: 'Nov 15, 2026',
-    description:
-      'Shortlisted teams get 15 minutes to pitch live and defend their solution before the judges.',
-  },
-  {
-    name: 'The Final',
     date: 'Nov 19, 2026',
     description:
-      'The best teams face off on the main stage — build fast, pitch hard, and take home the prize.',
+      'Present your progress and working prototype to the judges for evaluation and feedback.',
+  },
+  {
+    name: 'Select',
+    date: 'Nov 19, 2026',
+    description:
+      'Judges and community voters evaluate submissions to select the top 5 finalist teams.',
+  },
+  {
+    name: 'Demo',
+    date: 'Nov 20, 2026',
+    description:
+      'The top 5 finalists present live to the audience and panel of judges to crown the hackathon winners.',
   },
 ];
 

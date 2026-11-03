@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { slideInRight, springUp, staggerContainer, useScrollGate } from '@/lib/motion';
 
-const DUMMY_LOGO_SRC = '/icons/logo.png';
+// const DUMMY_LOGO_SRC = '/icons/logo.png';
 
 /** A single sponsor entry. Entries without `src` render the name as text. */
 interface SponsorLogo {
@@ -27,25 +27,27 @@ const sponsorTiers: readonly SponsorTier[] = [
   {
     label: 'Diamond Sponsors',
     logos: [
-      { name: 'Vistapay', src: DUMMY_LOGO_SRC },
+      // Commented out until officially revealed:
+      // { name: 'Vistapay', src: DUMMY_LOGO_SRC },
       { name: 'Paga Engine', src: '/images/sponsors/paga-engine.png' },
     ],
   },
-  {
-    label: 'Silver Sponsors',
-    logos: [
-      {
-        name: 'Jobberman',
-        src: DUMMY_LOGO_SRC,
-      },
-      { name: 'SwiftXr', src: DUMMY_LOGO_SRC },
-      {
-        name: 'Coincola',
-        src: DUMMY_LOGO_SRC,
-      },
-      { name: 'Litehost', src: DUMMY_LOGO_SRC },
-    ],
-  },
+  // Silver Sponsors commented out until officially revealed:
+  // {
+  //   label: 'Silver Sponsors',
+  //   logos: [
+  //     {
+  //       name: 'Jobberman',
+  //       src: DUMMY_LOGO_SRC,
+  //     },
+  //     { name: 'SwiftXr', src: DUMMY_LOGO_SRC },
+  //     {
+  //       name: 'Coincola',
+  //       src: DUMMY_LOGO_SRC,
+  //     },
+  //     { name: 'Litehost', src: DUMMY_LOGO_SRC },
+  //   ],
+  // },
   {
     label: 'Hackathon Sponsor',
     logos: [{ name: 'Paga Engine', src: '/images/sponsors/paga-engine.png' }],
