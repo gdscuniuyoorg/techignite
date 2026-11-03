@@ -22,7 +22,7 @@ interface SponsorTier {
 const sponsorTiers: readonly SponsorTier[] = [
   {
     label: 'Title Sponsor',
-    logos: [{ name: 'Chowdeck', src: DUMMY_LOGO_SRC }],
+    logos: [{ name: 'Chowdeck', src: '/images/sponsors/chowdeck-sponsor.png' }],
   },
   {
     label: 'Diamond Sponsors',
