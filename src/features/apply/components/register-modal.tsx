@@ -1,43 +1,41 @@
 import { useEffect, useRef, useState, type SyntheticEvent } from 'react';
-import { Check, FileUp, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
+import {
+  getApplicationErrorMessage,
+  submitApplication,
+  type HackathonApplication,
+} from '@/lib/api';
+import { SuccessConfetti } from '@/features/apply/components/success-confetti';
 
-/** Parsed, validated copy of what a builder entered — no file bytes kept. */
+/** Parsed copy of what a builder entered; only feeds the success screen. */
 interface RegistrationDraft {
   readonly firstName: string;
+  readonly teamName: string;
   readonly email: string;
 }
 
-type RegistrationField = 'name' | 'email' | 'teamSize' | 'about' | 'deck' | 'videoUrl';
+type RegistrationField =
+  | 'firstName'
+  | 'lastName'
+  | 'email'
+  | 'teamName'
+  | 'teamDescription'
+  | 'projectIdea'
+  | 'agreedToRules';
 
 type RegistrationErrors = Partial<Record<RegistrationField, string>>;
 
 type RegistrationParseResult =
-  | { readonly ok: true; readonly draft: RegistrationDraft }
+  | {
+      readonly ok: true;
+      readonly draft: RegistrationDraft;
+      readonly payload: HackathonApplication;
+    }
   | { readonly ok: false; readonly errors: RegistrationErrors };
-
-const DECK_EXTENSIONS: readonly string[] = ['pdf', 'ppt', 'pptx', 'odp', 'key'];
-const DECK_MAX_BYTES = 10 * 1024 * 1024;
-
-const TEAM_SIZES: readonly { readonly value: string; readonly label: string }[] = [
-  { value: '1', label: 'Solo' },
-  { value: '2', label: '2 builders' },
-  { value: '3', label: '3 builders' },
-  { value: '4', label: '4 builders' },
-  { value: '5', label: '5 builders' },
-];
 
 function getFormText(form: FormData, field: string): string {
   const value = form.get(field);
   return typeof value === 'string' ? value.trim() : '';
-}
-
-function isValidHttpUrl(input: string): boolean {
-  try {
-    const url = new URL(input);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch {
-    return false;
-  }
 }
 
 /**
@@ -47,17 +45,20 @@ function isValidHttpUrl(input: string): boolean {
 function parseRegistration(form: FormData): RegistrationParseResult {
   const errors: RegistrationErrors = {};
 
-  const name = getFormText(form, 'name');
+  const firstName = getFormText(form, 'firstName');
+  const lastName = getFormText(form, 'lastName');
   const email = getFormText(form, 'email');
-  const teamSize = getFormText(form, 'teamSize');
-  const about = getFormText(form, 'about');
-  const videoUrl = getFormText(form, 'videoUrl');
+  const teamName = getFormText(form, 'teamName');
+  const teamDescription = getFormText(form, 'teamDescription');
+  const projectIdea = getFormText(form, 'projectIdea');
+  const agreedToRules = form.get('agreedToRules') === 'on';
 
-  const deckEntry = form.get('deck');
-  const deck = deckEntry instanceof File && deckEntry.size > 0 ? deckEntry : null;
+  if (!firstName) {
+    errors.firstName = 'Tell us your first name.';
+  }
 
-  if (!name) {
-    errors.name = 'Tell us who you are.';
+  if (!lastName) {
+    errors.lastName = 'Tell us your last name.';
   }
 
   if (!email) {
@@ -66,39 +67,41 @@ function parseRegistration(form: FormData): RegistrationParseResult {
     errors.email = 'That email doesn’t look right.';
   }
 
-  if (!teamSize) {
-    errors.teamSize = 'How many builders are shipping?';
+  if (!teamName) {
+    errors.teamName = 'Give your team a name.';
   }
 
-  if (about.length < 40) {
-    errors.about =
-      'Give us at least a couple of sentences — the product, who it serves, what it does.';
+  if (!teamDescription) {
+    errors.teamDescription = 'A line or two about the team helps the judges.';
   }
 
-  if (deck) {
-    const extension = deck.name.split('.').pop()?.toLowerCase() ?? '';
-    if (deck.size > DECK_MAX_BYTES) {
-      errors.deck = 'That deck is over 10 MB.';
-    } else if (!DECK_EXTENSIONS.includes(extension)) {
-      errors.deck = `Slides only — one of ${DECK_EXTENSIONS.join(', ')}.`;
-    }
-  } else {
-    errors.deck = 'Attach your pitch deck (10 MB max).';
+  if (!projectIdea) {
+    errors.projectIdea = 'Tell us the idea you are bringing.';
   }
 
-  if (videoUrl && !isValidHttpUrl(videoUrl)) {
-    errors.videoUrl = 'Paste a full link, starting with http or https.';
+  if (!agreedToRules) {
+    errors.agreedToRules = 'You need to agree to the rules to enter.';
   }
 
   if (Object.keys(errors).length > 0) {
     return { ok: false, errors };
   }
 
-  // Safe: every field validated above; `!name` and `!email` can't reach here.
-  const firstName = name.split(' ')[0] ?? 'builder';
+  // Safe: every required field was validated above.
+  const payload: HackathonApplication = {
+    teamName,
+    projectIdea,
+    agreedToRules,
+    applicantEmail: email,
+    teamDescription,
+    applicantLastName: lastName,
+    applicantFirstName: firstName,
+  };
+
   return {
     ok: true,
-    draft: { firstName, email },
+    draft: { firstName, teamName, email },
+    payload,
   };
 }
 
@@ -111,8 +114,9 @@ const errorClass = 'text-xs leading-relaxed text-brand-red';
 
 function RegisterBody({ onClose }: { readonly onClose: () => void }) {
   const [errors, setErrors] = useState<RegistrationErrors>({});
-  const [captured, setCaptured] = useState<RegistrationDraft | null>(null);
-  const [deckName, setDeckName] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState<RegistrationDraft | null>(null);
 
   const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -123,8 +127,21 @@ function RegisterBody({ onClose }: { readonly onClose: () => void }) {
       setErrors(result.errors);
       return;
     }
+
     setErrors({});
-    setCaptured(result.draft);
+    setSubmitError(null);
+    setSubmitting(true);
+
+    void (async () => {
+      try {
+        await submitApplication(result.payload);
+        setSubmitted(result.draft);
+      } catch (error: unknown) {
+        setSubmitError(await getApplicationErrorMessage(error));
+      } finally {
+        setSubmitting(false);
+      }
+    })();
   };
 
   // Invisible, full-viewport safety close: clicking anywhere outside the
@@ -157,39 +174,41 @@ function RegisterBody({ onClose }: { readonly onClose: () => void }) {
             id="register-modal-title"
             className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl"
           >
-            {captured ? 'Details captured.' : 'Register to build'}
+            {submitted ? 'Application received.' : 'Register to build'}
           </h2>
-          {!captured ? (
+          {!submitted ? (
             <p className="mt-2 max-w-md text-sm leading-relaxed text-ink/70">
-              Complete the form, upload your pitch deck, and share a 60-second video —
-              that secures your spot in the hackathon.
+              Complete the form below and that secures your spot in the hackathon.
             </p>
           ) : null}
         </div>
 
-        {captured ? (
-          <div className="flex flex-col items-center gap-4 px-5 py-10 text-center sm:px-8">
-            <span
-              aria-hidden="true"
-              className="flex size-12 items-center justify-center rounded-pill bg-brand-green-bright text-paper"
-            >
-              <Check className="size-6" />
-            </span>
-            <p className="max-w-sm text-lg leading-relaxed text-ink/75">
-              Noted, <span className="font-bold">{captured.firstName}</span> — your build
-              idea and checklist live on this device only; nothing was submitted.
-              Registration is still in active development. When it opens at{' '}
-              <span className="font-medium">techignite.net/hackathon</span>, attach your
-              pitch deck and 60-second video to lock in your spot.
-            </p>
-            <button
-              type="button"
-              onClick={onClose}
-              className="mt-2 flex h-11 items-center justify-center rounded-xs bg-primary px-8 text-button font-normal text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong"
-            >
-              Done
-            </button>
-          </div>
+        {submitted ? (
+          <>
+            <SuccessConfetti />
+            <div className="flex flex-col items-center gap-4 px-5 py-10 text-center sm:px-8">
+              <span
+                aria-hidden="true"
+                className="flex size-12 items-center justify-center rounded-pill bg-brand-green-bright text-paper"
+              >
+                <Check className="size-6" />
+              </span>
+              <p className="max-w-sm text-lg leading-relaxed text-ink/75">
+                Noted, <span className="font-bold">{submitted.firstName}</span> — your
+                application for <span className="font-bold">{submitted.teamName}</span>{' '}
+                was received. We will review it and reach out at{' '}
+                <span className="font-medium">{submitted.email}</span> if you are
+                shortlisted.
+              </p>
+              <button
+                type="button"
+                onClick={onClose}
+                className="mt-2 flex h-11 items-center justify-center rounded-xs bg-primary px-8 text-button font-normal text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong"
+              >
+                Done
+              </button>
+            </div>
+          </>
         ) : (
           <form
             noValidate
@@ -197,21 +216,50 @@ function RegisterBody({ onClose }: { readonly onClose: () => void }) {
             className="grid grid-cols-1 gap-4 px-5 py-5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-4 sm:px-8 sm:py-7"
           >
             <div className="space-y-1.5">
-              <label htmlFor="register-name" className="text-label font-medium text-ink">
-                Full name
+              <label
+                htmlFor="register-first-name"
+                className="text-label font-medium text-ink"
+              >
+                First name
               </label>
               <input
-                id="register-name"
-                name="name"
+                id="register-first-name"
+                name="firstName"
                 type="text"
-                autoComplete="name"
-                placeholder="Your name"
-                aria-invalid={Boolean(errors.name)}
-                aria-describedby={errors.name ? 'register-name-error' : undefined}
-                className={`${fieldClass(Boolean(errors.name))} h-11`}
+                autoComplete="given-name"
+                placeholder="John"
+                aria-invalid={Boolean(errors.firstName)}
+                aria-describedby={
+                  errors.firstName ? 'register-first-name-error' : undefined
+                }
+                className={`${fieldClass(Boolean(errors.firstName))} h-11`}
               />
-              <p id="register-name-error" role="alert" className={errorClass}>
-                {errors.name ?? ''}
+              <p id="register-first-name-error" role="alert" className={errorClass}>
+                {errors.firstName ?? ''}
+              </p>
+            </div>
+
+            <div className="space-y-1.5">
+              <label
+                htmlFor="register-last-name"
+                className="text-label font-medium text-ink"
+              >
+                Last name
+              </label>
+              <input
+                id="register-last-name"
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+                placeholder="Doe"
+                aria-invalid={Boolean(errors.lastName)}
+                aria-describedby={
+                  errors.lastName ? 'register-last-name-error' : undefined
+                }
+                className={`${fieldClass(Boolean(errors.lastName))} h-11`}
+              />
+              <p id="register-last-name-error" role="alert" className={errorClass}>
+                {errors.lastName ?? ''}
               </p>
             </div>
 
@@ -236,66 +284,70 @@ function RegisterBody({ onClose }: { readonly onClose: () => void }) {
 
             <div className="space-y-1.5">
               <label
-                htmlFor="register-team-size"
-                className="text-label font-medium text-ink"
-              >
-                Team size
-              </label>
-              <select
-                id="register-team-size"
-                name="teamSize"
-                defaultValue=""
-                aria-invalid={Boolean(errors.teamSize)}
-                aria-describedby={
-                  errors.teamSize ? 'register-team-size-error' : undefined
-                }
-                className={`${fieldClass(Boolean(errors.teamSize))} h-11`}
-              >
-                <option value="" disabled>
-                  Select team size
-                </option>
-                {TEAM_SIZES.map((size) => (
-                  <option key={size.value} value={size.value}>
-                    {size.label}
-                  </option>
-                ))}
-              </select>
-              <p id="register-team-size-error" role="alert" className={errorClass}>
-                {errors.teamSize ?? ''}
-              </p>
-            </div>
-
-            <div className="space-y-1.5">
-              <label
                 htmlFor="register-team-name"
                 className="text-label font-medium text-ink"
               >
-                Team name <span className="text-muted-dark">(optional)</span>
+                Team name
               </label>
               <input
                 id="register-team-name"
                 name="teamName"
                 type="text"
-                placeholder="e.g. Uyo Builders"
-                className={`${fieldClass(false)} h-11`}
+                placeholder="e.g. Code Warriors"
+                aria-invalid={Boolean(errors.teamName)}
+                aria-describedby={
+                  errors.teamName ? 'register-team-name-error' : undefined
+                }
+                className={`${fieldClass(Boolean(errors.teamName))} h-11`}
               />
+              <p id="register-team-name-error" role="alert" className={errorClass}>
+                {errors.teamName ?? ''}
+              </p>
             </div>
 
             <div className="space-y-1.5 sm:col-span-2">
-              <label htmlFor="register-about" className="text-label font-medium text-ink">
+              <label
+                htmlFor="register-team-desc"
+                className="text-label font-medium text-ink"
+              >
+                Team description
+              </label>
+              <textarea
+                id="register-team-desc"
+                name="teamDescription"
+                rows={2}
+                placeholder="We build AI-powered tools"
+                aria-invalid={Boolean(errors.teamDescription)}
+                aria-describedby={
+                  errors.teamDescription ? 'register-team-desc-error' : undefined
+                }
+                className={`${fieldClass(Boolean(errors.teamDescription))} min-h-16 py-2.5`}
+              />
+              <p id="register-team-desc-error" role="alert" className={errorClass}>
+                {errors.teamDescription ?? ''}
+              </p>
+            </div>
+
+            <div className="space-y-1.5 sm:col-span-2">
+              <label
+                htmlFor="register-project-idea"
+                className="text-label font-medium text-ink"
+              >
                 What are you about to build?
               </label>
               <textarea
-                id="register-about"
-                name="about"
+                id="register-project-idea"
+                name="projectIdea"
                 rows={3}
                 placeholder="The product, who it serves, and what it will do — must solve an African problem, powered by the Paga Engine API."
-                aria-invalid={Boolean(errors.about)}
-                aria-describedby={errors.about ? 'register-about-error' : undefined}
-                className={`${fieldClass(Boolean(errors.about))} min-h-24 py-2.5`}
+                aria-invalid={Boolean(errors.projectIdea)}
+                aria-describedby={
+                  errors.projectIdea ? 'register-project-idea-error' : undefined
+                }
+                className={`${fieldClass(Boolean(errors.projectIdea))} min-h-24 py-2.5`}
               />
-              <p id="register-about-error" role="alert" className={errorClass}>
-                {errors.about ?? ''}
+              <p id="register-project-idea-error" role="alert" className={errorClass}>
+                {errors.projectIdea ?? ''}
               </p>
               <p className="text-xs leading-relaxed text-muted-dark">
                 One clear idea is enough — the working prototype comes over the two build
@@ -303,70 +355,51 @@ function RegisterBody({ onClose }: { readonly onClose: () => void }) {
               </p>
             </div>
 
-            <div className="space-y-1.5">
-              <label htmlFor="register-deck" className="text-label font-medium text-ink">
-                Your pitch deck
-              </label>
+            <div className="space-y-1.5 sm:col-span-2">
               <label
-                htmlFor="register-deck"
-                className={`flex cursor-pointer flex-col items-center gap-2 rounded-md border border-dashed px-4 py-5 text-center transition-colors hover:border-[#FF84B3] ${
-                  errors.deck
+                htmlFor="register-rules"
+                className={`flex cursor-pointer items-start gap-3 rounded-md border px-4 py-3 transition-colors ${
+                  errors.agreedToRules
                     ? 'border-brand-red/60 bg-brand-red/5'
-                    : 'border-line-light bg-mist'
+                    : 'border-line-light bg-mist hover:border-brand-blue'
                 }`}
               >
-                <FileUp aria-hidden="true" className="size-5 text-muted-dark" />
-                <span className="text-sm font-medium text-ink">
-                  {deckName ?? 'Select your deck — PDF or slides, up to 10 MB'}
-                </span>
-                <span className="text-xs text-muted-dark">
-                  The plan in a few slides: problem, idea, team.
-                </span>
                 <input
-                  id="register-deck"
-                  name="deck"
-                  type="file"
-                  aria-invalid={Boolean(errors.deck)}
-                  aria-describedby={errors.deck ? 'register-deck-error' : undefined}
-                  onChange={(event) => {
-                    const file = event.currentTarget.files?.[0];
-                    setDeckName(file ? file.name : null);
-                  }}
-                  className="sr-only"
+                  id="register-rules"
+                  name="agreedToRules"
+                  type="checkbox"
+                  aria-invalid={Boolean(errors.agreedToRules)}
+                  aria-describedby={
+                    errors.agreedToRules ? 'register-rules-error' : undefined
+                  }
+                  className="mt-0.5 size-4 shrink-0 accent-brand-blue"
                 />
+                <span className="text-sm leading-relaxed text-ink/80">
+                  I agree to the hackathon rules and judging criteria, and I confirm that
+                  my project will be built with the Paga Engine API during the build
+                  weeks.
+                </span>
               </label>
-              <p id="register-deck-error" role="alert" className={errorClass}>
-                {errors.deck ?? ''}
+              <p id="register-rules-error" role="alert" className={errorClass}>
+                {errors.agreedToRules ?? ''}
               </p>
             </div>
 
-            <div className="space-y-1.5">
-              <label htmlFor="register-video" className="text-label font-medium text-ink">
-                Link to your 60-second video{' '}
-                <span className="text-muted-dark">(optional)</span>
-              </label>
-              <input
-                id="register-video"
-                name="videoUrl"
-                type="url"
-                placeholder="https://…"
-                aria-invalid={Boolean(errors.videoUrl)}
-                aria-describedby={errors.videoUrl ? 'register-video-error' : undefined}
-                className={`${fieldClass(Boolean(errors.videoUrl))} h-11`}
-              />
-              <p id="register-video-error" role="alert" className={errorClass}>
-                {errors.videoUrl ?? ''}
-              </p>
-              <p className="text-xs leading-relaxed text-muted-dark">
-                YouTube, Drive, X — any public link the judges can play.
-              </p>
-            </div>
+            {submitError ? (
+              <div
+                role="alert"
+                className="rounded-md border border-brand-red/40 bg-brand-red/5 px-4 py-3 text-sm leading-relaxed text-brand-red sm:col-span-2"
+              >
+                {submitError}
+              </div>
+            ) : null}
 
             <button
               type="submit"
-              className="mt-2 flex h-11 w-full items-center justify-center rounded-xs bg-primary px-6 text-button font-normal text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong sm:col-span-2"
+              disabled={submitting}
+              className="mt-2 flex h-11 w-full items-center justify-center rounded-xs bg-primary px-6 text-button font-normal text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong disabled:cursor-not-allowed disabled:opacity-70 sm:col-span-2"
             >
-              Submit registration
+              {submitting ? 'Submitting…' : 'Submit registration'}
             </button>
           </form>
         )}

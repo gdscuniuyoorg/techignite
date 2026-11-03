@@ -146,7 +146,6 @@ export const hackathonFaqItems: readonly HackathonFaqItem[] = [
   {
     id: 'registration',
     question: 'How do I register?',
-    answer:
-      'Complete the application form, upload your pitch deck, and share a 60-second video — that secures your spot in the hackathon.',
+    answer: 'Complete the application form — that secures your spot in the hackathon.',
   },
 ];
