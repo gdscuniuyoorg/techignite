@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 import { SponsorPin } from '@/components/molecules/sponsor-pin';
 import { SPRING_POP, staggerContainer, wordReveal } from '@/lib/motion';
 
@@ -106,19 +107,20 @@ export function HackathonHero() {
           become reality.
         </motion.p>
 
-        <motion.button
-          type="button"
-          disabled
-          aria-disabled="true"
-          title="Applications are not open yet"
-          initial={{ opacity: 0, scale: 0.85, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ ...SPRING_POP, delay: 2 }}
-          className="relative z-10 mt-6 flex h-13 cursor-not-allowed items-center justify-center gap-2.5 rounded-xs bg-[#FF84B3]/60 px-8 text-button font-normal text-ink shadow-none sm:mt-7 sm:h-14 sm:min-w-[220px] sm:px-10"
-        >
-          Apply Now
-          <ArrowRight aria-hidden="true" className="size-4.5 sm:size-5" />
-        </motion.button>
+        <Link to="/apply">
+          <motion.button
+            type="button"
+            initial={{ opacity: 0, scale: 0.85, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ ...SPRING_POP, delay: 2 }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className="relative z-10 mt-6 flex h-13 cursor-pointer items-center justify-center gap-2.5 rounded-xs bg-[#FF84B3] px-8 text-button font-normal text-ink shadow-none transition-colors hover:bg-[#FF84B3]/90 sm:mt-7 sm:h-14 sm:min-w-[220px] sm:px-10"
+          >
+            Apply Now
+            <ArrowRight aria-hidden="true" className="size-4.5 sm:size-5" />
+          </motion.button>
+        </Link>
       </motion.div>
     </section>
   );
