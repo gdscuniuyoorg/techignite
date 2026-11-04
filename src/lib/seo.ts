@@ -145,6 +145,7 @@ export function eventJsonLd(): Record<string, unknown> {
     '@type': 'Event',
     name: SITE_NAME,
     startDate: '2026-11-20',
+    endDate: '2026-11-20',
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location: {
@@ -156,6 +157,11 @@ export function eventJsonLd(): Record<string, unknown> {
         addressRegion: 'Akwa Ibom State',
         addressCountry: 'Nigeria',
       },
+    },
+    performer: {
+      '@type': 'PerformingGroup',
+      name: 'GDG on Campus University of Uyo',
+      url: SITE_ORIGIN,
     },
     organizer: {
       '@type': 'Organization',

@@ -123,13 +123,12 @@ export const hackathonFaqItems: readonly HackathonFaqItem[] = [
     id: 'who-can-participate',
     question: 'Who can participate in the hackathon?',
     answer:
-      'Students, developers, designers, and aspiring entrepreneurs passionate about technology and solving real-world problems are welcome to participate.',
+      'This hackathon is open to all individuals and teams from various backgrounds, including developers, designers, tech enthusiasts, students, etc in Akwa Ibom State.',
   },
   {
     id: 'team-requirement',
     question: 'Do I need a team to apply?',
-    answer:
-      "No — you can apply solo or as a team of up to four. If you'd like a team but don't have one yet, we'll match solo applicants during the shortlist call.",
+    answer: 'Yes, you must apply as a team of 3-5 persons.',
   },
   {
     id: 'project-scope',
