@@ -351,7 +351,7 @@ function RegisterBody({ onClose }: { readonly onClose: () => void }) {
               </p>
               <p className="text-xs leading-relaxed text-muted-dark">
                 One clear idea is enough — the working prototype comes over the two build
-                weeks. Teams of 3–5 are recommended.
+                weeks. You must apply as a team of 3–5 persons.
               </p>
             </div>
 

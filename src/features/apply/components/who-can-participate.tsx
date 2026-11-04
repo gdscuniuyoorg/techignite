@@ -41,7 +41,8 @@ export function WhoCanParticipate() {
             className="mt-8 max-w-[42rem] text-lg leading-relaxed text-ink/75"
           >
             This hackathon is open to all individuals and teams from various backgrounds,
-            including developers, tech enthusiasts, and students in Akwa Ibom State.
+            including developers, designers, tech enthusiasts, students, etc in Akwa Ibom
+            State.
           </motion.p>
 
           <ul className="mt-12 flex flex-wrap gap-3">
