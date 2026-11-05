@@ -27,8 +27,7 @@ const sponsorTiers: readonly SponsorTier[] = [
   {
     label: 'Diamond Sponsors',
     logos: [
-      // Commented out until officially revealed:
-      // { name: 'Vistapay', src: DUMMY_LOGO_SRC },
+      { name: 'Vistapay', src: '/images/sponsors/vistapay.png' },
       { name: 'Paga Engine', src: '/images/sponsors/paga-engine.png' },
     ],
   },
