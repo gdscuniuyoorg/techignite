@@ -4,7 +4,13 @@ import { ChowdeckPopup } from '@/features/landing/components/chowdeck-popup';
 import { NotFound } from '@/features/landing/components/not-found';
 import appCss from '@/styles/globals.css?url';
 import '@fontsource-variable/google-sans';
-import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRoute,
+  useRouterState,
+} from '@tanstack/react-router';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -44,17 +50,31 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  // Site chrome (navbar, footer, popup) is for public/landing routes only.
+  // The admin and team dashboard areas render their own app chrome.
+  const isChromeless = useRouterState({
+    select: (state) =>
+      state.location.pathname.startsWith('/admin') ||
+      state.location.pathname.startsWith('/dashboard'),
+  });
+
   return (
     <html lang="en" className="bg-ink">
       <head>
         <HeadContent />
       </head>
       <body className="bg-ink text-paper">
-        <Navbar />
-        <Outlet />
-        <Footer />
-        {/* GDG x Chowdeck co-branding — site-wide, persists while scrolling. */}
-        <ChowdeckPopup />
+        {isChromeless ? (
+          <Outlet />
+        ) : (
+          <>
+            <Navbar />
+            <Outlet />
+            <Footer />
+            {/* GDG x Chowdeck co-branding — public site only. */}
+            <ChowdeckPopup />
+          </>
+        )}
         <Scripts />
       </body>
     </html>

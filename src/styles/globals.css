@@ -199,3 +199,95 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* Tiptap email editor content (admin only). */
+.tiptap-content {
+  min-height: 12rem;
+  max-height: 32rem;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+  color: var(--color-paper);
+  line-height: 1.7;
+  outline: none;
+}
+
+.tiptap-content p + p,
+.tiptap-content ul + p,
+.tiptap-content ol + p {
+  margin-top: 0.75em;
+}
+
+.tiptap-content h2 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  margin: 1em 0 0.4em;
+}
+
+.tiptap-content h3 {
+  font-size: 1.125rem;
+  line-height: 1.3;
+  font-weight: 700;
+  margin: 0.9em 0 0.35em;
+}
+
+.tiptap-content a {
+  color: var(--color-brand-blue-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.tiptap-content strong {
+  font-weight: 700;
+}
+
+.tiptap-content ul,
+.tiptap-content ol {
+  padding-left: 1.5rem;
+  margin: 0.5em 0;
+}
+
+.tiptap-content ul {
+  list-style: disc;
+}
+
+.tiptap-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+  margin: 0.75em 0;
+}
+
+.tiptap-content blockquote {
+  border-left: 3px solid var(--color-brand-blue-soft);
+  padding-left: 0.9rem;
+  margin: 0.75em 0;
+  color: rgba(255, 250, 240, 0.75);
+}
+
+.tiptap-content hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin: 1.25em 0;
+}
+
+.tiptap-content ol {
+  list-style: decimal;
+}
+
+.tiptap-content:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: -2px;
+}
+
+/* Medium-style empty-state placeholder. */
+.tiptap-content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: rgba(255, 250, 240, 0.35);
+}
+
+/* Preview mode footers/links inside the sender-safe view can't be interacted
+   with; the wrapper already sets pointer-events-none and select-none. */

@@ -7,8 +7,8 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   server: {
     port: 3000,
-    // Allow the apex and the tickets subdomain when testing locally.
-    allowedHosts: ['techignite.net', '.techignite.net'],
+    // Allow the apex, the admin subdomain, and local hosts.
+    allowedHosts: ['techignite.net', '.techignite.net', 'localhost', '.localhost'],
   },
   resolve: {
     tsconfigPaths: true,
