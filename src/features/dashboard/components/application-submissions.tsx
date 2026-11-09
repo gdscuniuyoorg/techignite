@@ -1,151 +1,221 @@
 import { useState } from 'react';
-import type { LucideIcon } from 'lucide-react';
-import { FolderGit2, Plus, Trophy } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Check, FolderGit2, Lock, Send, Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  connectRepository,
+  submitTeam,
+  updateTeam,
+  type TeamUpdateInput,
+} from '@/lib/team-api';
 import { DashboardPageHeader } from './dashboard-page-header';
-import { SubmissionCard } from './submission-card';
-import { SubmissionDialog, type SubmissionFormValues } from './submission-dialog';
-import { SUBMISSIONS, type CategorySubmission, type SubmissionCategory } from '../data';
+import { DashboardErrorState, DashboardLoading } from './dashboard-loading';
+import {
+  SubmissionDialog,
+  type SubmissionFormValues,
+  type SubmissionSaveMode,
+} from './submission-dialog';
+import { SubmissionStatusBadge } from './submission-status-badge';
+import {
+  formatTeamDate,
+  isSubmissionLocked,
+  toSubmissionStatus,
+} from './team-status';
+import { TEAM_PROFILE_KEY, useTeamProfile } from '../hooks/use-team-profile';
+import { EVENT } from '../data';
 
-interface SubmissionGroup {
-  readonly category: SubmissionCategory;
-  readonly title: string;
-  readonly description: string;
-  readonly icon: LucideIcon;
-  readonly emptyLabel: string;
-  readonly cardVariant: 'simple' | 'detailed';
-}
-
-const GROUPS: readonly SubmissionGroup[] = [
-  {
-    category: 'hackathon',
-    title: 'Hackathon Submissions',
-    description: 'A quick record of what the team built during the hackathon weekend.',
-    icon: Trophy,
-    emptyLabel: 'No hackathon submission yet',
-    cardVariant: 'simple',
-  },
-  {
-    category: 'project',
-    title: 'Project Submissions',
-    description: 'Your main submission — judges score this entry.',
-    icon: FolderGit2,
-    emptyLabel: 'No project submission yet',
-    cardVariant: 'detailed',
-  },
-];
-
-/** Two grouped submission boards; new entries are created in a modal form. */
+/** Hackathon info card plus the live, judged project submission. */
 export function ApplicationSubmissions() {
-  const [submissions, setSubmissions] =
-    useState<readonly CategorySubmission[]>(SUBMISSIONS);
-  const [dialogCategory, setDialogCategory] = useState<SubmissionCategory | null>(null);
+  const { data: team, isPending, isError, error, refetch } = useTeamProfile();
+  const queryClient = useQueryClient();
+  const [editing, setEditing] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
-  const handleSubmit = (values: SubmissionFormValues) => {
-    const entry: CategorySubmission = {
-      id: `${values.category}-${String(Date.now())}`,
-      category: values.category,
-      title: values.title.length > 0 ? values.title : 'Untitled submission',
-      summary: values.summary.length > 0 ? values.summary : 'No description yet.',
-      status: values.status,
-      updatedAt: 'Just now',
-      demoUrl: values.demoUrl,
-      repositoryUrl: values.repositoryUrl,
-      videoUrl: values.videoUrl,
-      technologies: values.technologies,
+  if (isPending) {
+    return <DashboardLoading label="Loading your submission…" />;
+  }
+
+  if (isError) {
+    return (
+      <DashboardErrorState
+        message={
+          error instanceof Error
+            ? error.message
+            : 'Could not load your team profile.'
+        }
+        onRetry={() => void refetch()}
+      />
+    );
+  }
+
+  if (!team) {
+    return <DashboardLoading label="Loading your submission…" />;
+  }
+
+  const status = toSubmissionStatus(team);
+  const locked = isSubmissionLocked(team);
+
+  const saveSubmission = async (
+    values: SubmissionFormValues,
+    mode: SubmissionSaveMode,
+  ): Promise<void> => {
+    const input: TeamUpdateInput = {
+      projectTitle: values.title,
+      projectDescription: values.summary,
+      techStack: values.technologies.join(', '),
+      ...(values.demoUrl.length > 0 ? { demoUrl: values.demoUrl } : {}),
     };
-    setSubmissions((previous) => [entry, ...previous]);
-    setDialogCategory(null);
+    await updateTeam(input);
+
+    if (
+      values.repositoryUrl.length > 0 &&
+      values.repositoryUrl !== team.repositoryUrl
+    ) {
+      await connectRepository(values.repositoryUrl);
+    }
+
+    if (mode === 'submit') {
+      await submitTeam();
+    }
+
+    await queryClient.invalidateQueries({ queryKey: TEAM_PROFILE_KEY });
+    setEditing(false);
+    setNotice(
+      mode === 'submit'
+        ? 'Project submitted and locked for judging.'
+        : 'Project details saved.',
+    );
   };
 
   return (
     <div className="flex flex-col gap-6">
       <DashboardPageHeader
-        eyebrow="Submission"
+        eyebrow={`${EVENT.name} · ${EVENT.track}`}
         title="Application Submissions"
-        description="Your team's hackathon and project entries, all in one place."
-        aside={
-          <Button
-            type="button"
-            onClick={() => {
-              setDialogCategory('project');
-            }}
-          >
-            <Plus size={16} aria-hidden="true" />
-            Submit project
-          </Button>
-        }
+        description="Your hackathon entry and the project judges will score."
+        aside={<SubmissionStatusBadge status={status} />}
       />
 
-      {GROUPS.map((group) => {
-        const entries = submissions.filter((item) => item.category === group.category);
-        const Icon = group.icon;
+      {notice && (
+        <p
+          role="status"
+          className="flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700"
+        >
+          <Check size={14} aria-hidden="true" />
+          {notice}
+        </p>
+      )}
 
-        return (
-          <Card key={group.category} className="bg-slate-50/60">
-            <CardHeader className="flex-wrap">
-              <div className="flex items-start gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-violet-600 ring-1 ring-slate-200">
-                  <Icon size={17} strokeWidth={1.75} aria-hidden="true" />
-                </span>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <CardTitle>{group.title}</CardTitle>
-                    <Badge variant="secondary">{entries.length}</Badge>
-                  </div>
-                  <CardDescription>{group.description}</CardDescription>
-                </div>
+      {/* Hackathon record — read-only. The API stores one judged project. */}
+      <Card className="bg-slate-50/60">
+        <CardHeader className="flex-wrap">
+          <div className="flex items-start gap-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-violet-600 ring-1 ring-slate-200">
+              <Trophy size={17} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <div>
+              <CardTitle>Hackathon Submissions</CardTitle>
+              <CardDescription>
+                A quick record of your hackathon entry. The judged work lives
+                under Project Submissions.
+              </CardDescription>
+            </div>
+          </div>
+          <Badge variant="secondary">Registered</Badge>
+        </CardHeader>
+        <CardContent>
+          <dl className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
+              <dt className="text-xs text-slate-500">Team</dt>
+              <dd className="mt-0.5 truncate text-sm font-medium text-slate-900">
+                {team.name}
+              </dd>
+            </div>
+            <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
+              <dt className="text-xs text-slate-500">Track</dt>
+              <dd className="mt-0.5 text-sm font-medium text-slate-900">
+                {EVENT.track}
+              </dd>
+            </div>
+            <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
+              <dt className="text-xs text-slate-500">Deadline</dt>
+              <dd className="mt-0.5 text-sm font-medium text-slate-900">
+                {EVENT.deadline}
+              </dd>
+            </div>
+          </dl>
+        </CardContent>
+      </Card>
+
+      {/* Judged project submission */}
+      <Card>
+        <CardHeader className="flex-wrap">
+          <div className="flex items-start gap-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+              <FolderGit2 size={17} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <CardTitle>Project Submissions</CardTitle>
+                <SubmissionStatusBadge status={status} />
               </div>
+              <CardDescription>
+                Your main submission — judges score this entry.
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <SubmissionCard team={team} status={status} />
+          {team.members.length > 0 && (
+            <p className="mt-3 text-xs text-slate-500">
+              Submitted by {team.name} · {String(team.members.length)}{' '}
+              {team.members.length === 1 ? 'member' : 'members'}
+            </p>
+          )}
+        </CardContent>
+        <CardFooter>
+          {locked ? (
+            <p className="flex items-center gap-1.5 text-xs text-slate-500">
+              <Lock size={13} aria-hidden="true" />
+              Locked {formatTeamDate(team.submittedAt)}. Writes are disabled —
+              contact organisers to reopen.
+            </p>
+          ) : (
+            <>
               <Button
                 type="button"
-                variant="outline"
-                size="sm"
                 onClick={() => {
-                  setDialogCategory(group.category);
+                  setEditing(true);
                 }}
               >
-                <Plus size={14} aria-hidden="true" />
-                New submission
+                <Send size={16} aria-hidden="true" />
+                Submit project
               </Button>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-3">
-              {entries.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-slate-300 bg-white/60 px-4 py-10 text-center">
-                  <Icon size={20} className="text-slate-400" aria-hidden="true" />
-                  <p className="text-sm font-medium text-slate-700">{group.emptyLabel}</p>
-                  <p className="text-xs text-slate-500">
-                    Start a draft — you can finish it later.
-                  </p>
-                </div>
-              ) : (
-                entries.map((entry) => (
-                  <SubmissionCard
-                    key={entry.id}
-                    submission={entry}
-                    variant={group.cardVariant}
-                  />
-                ))
-              )}
-            </CardContent>
-          </Card>
-        );
-      })}
+              <p className="text-xs text-slate-500">
+                Save a draft any time. Submitting locks the entry.
+              </p>
+            </>
+          )}
+        </CardFooter>
+      </Card>
 
-      {dialogCategory !== null && (
+      {editing && (
         <SubmissionDialog
-          initialCategory={dialogCategory}
+          team={team}
           onClose={() => {
-            setDialogCategory(null);
+            setEditing(false);
           }}
-          onSubmit={handleSubmit}
+          onSave={saveSubmission}
         />
       )}
     </div>

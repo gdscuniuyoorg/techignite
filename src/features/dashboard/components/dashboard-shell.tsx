@@ -1,17 +1,28 @@
-import { Link, Outlet, useRouterState } from '@tanstack/react-router';
+import { useCallback, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Link, Outlet, useNavigate, useRouterState } from '@tanstack/react-router';
 import {
   Bell,
   CalendarClock,
   ChevronDown,
   FileText,
   LayoutDashboard,
+  Loader2,
+  LogOut,
   Sparkles,
   Users,
   Zap,
 } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { cn } from '@/lib/utils';
-import { MOCK_LEAD, MOCK_TEAM } from '../data';
+import {
+  hasStoredToken,
+  isUnauthorized,
+  logout,
+} from '@/lib/team-api';
+import { memberInitials } from './team-status';
+import { useTeamProfile } from '../hooks/use-team-profile';
+import { EVENT } from '../data';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
@@ -42,6 +53,32 @@ function sectionLabel(pathname: string): string {
 /** Full-width, shadcn-style app shell: sticky sidebar + sticky top bar. */
 export function DashboardShell() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { data: team, isPending, isError, error } = useTeamProfile();
+
+  const signOut = useCallback(() => {
+    logout();
+    queryClient.clear();
+    void navigate({ to: '/auth', replace: true });
+  }, [navigate, queryClient]);
+
+  // The SSR pass cannot read sessionStorage, so confirm the session after
+  // hydration as well as in the route's beforeLoad guard.
+  useEffect(() => {
+    if (!hasStoredToken()) {
+      void navigate({ to: '/auth', replace: true });
+    }
+  }, [navigate]);
+
+  // An expired token means every dashboard query will 401 — drop the session.
+  useEffect(() => {
+    if (isError && isUnauthorized(error)) {
+      signOut();
+    }
+  }, [error, isError, signOut]);
+
+  const lead = team?.members.find((member) => member.role === 'LEAD');
 
   const isActive = (to: string, exact: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(`${to}/`);
@@ -117,24 +154,41 @@ export function DashboardShell() {
                 Submission closes
               </div>
               <p className="mt-1 text-sm font-medium text-slate-900">
-                {MOCK_TEAM.deadline}
+                {EVENT.deadline}
               </p>
-              <p className="text-xs text-amber-600">{MOCK_TEAM.daysLeft} days left</p>
+              <p className="text-xs text-amber-600">{String(EVENT.daysLeft)} days left</p>
             </div>
 
             <div className="flex items-center gap-2 rounded-xl border border-slate-100 p-2">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-600 text-xs font-semibold text-white">
-                {MOCK_LEAD.initials}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium text-slate-900">
-                  {MOCK_LEAD.name}
+              {isPending ? (
+                <span
+                  role="status"
+                  aria-busy="true"
+                  className="flex min-w-0 flex-1 items-center gap-2 px-1 py-1 text-xs text-slate-500"
+                >
+                  <Loader2 size={14} className="animate-spin text-violet-600" aria-hidden="true" />
+                  Loading account…
                 </span>
-                <span className="block truncate text-xs text-slate-500">
-                  {MOCK_LEAD.role}
+              ) : team && lead ? (
+                <>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-600 text-xs font-semibold text-white">
+                    {memberInitials(lead.name)}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium text-slate-900">
+                      {lead.name}
+                    </span>
+                    <span className="block truncate text-xs text-slate-500">
+                      {team.name}
+                    </span>
+                  </span>
+                  <ChevronDown size={14} className="text-slate-400" aria-hidden="true" />
+                </>
+              ) : (
+                <span className="min-w-0 flex-1 px-1 py-1 text-xs text-slate-500">
+                  Team profile unavailable
                 </span>
-              </span>
-              <ChevronDown size={14} className="text-slate-400" aria-hidden="true" />
+              )}
             </div>
           </div>
         </aside>
@@ -146,7 +200,9 @@ export function DashboardShell() {
               <div className="flex items-center gap-2">
                 <div className="lg:hidden">{brand}</div>
                 <div className="hidden items-center gap-2 text-sm lg:flex">
-                  <span className="text-slate-400">Team</span>
+                  <span className="text-slate-400">
+                    {team ? team.name : 'Team'}
+                  </span>
                   <span className="text-slate-300">/</span>
                   <span className="font-medium text-slate-900">
                     {sectionLabel(pathname)}
@@ -172,6 +228,17 @@ export function DashboardShell() {
                   <Sparkles size={14} aria-hidden="true" />
                   Submit Project
                 </Link>
+                <button
+                  type="button"
+                  aria-label="Sign out"
+                  onClick={signOut}
+                  className={cn(
+                    buttonVariants({ variant: 'ghost', size: 'icon' }),
+                    'text-slate-500',
+                  )}
+                >
+                  <LogOut size={16} aria-hidden="true" />
+                </button>
               </div>
             </header>
 

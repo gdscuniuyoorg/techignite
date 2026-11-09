@@ -1,13 +1,14 @@
 import type { LucideIcon } from 'lucide-react';
-import { ExternalLink, FileText, Video } from 'lucide-react';
+import { ExternalLink, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import type { TeamProfile } from '@/lib/team-api';
 import { SubmissionStatusBadge } from './submission-status-badge';
-import type { CategorySubmission } from '../data';
+import type { DashboardSubmissionStatus } from './submission-status';
+import { formatTeamDate } from './team-status';
 
 interface SubmissionCardProps {
-  readonly submission: CategorySubmission;
-  /** `simple` is the compact hackathon record; `detailed` is the full project entry. */
-  readonly variant?: 'simple' | 'detailed';
+  readonly team: TeamProfile;
+  readonly status: DashboardSubmissionStatus;
 }
 
 /** Display host for a URL so judges see where a link points. */
@@ -39,27 +40,10 @@ function SubmissionLink({ href, label, icon: Icon }: SubmissionLinkProps) {
   );
 }
 
-/** Read-only summary of one submitted (or drafted) entry. Smallest text is 12px. */
-export function SubmissionCard({
-  submission,
-  variant = 'detailed',
-}: SubmissionCardProps) {
-  if (variant === 'simple') {
-    return (
-      <article className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
-          <FileText size={15} strokeWidth={1.75} aria-hidden="true" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <h3 className="truncate text-sm font-medium text-slate-900">
-            {submission.title}
-          </h3>
-          <p className="text-xs text-slate-500">Updated {submission.updatedAt}</p>
-        </div>
-        <SubmissionStatusBadge status={submission.status} />
-      </article>
-    );
-  }
+/** Read-only view of the team's judged project submission. */
+export function SubmissionCard({ team, status }: SubmissionCardProps) {
+  const hasDetails =
+    team.projectTitle.length > 0 || team.projectDescription.length > 0;
 
   return (
     <article className="rounded-xl border border-slate-200 bg-white p-4">
@@ -69,43 +53,48 @@ export function SubmissionCard({
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
-            <h3 className="text-sm font-semibold text-slate-900">{submission.title}</h3>
-            <SubmissionStatusBadge status={submission.status} />
+            <h3 className="text-sm font-semibold text-slate-900">
+              {team.projectTitle.length > 0 ? team.projectTitle : 'Untitled project'}
+            </h3>
+            <SubmissionStatusBadge status={status} />
           </div>
           <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
-            {submission.summary}
+            {team.projectDescription.length > 0
+              ? team.projectDescription
+              : hasDetails
+                ? 'No description yet.'
+                : 'Add a title and description so judges know what you built.'}
           </p>
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-1.5">
-        {submission.technologies.map((technology) => (
-          <Badge key={technology} variant="secondary">
-            {technology}
-          </Badge>
-        ))}
-      </div>
+      {team.technologies.length > 0 && (
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          {team.technologies.map((technology) => (
+            <Badge key={technology} variant="secondary">
+              {technology}
+            </Badge>
+          ))}
+        </div>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-slate-100 pt-3">
-        {submission.demoUrl.length > 0 && (
+        {team.demoUrl.length > 0 && (
           <SubmissionLink
-            href={submission.demoUrl}
-            label={linkLabel(submission.demoUrl)}
+            href={team.demoUrl}
+            label={linkLabel(team.demoUrl)}
             icon={ExternalLink}
           />
         )}
-        {submission.repositoryUrl.length > 0 && (
+        {team.repositoryUrl.length > 0 && (
           <SubmissionLink
-            href={submission.repositoryUrl}
-            label={linkLabel(submission.repositoryUrl)}
+            href={team.repositoryUrl}
+            label={linkLabel(team.repositoryUrl)}
             icon={ExternalLink}
           />
-        )}
-        {submission.videoUrl.length > 0 && (
-          <SubmissionLink href={submission.videoUrl} label="Demo video" icon={Video} />
         )}
         <span className="ml-auto text-xs text-slate-400">
-          Updated {submission.updatedAt}
+          Updated {formatTeamDate(team.updatedAt ?? team.submittedAt)}
         </span>
       </div>
     </article>

@@ -55,7 +55,8 @@ function RootComponent() {
   const isChromeless = useRouterState({
     select: (state) =>
       state.location.pathname.startsWith('/admin') ||
-      state.location.pathname.startsWith('/dashboard'),
+      state.location.pathname.startsWith('/dashboard') ||
+      state.location.pathname.startsWith('/auth'),
   });
 
   return (

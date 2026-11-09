@@ -23,42 +23,109 @@ import {
 } from '@/components/ui/card';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { cn } from '@/lib/utils';
+import type { TeamProfile } from '@/lib/team-api';
 import { DashboardPageHeader } from './dashboard-page-header';
+import { DashboardErrorState, DashboardLoading } from './dashboard-loading';
 import { DashboardStat } from './dashboard-stat';
 import { SubmissionStatusBadge } from './submission-status-badge';
-import type { DashboardSubmissionStatus } from './submission-status';
 import {
-  CHECKLIST,
-  MEMBERS,
-  MOCK_SUBMISSION,
-  MOCK_TEAM,
-  STEP_INDEX,
-  STEPS,
-  TIMELINE,
-  type TimelineEntry,
-} from '../data';
+  STATUS_LABELS,
+  type DashboardSubmissionStatus,
+} from './submission-status';
+import {
+  formatTeamDate,
+  memberInitials,
+  toSubmissionStatus,
+} from './team-status';
+import { useTeamProfile } from '../hooks/use-team-profile';
+import { EVENT, STEP_INDEX, STEPS } from '../data';
 
 const STATUS: DashboardSubmissionStatus = 'draft';
 
 const FILTERS = ['all', 'done', 'pending'] as const;
 type CheckFilter = (typeof FILTERS)[number];
 
-const TIMELINE_STYLES: Record<TimelineEntry['state'], string> = {
-  done: 'border-emerald-200 bg-emerald-50 text-emerald-600',
-  current: 'border-violet-200 bg-violet-50 text-violet-600',
-  upcoming: 'border-slate-200 bg-white text-slate-400',
-};
+interface Requirement {
+  readonly id: string;
+  readonly label: string;
+  readonly detail: string;
+  readonly met: boolean;
+}
+
+function buildRequirements(team: TeamProfile): readonly Requirement[] {
+  const leadCount = team.members.filter((member) => member.role === 'LEAD').length;
+  return [
+    {
+      id: 'title',
+      label: 'Project title',
+      detail: 'Give judges a clear name for what you built.',
+      met: team.projectTitle.trim().length > 0,
+    },
+    {
+      id: 'description',
+      label: 'Project description',
+      detail: 'At least a short summary of the problem and your solution.',
+      met: team.projectDescription.trim().length >= 40,
+    },
+    {
+      id: 'demo',
+      label: 'Working demo link',
+      detail: 'A live URL judges can open without credentials.',
+      met: team.demoUrl.length > 0,
+    },
+    {
+      id: 'repo',
+      label: 'Repository link',
+      detail: 'Connect a GitHub repo that shows the team’s work.',
+      met: team.repositoryUrl.length > 0,
+    },
+    {
+      id: 'members',
+      label: 'Team members listed',
+      detail:
+        leadCount > 0
+          ? 'Every teammate is attached to the team profile.'
+          : 'Your lead account is attached; invite the rest of the team.',
+      met: team.members.length > 1,
+    },
+  ];
+}
 
 export function DashboardOverview() {
+  const { data: team, isPending, isError, error, refetch } = useTeamProfile();
   const [filter, setFilter] = useState<CheckFilter>('all');
 
-  const completed = CHECKLIST.filter((item) => item.met).length;
-  const total = CHECKLIST.length;
-  const completion = Math.round((completed / total) * 100);
-  const confirmed = MEMBERS.filter((member) => member.confirmed).length;
-  const currentStep = STEP_INDEX[STATUS];
+  if (isPending) {
+    return <DashboardLoading label="Loading your team…" />;
+  }
 
-  const visibleChecklist = CHECKLIST.filter((item) => {
+  if (isError) {
+    return (
+      <DashboardErrorState
+        message={
+          error instanceof Error
+            ? error.message
+            : 'Could not load your team profile.'
+        }
+        onRetry={() => void refetch()}
+      />
+    );
+  }
+
+  if (!team) {
+    return <DashboardLoading label="Loading your team…" />;
+  }
+
+  const status = toSubmissionStatus(team);
+  const requirements = buildRequirements(team);
+  const completed = requirements.filter((item) => item.met).length;
+  const total = requirements.length;
+  const completion = Math.round((completed / total) * 100);
+  const lead = team.members.find((member) => member.role === 'LEAD');
+  const memberCount = team.members.length;
+  const currentStep = STEP_INDEX[status];
+
+  const visibleRequirements = requirements.filter((item) => {
     if (filter === 'done') return item.met;
     if (filter === 'pending') return !item.met;
     return true;
@@ -67,11 +134,14 @@ export function DashboardOverview() {
   return (
     <div className="flex flex-col gap-6">
       <DashboardPageHeader
-        eyebrow={`Tech Ignite ’26 · ${MOCK_TEAM.track}`}
+        eyebrow={`${EVENT.name} · ${EVENT.track}`}
         title="Overview"
         description="Ship your project, keep the team aligned, and submit before the clock runs out."
         aside={
-          <Link to="/dashboard/submissions" className={cn(buttonVariants(), 'gap-2')}>
+          <Link
+            to="/dashboard/submissions"
+            className={cn(buttonVariants(), 'gap-2')}
+          >
             <Plus size={16} aria-hidden="true" />
             Submit project
           </Link>
@@ -85,31 +155,48 @@ export function DashboardOverview() {
       >
         <DashboardStat
           label="Submission"
-          value="Draft"
-          hint="Not submitted yet"
+          value={STATUS_LABELS[status]}
+          hint={
+            team.submittedAt !== null
+              ? `Locked ${formatTeamDate(team.submittedAt)}`
+              : 'Not submitted yet'
+          }
           icon={FileText}
-          badge={{ label: 'In progress', variant: 'warning' }}
+          badge={{
+            label: status === 'draft' ? 'In progress' : STATUS_LABELS[status],
+            variant: status === 'draft' ? 'warning' : 'success',
+          }}
         />
         <DashboardStat
           label="Deadline"
-          value={`${String(MOCK_TEAM.daysLeft)} days`}
-          hint="Closes 18 Nov, 11:59 PM WAT"
+          value={`${String(EVENT.daysLeft)} days`}
+          hint={EVENT.deadline}
           icon={CalendarClock}
           badge={{ label: 'On track', variant: 'success' }}
         />
         <DashboardStat
           label="Team"
-          value={`${String(MEMBERS.length)}/${String(MOCK_TEAM.seats)}`}
-          hint={`${String(confirmed)} confirmed · ${String(MEMBERS.length - confirmed)} pending`}
+          value={`${String(memberCount)}`}
+          hint={
+            lead
+              ? `${lead.name} leads · ${String(memberCount)} members`
+              : `${String(memberCount)} members`
+          }
           icon={Users}
-          badge={{ label: `${String(confirmed)} confirmed`, variant: 'success' }}
+          badge={{
+            label: `${String(memberCount)} ${memberCount === 1 ? 'member' : 'members'}`,
+            variant: 'default',
+          }}
         />
         <DashboardStat
           label="Checklist"
           value={`${String(completion)}%`}
           hint={`${String(completed)} of ${String(total)} requirements met`}
           icon={ListChecks}
-          badge={{ label: `${String(completed)}/${String(total)}`, variant: 'default' }}
+          badge={{
+            label: `${String(completed)}/${String(total)}`,
+            variant: completion === 100 ? 'success' : 'warning',
+          }}
         />
       </section>
 
@@ -145,13 +232,13 @@ export function DashboardOverview() {
             </div>
           </CardHeader>
           <CardContent>
-            {visibleChecklist.length === 0 ? (
+            {visibleRequirements.length === 0 ? (
               <p className="rounded-xl border border-dashed border-slate-200 px-4 py-10 text-center text-sm text-slate-500">
                 Nothing here.
               </p>
             ) : (
               <ul className="grid gap-3 sm:grid-cols-2">
-                {visibleChecklist.map((item) => (
+                {visibleRequirements.map((item) => (
                   <li
                     key={item.id}
                     className="rounded-xl border border-slate-200 bg-white p-4"
@@ -194,16 +281,22 @@ export function DashboardOverview() {
             <CardHeader>
               <div>
                 <CardTitle>Submission snapshot</CardTitle>
-                <CardDescription>Last saved {MOCK_TEAM.lastSaved}</CardDescription>
+                <CardDescription>
+                  Updated {formatTeamDate(team.updatedAt)}
+                </CardDescription>
               </div>
-              <SubmissionStatusBadge status={STATUS} />
+              <SubmissionStatusBadge status={status} />
             </CardHeader>
             <CardContent>
               <p className="text-sm font-medium text-slate-900">
-                {MOCK_SUBMISSION.title}
+                {team.projectTitle.length > 0
+                  ? team.projectTitle
+                  : 'Untitled project'}
               </p>
               <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-slate-500">
-                {MOCK_SUBMISSION.description}
+                {team.projectDescription.length > 0
+                  ? team.projectDescription
+                  : 'No description yet.'}
               </p>
               <dl className="mt-4 grid grid-cols-2 gap-2">
                 <div className="rounded-lg bg-slate-50 p-3">
@@ -215,7 +308,7 @@ export function DashboardOverview() {
                 <div className="rounded-lg bg-slate-50 p-3">
                   <dt className="text-xs text-slate-500">Deadline</dt>
                   <dd className="mt-0.5 text-sm font-medium text-slate-900">
-                    {String(MOCK_TEAM.daysLeft)} days
+                    {String(EVENT.daysLeft)} days
                   </dd>
                 </div>
               </dl>
@@ -240,7 +333,8 @@ export function DashboardOverview() {
               <div>
                 <CardTitle>Team</CardTitle>
                 <CardDescription>
-                  {String(MEMBERS.length)} of {String(MOCK_TEAM.seats)} seats used
+                  {String(memberCount)}{' '}
+                  {memberCount === 1 ? 'member' : 'members'} on the roster
                 </CardDescription>
               </div>
               <Link
@@ -251,26 +345,32 @@ export function DashboardOverview() {
               </Link>
             </CardHeader>
             <CardContent>
-              <ul className="flex flex-col gap-3">
-                {MEMBERS.map((member) => (
-                  <li key={member.email} className="flex items-center gap-2.5">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-50 text-xs font-semibold text-violet-700">
-                      {member.initials}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium text-slate-900">
-                        {member.name}
+              {memberCount === 0 ? (
+                <p className="rounded-lg border border-dashed border-slate-200 px-3 py-6 text-center text-xs text-slate-500">
+                  No members on the roster yet.
+                </p>
+              ) : (
+                <ul className="flex flex-col gap-3">
+                  {team.members.slice(0, 4).map((member) => (
+                    <li key={member.id} className="flex items-center gap-2.5">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-50 text-xs font-semibold text-violet-700">
+                        {memberInitials(member.name)}
                       </span>
-                      <span className="block truncate text-xs text-slate-500">
-                        {member.role}
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-slate-900">
+                          {member.name}
+                        </span>
+                        <span className="block truncate text-xs text-slate-500">
+                          {member.role === 'LEAD' ? 'Team lead' : 'Member'}
+                        </span>
                       </span>
-                    </span>
-                    <Badge variant={member.confirmed ? 'success' : 'warning'}>
-                      {member.confirmed ? 'Confirmed' : 'Pending'}
-                    </Badge>
-                  </li>
-                ))}
-              </ul>
+                      <Badge variant={member.role === 'LEAD' ? 'default' : 'secondary'}>
+                        {member.role === 'LEAD' ? 'Lead' : 'Member'}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -324,75 +424,20 @@ export function DashboardOverview() {
                     <span
                       className={cn(
                         'block text-sm',
-                        current ? 'font-medium text-slate-900' : 'text-slate-600',
+                        current
+                          ? 'font-medium text-slate-900'
+                          : 'text-slate-600',
                       )}
                     >
                       {step.label}
                     </span>
-                    <span className="block text-xs text-slate-500">{step.hint}</span>
+                    <span className="block text-xs text-slate-500">
+                      {step.hint}
+                    </span>
                   </span>
                 </li>
               );
             })}
-          </ol>
-        </CardContent>
-      </Card>
-
-      {/* Activity */}
-      <Card>
-        <CardHeader>
-          <div>
-            <CardTitle>Recent activity</CardTitle>
-            <CardDescription>
-              Every milestone from registration to judging.
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ol className="grid gap-x-8 sm:grid-cols-2">
-            {TIMELINE.map((entry, index) => (
-              <li key={`${entry.date}-${entry.label}`} className="flex gap-3">
-                <div className="flex flex-col items-center">
-                  <span
-                    className={cn(
-                      'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border',
-                      TIMELINE_STYLES[entry.state],
-                    )}
-                  >
-                    {entry.state === 'done' ? (
-                      <Check size={12} strokeWidth={2.5} aria-hidden="true" />
-                    ) : entry.state === 'current' ? (
-                      <CircleDot size={12} aria-hidden="true" />
-                    ) : (
-                      <Clock3 size={12} aria-hidden="true" />
-                    )}
-                  </span>
-                  {index < TIMELINE.length - 1 && (
-                    <span className="my-1 w-px flex-1 bg-slate-200" aria-hidden="true" />
-                  )}
-                </div>
-                <div className="min-w-0 pb-5">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs text-slate-400 tabular-nums">
-                      {entry.date}
-                    </span>
-                    <span
-                      className={cn(
-                        'text-sm',
-                        entry.state === 'upcoming'
-                          ? 'text-slate-500'
-                          : 'font-medium text-slate-900',
-                      )}
-                    >
-                      {entry.label}
-                    </span>
-                  </div>
-                  <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
-                    {entry.detail}
-                  </p>
-                </div>
-              </li>
-            ))}
           </ol>
         </CardContent>
       </Card>

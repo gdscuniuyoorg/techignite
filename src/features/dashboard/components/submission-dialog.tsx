@@ -1,32 +1,29 @@
 import { useEffect, useState } from 'react';
-import { Save, Send, X } from 'lucide-react';
+import { Loader2, Save, Send, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
-import type { SubmissionCategory } from '../data';
+import type { TeamProfile } from '@/lib/team-api';
+import { teamErrorMessage } from '@/lib/team-api';
 
 export interface SubmissionFormValues {
-  readonly category: SubmissionCategory;
   readonly title: string;
   readonly summary: string;
   readonly demoUrl: string;
   readonly repositoryUrl: string;
-  readonly videoUrl: string;
   readonly technologies: readonly string[];
-  readonly status: 'draft' | 'submitted';
 }
 
-const CATEGORY_LABELS: Record<SubmissionCategory, string> = {
-  hackathon: 'Hackathon',
-  project: 'Project',
-};
+export type SubmissionSaveMode = 'draft' | 'submit';
 
 interface SubmissionDialogProps {
-  readonly initialCategory: SubmissionCategory;
+  readonly team: TeamProfile;
   readonly onClose: () => void;
-  readonly onSubmit: (values: SubmissionFormValues) => void;
+  readonly onSave: (
+    values: SubmissionFormValues,
+    mode: SubmissionSaveMode,
+  ) => Promise<void>;
 }
 
 function parseTechnologies(value: string): readonly string[] {
@@ -36,18 +33,15 @@ function parseTechnologies(value: string): readonly string[] {
     .filter((item) => item.length > 0);
 }
 
-/** Modal form for a new hackathon or project submission. Mount only while open. */
-export function SubmissionDialog({
-  initialCategory,
-  onClose,
-  onSubmit,
-}: SubmissionDialogProps) {
-  const [title, setTitle] = useState('');
-  const [summary, setSummary] = useState('');
-  const [demoUrl, setDemoUrl] = useState('');
-  const [repositoryUrl, setRepositoryUrl] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
-  const [technologies, setTechnologies] = useState('');
+/** Modal form for the team's project submission. Mount only while open. */
+export function SubmissionDialog({ team, onClose, onSave }: SubmissionDialogProps) {
+  const [title, setTitle] = useState(team.projectTitle);
+  const [summary, setSummary] = useState(team.projectDescription);
+  const [demoUrl, setDemoUrl] = useState(team.demoUrl);
+  const [repositoryUrl, setRepositoryUrl] = useState(team.repositoryUrl);
+  const [technologies, setTechnologies] = useState(team.technologies.join(', '));
+  const [savingMode, setSavingMode] = useState<SubmissionSaveMode | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -67,18 +61,27 @@ export function SubmissionDialog({
     };
   }, []);
 
-  const submit = (status: SubmissionFormValues['status']) => {
-    onSubmit({
-      category: initialCategory,
-      title: title.trim(),
-      summary: summary.trim(),
-      demoUrl: demoUrl.trim(),
-      repositoryUrl: initialCategory === 'project' ? repositoryUrl.trim() : '',
-      videoUrl: videoUrl.trim(),
-      technologies: parseTechnologies(technologies),
-      status,
-    });
+  const save = async (mode: SubmissionSaveMode) => {
+    setError(null);
+    setSavingMode(mode);
+    try {
+      await onSave(
+        {
+          title: title.trim(),
+          summary: summary.trim(),
+          demoUrl: demoUrl.trim(),
+          repositoryUrl: repositoryUrl.trim(),
+          technologies: parseTechnologies(technologies),
+        },
+        mode,
+      );
+    } catch (submitError) {
+      setError(await teamErrorMessage(submitError));
+      setSavingMode(null);
+    }
   };
+
+  const busy = savingMode !== null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4 backdrop-blur-sm sm:items-center">
@@ -98,23 +101,25 @@ export function SubmissionDialog({
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-medium tracking-wide text-violet-600 uppercase">
-              {CATEGORY_LABELS[initialCategory]}
+              Project submission
             </p>
             <h2
               id="submission-dialog-title"
               className="mt-1 text-xl font-semibold tracking-tight text-slate-900"
             >
-              Submit your work
+              Submit your project
             </h2>
             <p className="mt-1 text-sm leading-relaxed text-slate-500">
-              Judges see exactly what you enter here. Drafts stay private.
+              Judges see exactly what you enter here. Drafts stay private until
+              you submit for judging.
             </p>
           </div>
           <button
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            disabled={busy}
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 disabled:opacity-50"
           >
             <X size={16} aria-hidden="true" />
           </button>
@@ -127,11 +132,11 @@ export function SubmissionDialog({
             const native = event.nativeEvent;
             const submitter = native instanceof SubmitEvent ? native.submitter : null;
             const isDraft = submitter?.getAttribute('data-action') === 'draft';
-            submit(isDraft ? 'draft' : 'submitted');
+            void save(isDraft ? 'draft' : 'submit');
           }}
         >
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="submission-title">Title</Label>
+            <Label htmlFor="submission-title">Project title</Label>
             <Input
               id="submission-title"
               name="title"
@@ -141,7 +146,7 @@ export function SubmissionDialog({
               onChange={(event) => {
                 setTitle(event.target.value);
               }}
-              placeholder="What are you submitting?"
+              placeholder="What did you build?"
             />
           </div>
 
@@ -160,12 +165,7 @@ export function SubmissionDialog({
             />
           </div>
 
-          <div
-            className={cn(
-              'grid gap-4',
-              initialCategory === 'project' && 'sm:grid-cols-2',
-            )}
-          >
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="submission-demo">Demo URL</Label>
               <Input
@@ -180,61 +180,70 @@ export function SubmissionDialog({
                 placeholder="https://"
               />
             </div>
-            {initialCategory === 'project' && (
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="submission-repo">Repository URL</Label>
-                <Input
-                  id="submission-repo"
-                  name="repositoryUrl"
-                  type="url"
-                  value={repositoryUrl}
-                  onChange={(event) => {
-                    setRepositoryUrl(event.target.value);
-                  }}
-                  placeholder="https://"
-                />
-              </div>
-            )}
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="submission-repo">
+                Repository URL{' '}
+                <span className="font-normal text-slate-400">(GitHub)</span>
+              </Label>
+              <Input
+                id="submission-repo"
+                name="repositoryUrl"
+                type="url"
+                value={repositoryUrl}
+                onChange={(event) => {
+                  setRepositoryUrl(event.target.value);
+                }}
+                placeholder="https://github.com/username/repo"
+              />
+            </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="submission-video">Demo video URL</Label>
-              <Input
-                id="submission-video"
-                name="videoUrl"
-                type="url"
-                value={videoUrl}
-                onChange={(event) => {
-                  setVideoUrl(event.target.value);
-                }}
-                placeholder="https://"
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="submission-tech">Tech stack</Label>
-              <Input
-                id="submission-tech"
-                name="technologies"
-                value={technologies}
-                onChange={(event) => {
-                  setTechnologies(event.target.value);
-                }}
-                placeholder="React, Node, PostgreSQL"
-              />
-            </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="submission-tech">Tech stack</Label>
+            <Input
+              id="submission-tech"
+              name="technologies"
+              value={technologies}
+              onChange={(event) => {
+                setTechnologies(event.target.value);
+              }}
+              placeholder="React, Node, PostgreSQL"
+            />
           </div>
+
+          {error && (
+            <p
+              role="alert"
+              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+            >
+              {error}
+            </p>
+          )}
 
           <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4">
-            <Button type="submit">
-              <Send size={16} aria-hidden="true" />
-              Submit for judging
+            <Button type="submit" disabled={busy}>
+              {savingMode === 'submit' ? (
+                <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+              ) : (
+                <Send size={16} aria-hidden="true" />
+              )}
+              {savingMode === 'submit' ? 'Submitting…' : 'Submit for judging'}
             </Button>
-            <Button type="submit" variant="outline" formNoValidate data-action="draft">
-              <Save size={16} aria-hidden="true" />
-              Save draft
+            <Button
+              type="submit"
+              variant="outline"
+              formNoValidate
+              data-action="draft"
+              disabled={busy}
+            >
+              {savingMode === 'draft' ? (
+                <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+              ) : (
+                <Save size={16} aria-hidden="true" />
+              )}
+              {savingMode === 'draft' ? 'Saving…' : 'Save draft'}
             </Button>
-            <Button type="button" variant="ghost" onClick={onClose}>
+            <Button type="button" variant="ghost" onClick={onClose} disabled={busy}>
               Cancel
             </Button>
           </div>

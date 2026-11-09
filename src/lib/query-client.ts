@@ -18,10 +18,15 @@ const defaultOptions = {
  */
 let browserClient: QueryClient | undefined;
 
-export function getAdminQueryClient(): QueryClient {
+export function getQueryClient(): QueryClient {
   if (typeof window === 'undefined') {
     return new QueryClient({ defaultOptions });
   }
   browserClient ??= new QueryClient({ defaultOptions });
   return browserClient;
+}
+
+/** Admin alias kept for the existing admin root. */
+export function getAdminQueryClient(): QueryClient {
+  return getQueryClient();
 }

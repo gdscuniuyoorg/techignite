@@ -15,6 +15,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as ApplyRouteImport } from './routes/apply'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as HackathonRouteImport } from './routes/hackathon'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
@@ -58,6 +59,11 @@ const AgendaRoute = AgendaRouteImport.update({
 const ApplyRoute = ApplyRouteImport.update({
   id: '/apply',
   path: '/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
+  '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
+  '/auth': typeof AuthRoute
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
@@ -181,6 +189,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
+  '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
@@ -205,6 +214,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/agenda'
     | '/apply'
+    | '/auth'
     | '/dashboard'
     | '/hackathon'
     | '/llms.txt'
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/agenda'
     | '/apply'
+    | '/auth'
     | '/hackathon'
     | '/llms.txt'
     | '/photos'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/agenda'
     | '/apply'
+    | '/auth'
     | '/dashboard'
     | '/hackathon'
     | '/llms.txt'
@@ -270,6 +282,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AgendaRoute: typeof AgendaRoute
   ApplyRoute: typeof ApplyRoute
+  AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   HackathonRoute: typeof HackathonRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
@@ -321,6 +334,13 @@ declare module '@tanstack/react-router' {
       path: '/apply'
       fullPath: '/apply'
       preLoaderRoute: typeof ApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -463,6 +483,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AgendaRoute: AgendaRoute,
   ApplyRoute: ApplyRoute,
+  AuthRoute: AuthRoute,
   DashboardRoute: DashboardRouteWithChildren,
   HackathonRoute: HackathonRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,

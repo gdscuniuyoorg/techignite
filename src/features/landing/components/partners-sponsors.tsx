@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { slideInRight, springUp, staggerContainer, useScrollGate } from '@/lib/motion';
 
-// const DUMMY_LOGO_SRC = '/icons/logo.png';
-
 /** A single sponsor entry. Entries without `src` render the name as text. */
 interface SponsorLogo {
   readonly name: string;
@@ -31,22 +29,17 @@ const sponsorTiers: readonly SponsorTier[] = [
       { name: 'Paga Engine', src: '/images/sponsors/paga-engine.png' },
     ],
   },
-  // Silver Sponsors commented out until officially revealed:
-  // {
-  //   label: 'Silver Sponsors',
-  //   logos: [
-  //     {
-  //       name: 'Jobberman',
-  //       src: DUMMY_LOGO_SRC,
-  //     },
-  //     { name: 'SwiftXr', src: DUMMY_LOGO_SRC },
-  //     {
-  //       name: 'Coincola',
-  //       src: DUMMY_LOGO_SRC,
-  //     },
-  //     { name: 'Litehost', src: DUMMY_LOGO_SRC },
-  //   ],
-  // },
+  {
+    label: 'Silver Sponsors',
+    logos: [
+      { name: 'Litehost', src: '/images/sponsors/litehost-wordmark.svg' },
+      { name: 'Jobberman', src: '/images/sponsors/jobberman.jpg' },
+      // No artwork yet — SwiftXr renders as its name until a logo is added to
+      // public/images/sponsors/ (e.g. swiftxr.png).
+      { name: 'SwiftXr' },
+      { name: 'Coincola', src: '/images/sponsors/coin-cola.jpg', sizeClass: 'h-14' },
+    ],
+  },
   {
     label: 'Hackathon Sponsor',
     logos: [{ name: 'Paga Engine', src: '/images/sponsors/paga-engine.png' }],
