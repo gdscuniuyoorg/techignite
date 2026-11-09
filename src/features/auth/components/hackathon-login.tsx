@@ -14,8 +14,8 @@ import { Eye, EyeOff, LogIn, KeyRound, Trophy } from 'lucide-react';
 import { teamErrorMessage } from '@/lib/team-api';
 
 export interface TeamLoginValues {
-  readonly teamName: string;
-  readonly teamPassword: string;
+  readonly email: string;
+  readonly password: string;
 }
 
 interface HackathonLoginProps {
@@ -24,7 +24,7 @@ interface HackathonLoginProps {
 }
 
 /**
- * Team sign-in for the Tech Ignite hackathon: team name + team password,
+ * Team sign-in for the Tech Ignite hackathon: email + password,
  * built on react-hook-form and the shared shadcn-style ui primitives.
  */
 export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
@@ -33,7 +33,7 @@ export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<TeamLoginValues>({
-    defaultValues: { teamName: '', teamPassword: '' },
+    defaultValues: { email: '', password: '' },
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -45,7 +45,7 @@ export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
       await onSubmit(values);
     } catch (error) {
       setSubmitError(
-        await teamErrorMessage(error, 'Team name or password is incorrect.'),
+        await teamErrorMessage(error, 'Email or password is incorrect.'),
       );
     }
   });
@@ -70,7 +70,7 @@ export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
               Team sign in
             </CardTitle>
             <CardDescription className="mt-1 text-sm text-white/60">
-              Tech Ignite hackathon. Use the name and password you submitted with.
+              Tech Ignite hackathon. Use the email and password you submitted with.
             </CardDescription>
           </div>
         </CardHeader>
@@ -78,30 +78,31 @@ export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
         <CardContent>
           <form onSubmit={submit} className="flex flex-col gap-5" noValidate>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="team-name" className="text-white/80">
-                Team name
+              <Label htmlFor="team-email" className="text-white/80">
+                Email
               </Label>
               <Input
-                id="team-name"
-                autoComplete="off"
-                placeholder="Session Rockets"
-                aria-invalid={errors.teamName !== undefined}
+                id="team-email"
+                type="email"
+                autoComplete="email"
+                placeholder="team@example.com"
+                aria-invalid={errors.email !== undefined}
                 className="h-11 border-line bg-ink text-paper placeholder:text-muted focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
-                {...register('teamName', {
-                  required: 'Enter your team name.',
+                {...register('email', {
+                  required: 'Enter your email address.',
                   setValueAs: (value: string) => value.trim(),
                 })}
               />
-              {errors.teamName && (
+              {errors.email && (
                 <p role="alert" className="text-xs text-[#ff9d91]">
-                  {errors.teamName.message}
+                  {errors.email.message}
                 </p>
               )}
             </div>
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="team-password" className="text-white/80">
-                Team password
+                Password
               </Label>
               <div className="relative">
                 <Input
@@ -109,10 +110,10 @@ export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
                   placeholder="••••••••••"
-                  aria-invalid={errors.teamPassword !== undefined}
+                  aria-invalid={errors.password !== undefined}
                   className="h-11 border-line bg-ink pr-10 text-paper placeholder:text-muted focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
-                  {...register('teamPassword', {
-                    required: 'Enter your team password.',
+                  {...register('password', {
+                    required: 'Enter your password.',
                   })}
                 />
                 <button
@@ -131,9 +132,9 @@ export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
                   )}
                 </button>
               </div>
-              {errors.teamPassword && (
+              {errors.password && (
                 <p role="alert" className="text-xs text-[#ff9d91]">
-                  {errors.teamPassword.message}
+                  {errors.password.message}
                 </p>
               )}
             </div>
@@ -158,7 +159,7 @@ export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
 
             <p className="flex items-center justify-center gap-1.5 text-center text-xs text-muted">
               <KeyRound size={12} aria-hidden="true" />
-              Lost your team password? Contact the organisers at gdscuniuyo@gmail.com.
+              Lost your password? Contact the organisers at gdscuniuyo@gmail.com.
             </p>
           </form>
         </CardContent>

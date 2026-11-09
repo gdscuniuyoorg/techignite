@@ -76,12 +76,13 @@ export interface TeamProfile {
 }
 
 export interface LoginInput {
-  readonly teamName: string;
+  readonly email: string;
   readonly password: string;
 }
 
 export interface LoginResult {
   readonly token: string;
+  readonly sessionToken?: string;
   readonly team: TeamProfile | null;
 }
 
@@ -155,21 +156,36 @@ function mapMember(value: unknown, index: number): TeamMember {
 
 export function mapTeam(value: unknown): TeamProfile {
   if (!isRecord(value)) throw new Error('Malformed team profile');
-  const members = value.members;
+  const target = isRecord(value.team)
+    ? value.team
+    : isRecord(value.user)
+      ? value.user
+      : value;
+  const members = target.members;
+  const fullName = [
+    firstString(target, ['firstName']),
+    firstString(target, ['lastName']),
+  ]
+    .filter((part) => part.length > 0)
+    .join(' ');
+
   return {
-    id: firstString(value, ['id', 'teamId', '_id']),
-    name: firstString(value, ['teamName', 'name']) || 'Your team',
-    description: firstString(value, ['description', 'teamDescription']),
-    status: toTeamStatus(value.status),
-    projectTitle: firstString(value, ['projectTitle', 'title']),
-    projectDescription: firstString(value, ['projectDescription', 'description']),
-    technologies: toStringArray(value.technologies ?? value.techStack),
-    demoUrl: firstString(value, ['demoUrl']),
-    repositoryUrl: firstString(value, ['repositoryUrl', 'repoUrl']),
-    submittedAt: optionalString(value, ['submittedAt', 'submitted_at', 'lockedAt']),
+    id: firstString(target, ['id', 'teamId', '_id']),
+    name:
+      firstString(target, ['teamName', 'name', 'fullName']) ||
+      fullName ||
+      'Your team',
+    description: firstString(target, ['description', 'teamDescription']),
+    status: toTeamStatus(target.status),
+    projectTitle: firstString(target, ['projectTitle', 'title']),
+    projectDescription: firstString(target, ['projectDescription', 'description']),
+    technologies: toStringArray(target.technologies ?? target.techStack),
+    demoUrl: firstString(target, ['demoUrl']),
+    repositoryUrl: firstString(target, ['repositoryUrl', 'repoUrl']),
+    submittedAt: optionalString(target, ['submittedAt', 'submitted_at', 'lockedAt']),
     members: Array.isArray(members) ? members.map(mapMember) : [],
-    createdAt: optionalString(value, ['createdAt', 'created_at']),
-    updatedAt: optionalString(value, ['updatedAt', 'updated_at']),
+    createdAt: optionalString(target, ['createdAt', 'created_at']),
+    updatedAt: optionalString(target, ['updatedAt', 'updated_at']),
   };
 }
 
@@ -187,7 +203,9 @@ function expectData(body: unknown): unknown {
   if (!isRecord(body) || body.success !== true) {
     throw new Error(errorMessageFromBody(body) || 'Malformed API response');
   }
-  return body.data;
+  return 'data' in body && body.data !== undefined && body.data !== null
+    ? body.data
+    : body;
 }
 
 // ─── Auth ──────────────────────────────────────────────────────────────────
@@ -196,25 +214,29 @@ export async function login(input: LoginInput): Promise<LoginResult> {
   const body: unknown = await teamApi.post('api/auth/login', { json: input }).json();
   const data = expectData(body);
 
+  const container = isRecord(data) ? data : isRecord(body) ? body : {};
+
   const token =
     typeof data === 'string'
       ? data
-      : isRecord(data)
-        ? firstString(data, ['token', 'accessToken', 'jwt'])
-        : '';
+      : firstString(container, ['sessionToken', 'token', 'accessToken', 'jwt']);
   if (token.length === 0) {
     throw new Error('The server did not return a session token.');
   }
   setStoredToken(token);
 
-  const team =
-    isRecord(data) && isRecord(data.team)
-      ? mapTeam(data.team)
-      : isRecord(data) && isRecord(data.user)
-        ? mapTeam(data.user)
-        : null;
+  const sessionToken = firstString(container, ['sessionToken']) || token;
 
-  return { token, team };
+  const team =
+    isRecord(container.team)
+      ? mapTeam(container.team)
+      : isRecord(container.user)
+        ? mapTeam(container.user)
+        : isRecord(data) && ('id' in data || 'name' in data)
+          ? mapTeam(data)
+          : null;
+
+  return { token, sessionToken, team };
 }
 
 export function logout(): void {

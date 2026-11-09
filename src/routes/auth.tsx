@@ -16,6 +16,8 @@ export const Route = createFileRoute('/auth')({
   beforeLoad: () => {
     // Already signed in? Skip the form. Tokens live in sessionStorage.
     if (typeof window !== 'undefined' && hasStoredToken()) {
+      // TanStack Router redirects are thrown as control flow.
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect({ to: '/dashboard' });
     }
   },
@@ -26,7 +28,7 @@ function AuthPage() {
   const navigate = useNavigate({ from: Route.fullPath });
 
   const onAuthenticated = async (values: TeamLoginValues): Promise<void> => {
-    await login({ teamName: values.teamName, password: values.teamPassword });
+    await login({ email: values.email, password: values.password });
     await navigate({ to: '/dashboard' });
   };
 
