@@ -12,14 +12,23 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as ApplyRouteImport } from './routes/apply'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as HackathonRouteImport } from './routes/hackathon'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as PhotosRouteImport } from './routes/photos'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SpeakersRouteImport } from './routes/speakers'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
+import { Route as AdminEmailRouteImport } from './routes/admin.email'
+import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard.submissions'
+import { Route as DashboardTeamRouteImport } from './routes/dashboard.team'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,6 +45,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgendaRoute = AgendaRouteImport.update({
   id: '/agenda',
   path: '/agenda',
@@ -44,6 +58,11 @@ const AgendaRoute = AgendaRouteImport.update({
 const ApplyRoute = ApplyRouteImport.update({
   id: '/apply',
   path: '/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HackathonRoute = HackathonRouteImport.update({
@@ -76,19 +95,63 @@ const SpeakersRoute = SpeakersRouteImport.update({
   path: '/speakers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCouponsRoute = AdminCouponsRouteImport.update({
+  id: '/coupons',
+  path: '/coupons',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEmailRoute = AdminEmailRouteImport.update({
+  id: '/email',
+  path: '/email',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSubmissionsRoute = AdminSubmissionsRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSubmissionsRoute = DashboardSubmissionsRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardTeamRoute = DashboardTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
+  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/email': typeof AdminEmailRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
+  '/dashboard/submissions': typeof DashboardSubmissionsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/admin/': typeof AdminIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,20 +165,36 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
+  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/email': typeof AdminEmailRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
+  '/dashboard/submissions': typeof DashboardSubmissionsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/admin': typeof AdminIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
+  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/email': typeof AdminEmailRoute
+  '/admin/submissions': typeof AdminSubmissionsRoute
+  '/dashboard/submissions': typeof DashboardSubmissionsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/admin/': typeof AdminIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,14 +202,23 @@ export interface FileRouteTypes {
     | '/'
     | '/$'
     | '/about'
+    | '/admin'
     | '/agenda'
     | '/apply'
+    | '/dashboard'
     | '/hackathon'
     | '/llms.txt'
     | '/photos'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/speakers'
+    | '/admin/coupons'
+    | '/admin/email'
+    | '/admin/submissions'
+    | '/dashboard/submissions'
+    | '/dashboard/team'
+    | '/admin/'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,27 +232,45 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/speakers'
+    | '/admin/coupons'
+    | '/admin/email'
+    | '/admin/submissions'
+    | '/dashboard/submissions'
+    | '/dashboard/team'
+    | '/admin'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/$'
     | '/about'
+    | '/admin'
     | '/agenda'
     | '/apply'
+    | '/dashboard'
     | '/hackathon'
     | '/llms.txt'
     | '/photos'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/speakers'
+    | '/admin/coupons'
+    | '/admin/email'
+    | '/admin/submissions'
+    | '/dashboard/submissions'
+    | '/dashboard/team'
+    | '/admin/'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AgendaRoute: typeof AgendaRoute
   ApplyRoute: typeof ApplyRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   HackathonRoute: typeof HackathonRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   PhotosRoute: typeof PhotosRoute
@@ -196,6 +302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agenda': {
       id: '/agenda'
       path: '/agenda'
@@ -208,6 +321,13 @@ declare module '@tanstack/react-router' {
       path: '/apply'
       fullPath: '/apply'
       preLoaderRoute: typeof ApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hackathon': {
@@ -252,15 +372,98 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpeakersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/coupons': {
+      id: '/admin/coupons'
+      path: '/coupons'
+      fullPath: '/admin/coupons'
+      preLoaderRoute: typeof AdminCouponsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/email': {
+      id: '/admin/email'
+      path: '/email'
+      fullPath: '/admin/email'
+      preLoaderRoute: typeof AdminEmailRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/submissions': {
+      id: '/admin/submissions'
+      path: '/submissions'
+      fullPath: '/admin/submissions'
+      preLoaderRoute: typeof AdminSubmissionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/submissions': {
+      id: '/dashboard/submissions'
+      path: '/submissions'
+      fullPath: '/dashboard/submissions'
+      preLoaderRoute: typeof DashboardSubmissionsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/team': {
+      id: '/dashboard/team'
+      path: '/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof DashboardTeamRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminCouponsRoute: typeof AdminCouponsRoute
+  AdminEmailRoute: typeof AdminEmailRoute
+  AdminSubmissionsRoute: typeof AdminSubmissionsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCouponsRoute: AdminCouponsRoute,
+  AdminEmailRoute: AdminEmailRoute,
+  AdminSubmissionsRoute: AdminSubmissionsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardSubmissionsRoute: typeof DashboardSubmissionsRoute
+  DashboardTeamRoute: typeof DashboardTeamRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardSubmissionsRoute: DashboardSubmissionsRoute,
+  DashboardTeamRoute: DashboardTeamRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   AgendaRoute: AgendaRoute,
   ApplyRoute: ApplyRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   HackathonRoute: HackathonRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   PhotosRoute: PhotosRoute,
