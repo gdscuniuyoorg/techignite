@@ -23,9 +23,7 @@ export function DashboardPageHeader({
         <h1 className="mt-1.5 text-3xl font-semibold tracking-tight text-slate-950">
           {title}
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-          {description}
-        </p>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">{description}</p>
       </div>
       {aside}
     </div>

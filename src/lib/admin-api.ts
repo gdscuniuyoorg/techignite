@@ -33,6 +33,8 @@ export type CampaignAudience =
   | 'admins'
   | 'subscribers'
   | 'custom';
+export type ApplicationStatus = 'pending' | 'accepted' | 'rejected' | 'waitlisted';
+export type AdminTeamMemberRole = 'lead' | 'member' | 'mentor';
 
 export interface AdminSessionUser {
   readonly id: string;
@@ -41,6 +43,7 @@ export interface AdminSessionUser {
   readonly lastName: string;
   readonly role: string;
   readonly status: string;
+  readonly permissions: readonly string[];
 }
 
 export interface Pagination {
@@ -157,6 +160,86 @@ export interface Subscriber {
   readonly subscribedAt: string;
 }
 
+export interface AdminApplication {
+  readonly id: string;
+  readonly teamName: string;
+  readonly projectIdea: string;
+  readonly agreedToRules: boolean;
+  readonly applicantEmail: string;
+  readonly teamDescription: string;
+  readonly applicantFirstName: string;
+  readonly applicantLastName: string;
+  readonly status: ApplicationStatus;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface AdminTeam {
+  readonly id: string;
+  readonly name: string;
+  readonly description: string;
+  readonly status: string;
+  readonly isFinalist: boolean;
+  readonly memberCount: number;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface AdminTeamMember {
+  readonly id: string;
+  readonly teamId: string;
+  readonly name: string;
+  readonly email: string;
+  readonly role: AdminTeamMemberRole;
+  readonly userId: string | null;
+  readonly onboardingStatus: string;
+  readonly createdAt: string;
+}
+
+export interface ManagedUser {
+  readonly id: string;
+  readonly email: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly role: string;
+  readonly status: string;
+  readonly isActive: boolean;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+export interface AdminRole {
+  readonly id: string;
+  readonly name: string;
+  readonly description: string;
+  readonly permissions: readonly string[];
+  readonly isDefault: boolean;
+}
+
+export interface AdminUserInput {
+  readonly email: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly password: string;
+  readonly role: string;
+  readonly customRoleId?: string;
+}
+
+export interface ManagedUserInput {
+  readonly email: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly password?: string;
+  readonly role?: string;
+  readonly status?: string;
+}
+
+export interface CustomRoleInput {
+  readonly name: string;
+  readonly description?: string;
+  readonly permissions: readonly string[];
+}
+
 // ─── Boundary narrowing ─────────────────────────────────────────────────────
 // The OpenAPI file types responses as untyped "description" stubs, so every
 // envelope is checked at runtime. Malformed core fields throw; display-only
@@ -168,6 +251,13 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function str(value: unknown, fallback = ''): string {
   return typeof value === 'string' ? value : fallback;
+}
+
+function firstString(fallback: string, ...values: readonly unknown[]): string {
+  for (const value of values) {
+    if (typeof value === 'string' && value.length > 0) return value;
+  }
+  return fallback;
 }
 
 function strOrNull(value: unknown): string | null {
@@ -298,6 +388,144 @@ function asArray(value: unknown): readonly unknown[] {
   return Array.isArray(value) ? value : [];
 }
 
+function collectionFrom(value: unknown, keys: readonly string[]): readonly unknown[] {
+  if (Array.isArray(value)) return value;
+  if (!isRecord(value)) return [];
+  for (const key of keys) {
+    const candidate = value[key];
+    if (Array.isArray(candidate)) return candidate;
+  }
+  return [];
+}
+
+function paginationFrom(body: unknown, data: unknown, fallbackTotal: number): Pagination {
+  const rootPagination =
+    isRecord(body) && isRecord(body.pagination) ? body.pagination : null;
+  const dataPagination =
+    isRecord(data) && isRecord(data.pagination) ? data.pagination : null;
+  const pagination = rootPagination ?? dataPagination;
+  return pagination
+    ? {
+        total: num(pagination.total, fallbackTotal),
+        limit: num(pagination.limit, fallbackTotal),
+        offset: num(pagination.offset),
+      }
+    : { total: fallbackTotal, limit: fallbackTotal, offset: 0 };
+}
+
+function toApplicationStatus(value: unknown): ApplicationStatus {
+  const normalized = str(value).toLowerCase();
+  switch (normalized) {
+    case 'accepted':
+    case 'rejected':
+    case 'waitlisted':
+      return normalized;
+    case 'pending':
+    default:
+      return 'pending';
+  }
+}
+
+function toTeamMemberRole(value: unknown): AdminTeamMemberRole {
+  const normalized = str(value).toLowerCase();
+  switch (normalized) {
+    case 'lead':
+    case 'mentor':
+      return normalized;
+    case 'member':
+    default:
+      return 'member';
+  }
+}
+
+function mapApplication(value: unknown): AdminApplication {
+  if (!isRecord(value)) throw new Error('Malformed application');
+  const id = firstString('', value.id, value.applicationId, value._id);
+  if (!id) throw new Error('Malformed application: missing id');
+  return {
+    id,
+    teamName: str(value.teamName, 'Unnamed team'),
+    projectIdea: str(value.projectIdea),
+    agreedToRules: bool(value.agreedToRules),
+    applicantEmail: firstString('', value.applicantEmail, value.email),
+    teamDescription: firstString('', value.teamDescription, value.description),
+    applicantFirstName: firstString('', value.applicantFirstName, value.firstName),
+    applicantLastName: firstString('', value.applicantLastName, value.lastName),
+    status: toApplicationStatus(value.status),
+    createdAt: firstString('', value.createdAt, value.created_at),
+    updatedAt: firstString('', value.updatedAt, value.updated_at),
+  };
+}
+
+function mapTeam(value: unknown): AdminTeam {
+  if (!isRecord(value)) throw new Error('Malformed team');
+  const id = firstString('', value.id, value.teamId, value._id);
+  if (!id) throw new Error('Malformed team: missing id');
+  const members = collectionFrom(value, ['members']);
+  return {
+    id,
+    name: firstString('Unnamed team', value.name, value.teamName),
+    description: firstString('', value.description, value.teamDescription),
+    status: str(value.status, 'active'),
+    isFinalist: bool(value.isFinalist ?? value.finalist),
+    memberCount: num(value.memberCount, members.length),
+    createdAt: firstString('', value.createdAt, value.created_at),
+    updatedAt: firstString('', value.updatedAt, value.updated_at),
+  };
+}
+
+function mapAdminTeamMember(value: unknown): AdminTeamMember {
+  if (!isRecord(value)) throw new Error('Malformed team member');
+  const id = firstString('', value.id, value.memberId, value._id);
+  if (!id) throw new Error('Malformed team member: missing id');
+  return {
+    id,
+    teamId: str(value.teamId),
+    name: firstString('Unnamed member', value.name, value.fullName, value.memberName),
+    email: firstString('', value.email, value.memberEmail),
+    role: toTeamMemberRole(value.role),
+    userId: strOrNull(value.userId ?? value.user_id),
+    onboardingStatus: firstString(
+      'unknown',
+      value.onboardingStatus,
+      value.inviteStatus,
+      value.status,
+    ).toLowerCase(),
+    createdAt: firstString('', value.createdAt, value.created_at),
+  };
+}
+
+function mapManagedUser(value: unknown): ManagedUser {
+  if (!isRecord(value)) throw new Error('Malformed user');
+  const id = firstString('', value.id, value.userId, value._id);
+  if (!id) throw new Error('Malformed user: missing id');
+  const status = str(value.status, bool(value.isActive, true) ? 'active' : 'inactive');
+  return {
+    id,
+    email: str(value.email),
+    firstName: firstString('', value.firstName, value.first_name),
+    lastName: firstString('', value.lastName, value.last_name),
+    role: str(value.role, 'user'),
+    status,
+    isActive: bool(value.isActive, status.toLowerCase() !== 'inactive'),
+    createdAt: firstString('', value.createdAt, value.created_at),
+    updatedAt: firstString('', value.updatedAt, value.updated_at),
+  };
+}
+
+function mapRole(value: unknown, isDefault: boolean): AdminRole {
+  if (!isRecord(value)) throw new Error('Malformed role');
+  const name = firstString('', value.name, value.role, value.id);
+  if (!name) throw new Error('Malformed role: missing name');
+  return {
+    id: firstString(name, value.id, value.roleId),
+    name,
+    description: str(value.description),
+    permissions: strArray(value.permissions) ?? [],
+    isDefault: bool(value.isDefault, isDefault),
+  };
+}
+
 // ─── Session ────────────────────────────────────────────────────────────────
 
 export type SessionResult =
@@ -312,7 +540,8 @@ export async function getSession(): Promise<SessionResult> {
       return { status: 'unauthenticated' };
     }
     const user = body.user;
-    const role = str(user.role);
+    const roleRecord = isRecord(user.role) ? user.role : null;
+    const role = roleRecord ? str(roleRecord.name) : str(user.role);
     if (role !== 'admin' && role !== 'custom') {
       return {
         status: 'forbidden',
@@ -328,6 +557,10 @@ export async function getSession(): Promise<SessionResult> {
         lastName: str(user.lastName),
         role,
         status: str(user.status),
+        permissions:
+          strArray(user.permissions) ??
+          (roleRecord ? strArray(roleRecord.permissions) : null) ??
+          [],
       },
     };
   } catch (error) {
@@ -351,13 +584,18 @@ export async function login(email: string, password: string): Promise<AdminSessi
     );
   }
   const user = body.user;
+  const roleRecord = isRecord(user.role) ? user.role : null;
   return {
     id: str(user.id),
     email: str(user.email),
     firstName: str(user.firstName),
     lastName: str(user.lastName),
-    role: str(user.role),
+    role: roleRecord ? str(roleRecord.name) : str(user.role),
     status: 'ACTIVE',
+    permissions:
+      strArray(user.permissions) ??
+      (roleRecord ? strArray(roleRecord.permissions) : null) ??
+      [],
   };
 }
 
@@ -420,6 +658,216 @@ export async function getStats(): Promise<DashboardStats> {
       activeSubscribers: num(users.activeSubscribers),
     },
   };
+}
+
+// ─── Applications ───────────────────────────────────────────────────────────
+
+export async function listApplications(params: {
+  status?: ApplicationStatus | undefined;
+  limit?: number | undefined;
+  offset?: number | undefined;
+}): Promise<ListResult<AdminApplication>> {
+  const searchParams: Record<string, string | number> = {};
+  if (params.status) searchParams.status = params.status;
+  if (params.limit !== undefined) searchParams.limit = params.limit;
+  if (params.offset !== undefined) searchParams.offset = params.offset;
+  const body: unknown = await adminApi.get('api/applications', { searchParams }).json();
+  const data = expectData(body);
+  const items = collectionFrom(data, ['applications', 'items', 'results']).map(
+    mapApplication,
+  );
+  return { items, pagination: paginationFrom(body, data, items.length) };
+}
+
+export async function getApplication(id: string): Promise<AdminApplication> {
+  const body: unknown = await adminApi
+    .get(`api/applications/${encodeURIComponent(id)}`)
+    .json();
+  const data = expectData(body);
+  const application =
+    isRecord(data) && isRecord(data.application) ? data.application : data;
+  return mapApplication(application);
+}
+
+export async function updateApplicationStatus(
+  id: string,
+  status: Exclude<ApplicationStatus, 'pending'>,
+): Promise<void> {
+  await adminApi.patch(`api/applications/${encodeURIComponent(id)}/status`, {
+    json: { status },
+  });
+}
+
+export async function batchUpdateApplicationStatus(
+  updates: readonly {
+    readonly id: string;
+    readonly status: Exclude<ApplicationStatus, 'pending'>;
+  }[],
+): Promise<void> {
+  await adminApi.patch('api/applications/batch/update', { json: updates });
+}
+
+export async function deleteApplication(id: string): Promise<void> {
+  await adminApi.delete(`api/applications/${encodeURIComponent(id)}`);
+}
+
+// ─── Teams and members ──────────────────────────────────────────────────────
+
+export async function listTeams(params: {
+  limit?: number | undefined;
+  offset?: number | undefined;
+}): Promise<ListResult<AdminTeam>> {
+  const searchParams: Record<string, number> = {};
+  if (params.limit !== undefined) searchParams.limit = params.limit;
+  if (params.offset !== undefined) searchParams.offset = params.offset;
+  const body: unknown = await adminApi.get('api/teams', { searchParams }).json();
+  const data = expectData(body);
+  const items = collectionFrom(data, ['teams', 'items', 'results']).map(mapTeam);
+  return { items, pagination: paginationFrom(body, data, items.length) };
+}
+
+export async function listFinalistTeams(): Promise<readonly AdminTeam[]> {
+  const body: unknown = await adminApi.get('api/teams/finalists').json();
+  const data = expectData(body);
+  return collectionFrom(data, ['teams', 'finalists', 'items']).map(mapTeam);
+}
+
+export async function getTeam(id: string): Promise<AdminTeam> {
+  const body: unknown = await adminApi.get(`api/teams/${encodeURIComponent(id)}`).json();
+  const data = expectData(body);
+  const team = isRecord(data) && isRecord(data.team) ? data.team : data;
+  return mapTeam(team);
+}
+
+export async function toggleTeamFinalist(id: string): Promise<void> {
+  await adminApi.patch(`api/teams/${encodeURIComponent(id)}/finalist`);
+}
+
+export async function deleteTeam(id: string): Promise<void> {
+  await adminApi.delete(`api/teams/${encodeURIComponent(id)}`);
+}
+
+export async function listAdminTeamMembers(
+  teamId: string,
+): Promise<readonly AdminTeamMember[]> {
+  const body: unknown = await adminApi
+    .get('api/team-members', {
+      searchParams: { teamId, limit: '100', offset: '0' },
+    })
+    .json();
+  const data = expectData(body);
+  return collectionFrom(data, ['members', 'items', 'results']).map(mapAdminTeamMember);
+}
+
+export async function updateAdminTeamMemberRole(
+  id: string,
+  role: AdminTeamMemberRole,
+): Promise<void> {
+  await adminApi.patch(`api/team-members/${encodeURIComponent(id)}/role`, {
+    json: { role },
+  });
+}
+
+export async function deleteAdminTeamMember(id: string): Promise<void> {
+  await adminApi.delete(`api/team-members/${encodeURIComponent(id)}`);
+}
+
+// ─── Users and access ───────────────────────────────────────────────────────
+
+export async function listDefaultRoles(): Promise<readonly AdminRole[]> {
+  const body: unknown = await adminApi.get('api/admin/roles').json();
+  const data = expectData(body);
+  return collectionFrom(data, ['roles', 'items']).map((role) => mapRole(role, true));
+}
+
+export async function listCustomRoles(): Promise<readonly AdminRole[]> {
+  const body: unknown = await adminApi.get('api/admin/custom-roles').json();
+  const data = expectData(body);
+  return collectionFrom(data, ['roles', 'customRoles', 'items']).map((role) =>
+    mapRole(role, false),
+  );
+}
+
+export async function createCustomRole(input: CustomRoleInput): Promise<void> {
+  await adminApi.post('api/admin/custom-roles', { json: input });
+}
+
+export async function updateCustomRole(
+  id: string,
+  input: CustomRoleInput,
+): Promise<void> {
+  await adminApi.patch(`api/admin/custom-roles/${encodeURIComponent(id)}`, {
+    json: input,
+  });
+}
+
+export async function deleteCustomRole(id: string): Promise<void> {
+  await adminApi.delete(`api/admin/custom-roles/${encodeURIComponent(id)}`);
+}
+
+export async function listAdminUsers(): Promise<readonly ManagedUser[]> {
+  const body: unknown = await adminApi.get('api/admin/users').json();
+  const data = expectData(body);
+  return collectionFrom(data, ['users', 'admins', 'items']).map(mapManagedUser);
+}
+
+export async function createAdminUser(input: AdminUserInput): Promise<void> {
+  await adminApi.post('api/admin/users', { json: input });
+}
+
+export async function updateAdminUserRole(
+  id: string,
+  input: { readonly role: string; readonly customRoleId?: string },
+): Promise<void> {
+  await adminApi.patch(`api/admin/users/${encodeURIComponent(id)}/role`, {
+    json: input,
+  });
+}
+
+export async function deactivateAdminUser(id: string): Promise<void> {
+  await adminApi.patch(`api/admin/users/${encodeURIComponent(id)}/deactivate`);
+}
+
+export async function listUsers(params: {
+  limit?: number | undefined;
+  offset?: number | undefined;
+}): Promise<ListResult<ManagedUser>> {
+  const searchParams: Record<string, number> = {};
+  if (params.limit !== undefined) searchParams.limit = params.limit;
+  if (params.offset !== undefined) searchParams.offset = params.offset;
+  const body: unknown = await adminApi.get('api/users', { searchParams }).json();
+  const data = expectData(body);
+  const items = collectionFrom(data, ['users', 'items', 'results']).map(mapManagedUser);
+  return { items, pagination: paginationFrom(body, data, items.length) };
+}
+
+export async function getUser(id: string): Promise<ManagedUser> {
+  const body: unknown = await adminApi.get(`api/users/${encodeURIComponent(id)}`).json();
+  const data = expectData(body);
+  const user = isRecord(data) && isRecord(data.user) ? data.user : data;
+  return mapManagedUser(user);
+}
+
+export async function createUser(input: ManagedUserInput): Promise<void> {
+  await adminApi.post('api/users', { json: input });
+}
+
+export async function updateUser(id: string, input: ManagedUserInput): Promise<void> {
+  await adminApi.put(`api/users/${encodeURIComponent(id)}`, { json: input });
+}
+
+export async function deleteUser(id: string): Promise<void> {
+  await adminApi.delete(`api/users/${encodeURIComponent(id)}`);
+}
+
+// ─── Operations ─────────────────────────────────────────────────────────────
+
+export async function sendSubmissionReminders(): Promise<void> {
+  await adminApi.post('api/admin/reminders/submission');
+}
+
+export async function sendOnboardingReminders(): Promise<void> {
+  await adminApi.post('api/admin/reminders/onboarding');
 }
 
 // ─── Submissions ────────────────────────────────────────────────────────────

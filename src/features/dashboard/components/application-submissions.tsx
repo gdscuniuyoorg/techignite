@@ -26,11 +26,7 @@ import {
   type SubmissionSaveMode,
 } from './submission-dialog';
 import { SubmissionStatusBadge } from './submission-status-badge';
-import {
-  formatTeamDate,
-  isSubmissionLocked,
-  toSubmissionStatus,
-} from './team-status';
+import { formatTeamDate, isSubmissionLocked, toSubmissionStatus } from './team-status';
 import { TEAM_PROFILE_KEY, useTeamProfile } from '../hooks/use-team-profile';
 import { EVENT } from '../data';
 
@@ -49,17 +45,11 @@ export function ApplicationSubmissions() {
     return (
       <DashboardErrorState
         message={
-          error instanceof Error
-            ? error.message
-            : 'Could not load your team profile.'
+          error instanceof Error ? error.message : 'Could not load your team profile.'
         }
         onRetry={() => void refetch()}
       />
     );
-  }
-
-  if (!team) {
-    return <DashboardLoading label="Loading your submission…" />;
   }
 
   const status = toSubmissionStatus(team);
@@ -77,10 +67,7 @@ export function ApplicationSubmissions() {
     };
     await updateTeam(input);
 
-    if (
-      values.repositoryUrl.length > 0 &&
-      values.repositoryUrl !== team.repositoryUrl
-    ) {
+    if (values.repositoryUrl.length > 0 && values.repositoryUrl !== team.repositoryUrl) {
       await connectRepository(values.repositoryUrl);
     }
 
@@ -126,8 +113,8 @@ export function ApplicationSubmissions() {
             <div>
               <CardTitle>Hackathon Submissions</CardTitle>
               <CardDescription>
-                A quick record of your hackathon entry. The judged work lives
-                under Project Submissions.
+                A quick record of your hackathon entry. The judged work lives under
+                Project Submissions.
               </CardDescription>
             </div>
           </div>
@@ -143,9 +130,7 @@ export function ApplicationSubmissions() {
             </div>
             <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
               <dt className="text-xs text-slate-500">Track</dt>
-              <dd className="mt-0.5 text-sm font-medium text-slate-900">
-                {EVENT.track}
-              </dd>
+              <dd className="mt-0.5 text-sm font-medium text-slate-900">{EVENT.track}</dd>
             </div>
             <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
               <dt className="text-xs text-slate-500">Deadline</dt>
@@ -188,8 +173,8 @@ export function ApplicationSubmissions() {
           {locked ? (
             <p className="flex items-center gap-1.5 text-xs text-slate-500">
               <Lock size={13} aria-hidden="true" />
-              Locked {formatTeamDate(team.submittedAt)}. Writes are disabled —
-              contact organisers to reopen.
+              Locked {formatTeamDate(team.submittedAt)}. Writes are disabled — contact
+              organisers to reopen.
             </p>
           ) : (
             <>

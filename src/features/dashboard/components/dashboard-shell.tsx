@@ -1,21 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, Outlet, useNavigate, useRouterState } from '@tanstack/react-router';
-import {
-  FileText,
-  LayoutDashboard,
-  Loader2,
-  LogOut,
-  Users,
-  Zap,
-} from 'lucide-react';
+import { FileText, LayoutDashboard, Loader2, LogOut, Users, Zap } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { cn } from '@/lib/utils';
-import {
-  hasStoredToken,
-  isUnauthorized,
-  logout,
-} from '@/lib/team-api';
+import { hasStoredToken, isUnauthorized, logout } from '@/lib/team-api';
 import { memberInitials } from './team-status';
 import { useTeamProfile } from '../hooks/use-team-profile';
 
@@ -187,9 +176,7 @@ export function DashboardShell() {
               <div className="flex items-center gap-2">
                 <div className="lg:hidden">{brand}</div>
                 <div className="hidden items-center gap-2 text-sm lg:flex">
-                  <span className="text-slate-400">
-                    {team ? team.name : 'Team'}
-                  </span>
+                  <span className="text-slate-400">{team ? team.name : 'Team'}</span>
                   <span className="text-slate-300">/</span>
                   <span className="font-medium text-slate-900">
                     {sectionLabel(pathname)}

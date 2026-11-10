@@ -56,7 +56,8 @@ function RootComponent() {
     select: (state) =>
       state.location.pathname.startsWith('/admin') ||
       state.location.pathname.startsWith('/dashboard') ||
-      state.location.pathname.startsWith('/auth'),
+      state.location.pathname.startsWith('/auth') ||
+      state.location.pathname.startsWith('/team/'),
   });
 
   return (

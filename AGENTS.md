@@ -45,6 +45,11 @@ bun run smoke                # boot the build and verify / + CSS
 bun run start                # node .output/server/index.mjs
 ```
 
+**Validation is owned by the maintainer.** Do not run `typecheck`, `lint`,
+`format`/`format:check`, `build`, `smoke`, or `dev` unless the maintainer
+explicitly asks in that turn. Write the change, re-read it, and hand it over;
+the maintainer runs the checks and debugs.
+
 `src/routeTree.gen.ts` is generated but **committed** so a clean checkout can
 typecheck before the dev server has run.
 
@@ -161,18 +166,23 @@ idea → /scope → /audit → /architect → /develop → /check verify → /te
 Depth: Prototype = self-check; Alpha = + verify; Beta = + tests; GA = +
 fresh-model review + docs.
 
-## 8. Validation gate (before "done")
+## 8. Validation gate (maintainer-run)
 
-- [ ] `bun run typecheck` — zero errors
-- [ ] `bun run lint` — zero errors
-- [ ] `bun run format:check` — clean
-- [ ] `bun run build` — succeeds
-- [ ] `bun run smoke` — built server serves `/` and its stylesheet
-- [ ] `bun run dev` — affected route renders
-- [ ] Edited files re-read; no debug leftovers, secrets, or placeholder code
+The maintainer runs and owns the checks. Agents must not execute them
+unprompted; write the change, re-read the edited files, and hand it over.
+
+- [ ] `bun run typecheck` — zero errors (maintainer)
+- [ ] `bun run lint` — zero errors (maintainer)
+- [ ] `bun run format:check` — clean (maintainer)
+- [ ] `bun run build` — succeeds (maintainer)
+- [ ] `bun run smoke` — built server serves `/` and its stylesheet (maintainer)
+- [ ] `bun run dev` — affected route renders (maintainer)
+- [ ] Edited files re-read by the agent; no debug leftovers, secrets, or
+      placeholder code
 - [ ] Lockfile updated when dependencies changed
 
-Report actual command output. Never claim a check passed without running it.
+Do not claim a check passed unless it was actually run in this session and its
+output reported.
 
 ## 9. Safety and Git
 

@@ -27,16 +27,16 @@ Members screens.
 
 ## Contract gaps (must resolve before wiring)
 
-| #   | Gap                                                                  | Impact                                          | Proposal                                                                    |
-| --- | -------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------- |
-| G1  | `GET /api/teams` response body is untyped (`data: {}`)               | Cannot map fields safely                        | Backend documents the team payload (members, repoUrl, submission status)    |
+| #   | Gap                                                                  | Impact                                          | Proposal                                                                     |
+| --- | -------------------------------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------- |
+| G1  | `GET /api/teams` response body is untyped (`data: {}`)               | Cannot map fields safely                        | Backend documents the team payload (members, repoUrl, submission status)     |
 | G2  | No team-member endpoints                                             | Team Members screen has no data source          | Add `GET/POST/DELETE /api/teams/members`, or include members in `/api/teams` |
-| G3  | No hackathon vs project submission split                             | Current two-group UI cannot be honest           | One submission per team; hackathon group becomes informational/removed (D2) |
-| G4  | `PATCH /api/teams` has no `videoUrl`                                 | Demo video field cannot persist                 | Add `videoUrl` to the patch schema, or drop the field                       |
-| G5  | No dashboard stats, checklist, or timeline endpoints                 | Overview aggregates must be derived or dropped  | Derive from team payload + fixed event config; drop timeline for v1         |
-| G6  | `securitySchemes` sits at the document root, not `components`        | Spec is invalid OpenAPI; tooling will reject it | Move it under `components.securitySchemes` (docs-only fix)                  |
-| G7  | Login returns a bearer JWT, unlike admin's HTTP-only cookie          | Token storage/security model must be chosen     | `sessionStorage` + `Authorization: Bearer` (D1)                             |
-| G8  | Team status enum (`ACTIVE/PENDING/REJECTED/LOCKED`) ≠ UI status enum | Status badges and gating would lie              | Explicit mapping table (D4)                                                 |
+| G3  | No hackathon vs project submission split                             | Current two-group UI cannot be honest           | One submission per team; hackathon group becomes informational/removed (D2)  |
+| G4  | `PATCH /api/teams` has no `videoUrl`                                 | Demo video field cannot persist                 | Add `videoUrl` to the patch schema, or drop the field                        |
+| G5  | No dashboard stats, checklist, or timeline endpoints                 | Overview aggregates must be derived or dropped  | Derive from team payload + fixed event config; drop timeline for v1          |
+| G6  | `securitySchemes` sits at the document root, not `components`        | Spec is invalid OpenAPI; tooling will reject it | Move it under `components.securitySchemes` (docs-only fix)                   |
+| G7  | Login returns a bearer JWT, unlike admin's HTTP-only cookie          | Token storage/security model must be chosen     | `sessionStorage` + `Authorization: Bearer` (D1)                              |
+| G8  | Team status enum (`ACTIVE/PENDING/REJECTED/LOCKED`) ≠ UI status enum | Status badges and gating would lie              | Explicit mapping table (D4)                                                  |
 
 ## Feature plan
 

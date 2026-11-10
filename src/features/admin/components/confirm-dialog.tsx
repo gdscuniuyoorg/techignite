@@ -12,6 +12,7 @@ interface ConfirmDialogProps {
   readonly onConfirmValueChange?: (value: string) => void;
   readonly destructive?: boolean;
   readonly confirming: boolean;
+  readonly error?: string | undefined;
   readonly onConfirm: () => void;
   readonly onCancel: () => void;
 }
@@ -31,6 +32,7 @@ export function ConfirmDialog({
   onConfirmValueChange,
   destructive = false,
   confirming,
+  error,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -92,6 +94,15 @@ export function ConfirmDialog({
               spellCheck={false}
             />
           </label>
+        )}
+
+        {error && (
+          <p
+            role="alert"
+            className="mt-4 rounded-xs border border-brand-red/40 bg-brand-red/10 px-3 py-2 text-sm text-white/80"
+          >
+            {error}
+          </p>
         )}
 
         <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">

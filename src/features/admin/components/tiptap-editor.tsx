@@ -39,6 +39,12 @@ interface TiptapEditorProps {
   readonly initialHtml?: string | undefined;
   readonly onChange: (doc: EmailDocument) => void;
   readonly ariaLabel?: string | undefined;
+  /**
+   * `framed` is the boxed editor used in dense panels. `document` strips the
+   * chrome so the writing surface reads like a long-form article (Medium-style
+   * composer), keeping only the quiet structural toolbar.
+   */
+  readonly variant?: 'framed' | 'document' | undefined;
 }
 
 function ToolbarButton({
@@ -299,10 +305,12 @@ function EditorFooter({
   editor,
   previewing,
   onTogglePreview,
+  document,
 }: {
   readonly editor: Editor;
   readonly previewing: boolean;
   readonly onTogglePreview: () => void;
+  readonly document?: boolean;
 }) {
   const counting = useEditorState({
     editor,
@@ -313,7 +321,11 @@ function EditorFooter({
   });
 
   return (
-    <div className="flex items-center justify-between border-t border-line bg-ink-raised px-3 py-1.5">
+    <div
+      className={`flex items-center justify-between px-3 py-1.5 ${
+        document ? 'border-t-0 bg-transparent px-0' : 'border-t border-line bg-ink-raised'
+      }`}
+    >
       <p className="text-xs text-muted tabular-nums" aria-live="polite">
         {String(counting.words)} words · {String(counting.characters)} characters
       </p>
@@ -342,10 +354,16 @@ const formValue = (data: FormData, name: string): string => {
   return typeof value === 'string' ? value : '';
 };
 
-export function TiptapEditor({ initialHtml, onChange, ariaLabel }: TiptapEditorProps) {
+export function TiptapEditor({
+  initialHtml,
+  onChange,
+  ariaLabel,
+  variant = 'framed',
+}: TiptapEditorProps) {
   const [dialog, setDialog] = useState<'none' | 'link' | 'image'>('none');
   const [dialogError, setDialogError] = useState<string | null>(null);
   const [previewing, setPreviewing] = useState(false);
+  const document = variant === 'document';
 
   const editor = useEditor({
     extensions: [
@@ -356,14 +374,16 @@ export function TiptapEditor({ initialHtml, onChange, ariaLabel }: TiptapEditorP
       Image.configure({ inline: false, allowBase64: true }),
       TextAlign.configure({ types: ['paragraph', 'heading'] }),
       Placeholder.configure({
-        placeholder: 'Write the email body — select text to format',
+        placeholder: document
+          ? 'Tell the story — what should readers take away?'
+          : 'Write the email body — select text to format',
       }),
       CharacterCount.configure({ limit: 40_000 }),
     ],
     content: initialHtml ?? '<p></p>',
     editorProps: {
       attributes: {
-        class: 'tiptap-content',
+        class: document ? 'tiptap-content tiptap-content-document' : 'tiptap-content',
         role: 'textbox',
         'aria-multiline': 'true',
         'aria-label': ariaLabel ?? 'Email body',
@@ -383,7 +403,11 @@ export function TiptapEditor({ initialHtml, onChange, ariaLabel }: TiptapEditorP
   if (!editor) {
     return (
       <div
-        className="h-48 animate-pulse rounded-xs border border-line bg-ink"
+        className={
+          document
+            ? 'h-64 animate-pulse bg-slate-100/70'
+            : 'h-48 animate-pulse rounded-xs border border-line bg-ink'
+        }
         aria-hidden="true"
       />
     );
@@ -423,7 +447,13 @@ export function TiptapEditor({ initialHtml, onChange, ariaLabel }: TiptapEditorP
   };
 
   return (
-    <div className="overflow-hidden rounded-lg border border-line bg-ink shadow-sm">
+    <div
+      className={
+        document
+          ? 'bg-transparent'
+          : 'overflow-hidden rounded-lg border border-line bg-ink shadow-sm'
+      }
+    >
       {dialog === 'link' && (
         <Dialog
           title="Link"
@@ -468,7 +498,11 @@ export function TiptapEditor({ initialHtml, onChange, ariaLabel }: TiptapEditorP
 
       {/* Slim block-level actions — the full formatting kit floats on selection. */}
       <div
-        className="flex flex-wrap items-center gap-0.5 border-b border-line bg-ink-raised px-2 py-1.5"
+        className={`flex flex-wrap items-center gap-0.5 px-2 py-1.5 ${
+          document
+            ? 'border-b-0 bg-transparent px-0 pt-0 pb-3'
+            : 'border-b border-line bg-ink-raised'
+        }`}
         role="toolbar"
         aria-label="Insert and structure"
       >
@@ -552,7 +586,11 @@ export function TiptapEditor({ initialHtml, onChange, ariaLabel }: TiptapEditorP
         >
           <Redo2 size={15} strokeWidth={2} />
         </ToolbarButton>
-        <span className="ml-auto text-xs text-muted">Select text for the format bar</span>
+        {!document && (
+          <span className="ml-auto text-xs text-muted">
+            Select text for the format bar
+          </span>
+        )}
       </div>
 
       {previewing ? (
@@ -587,6 +625,7 @@ export function TiptapEditor({ initialHtml, onChange, ariaLabel }: TiptapEditorP
       <EditorFooter
         editor={editor}
         previewing={previewing}
+        document={document}
         onTogglePreview={() => {
           setPreviewing(!previewing);
         }}

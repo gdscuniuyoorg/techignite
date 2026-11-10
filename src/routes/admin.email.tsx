@@ -2,18 +2,7 @@ import { formText } from '@/lib/form';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useRef, type SyntheticEvent } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  Mail,
-  Download,
-  Send,
-  FlaskConical,
-  Ban,
-  Trash2,
-  Rocket,
-  Save,
-  Info,
-  Plus,
-} from 'lucide-react';
+import { Mail, Download, Send, FlaskConical, Ban, Trash2 } from 'lucide-react';
 import {
   listCampaigns,
   createCampaign,
@@ -31,23 +20,12 @@ import {
   type CampaignAudience,
   type CampaignStatus,
 } from '@/lib/admin-api';
-import {
-  TiptapEditor,
-  type EmailDocument,
-} from '@/features/admin/components/tiptap-editor';
+import type { EmailDocument } from '@/features/admin/components/tiptap-editor';
+import { CampaignComposer } from '@/features/admin/components/campaign-composer';
 import { ConfirmDialog } from '@/features/admin/components/confirm-dialog';
 import { noindexHead } from '@/lib/seo';
 
 const PAGE_SIZE = 10;
-const AUDIENCE_OPTIONS: readonly { value: CampaignAudience; label: string }[] = [
-  { value: 'subscribers', label: 'Newsletter subscribers' },
-  { value: 'all_applicants', label: 'All applicants' },
-  { value: 'accepted_teams', label: 'Accepted teams' },
-  { value: 'finalists', label: 'Finalist teams' },
-  { value: 'reviewers', label: 'Reviewers' },
-  { value: 'admins', label: 'Admins' },
-  { value: 'custom', label: 'Custom recipients' },
-];
 
 interface EmailSearch {
   readonly compose?: string | undefined;
@@ -304,11 +282,6 @@ function AdminEmail() {
     },
   });
 
-  const handleComposerSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    saveMutation.mutate(new FormData(event.currentTarget));
-  };
-
   const handleTemplateSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -350,161 +323,28 @@ function AdminEmail() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-5">
-        {/* Composer */}
-        <form
-          key={editingCampaign?.id ?? 'new'}
-          onSubmit={handleComposerSubmit}
-          className="flex flex-col gap-3 rounded-card border border-line bg-ink-raised p-5 xl:col-span-3"
-        >
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-label text-white">
-              {editingCampaign ? `Editing: ${editingCampaign.name}` : 'Compose campaign'}
-            </h2>
-            {editingCampaign && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearch({ compose: undefined });
-                }}
-                className="flex h-9 items-center gap-1 rounded-xs border border-line px-3 text-sm text-white/70 hover:text-white"
-              >
-                <Plus size={14} aria-hidden="true" /> New campaign
-              </button>
-            )}
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-white/80">
-              Campaign name
-              <input
-                name="name"
-                required
-                defaultValue={editingCampaign?.name ?? ''}
-                placeholder="November update #3"
-                className="h-11 rounded-xs border border-line bg-ink px-3 text-paper outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
-              />
-            </label>
-            <label className="flex flex-col gap-2 text-sm text-white/80">
-              Subject
-              <input
-                name="subject"
-                required
-                defaultValue={editingCampaign?.subject ?? ''}
-                placeholder="Shipathon final hour"
-                className="h-11 rounded-xs border border-line bg-ink px-3 text-paper outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
-              />
-            </label>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-white/80">
-              Audience
-              <select
-                name="audience"
-                defaultValue={editingCampaign?.audience ?? 'subscribers'}
-                className="h-11 rounded-xs border border-line bg-ink px-3 text-paper outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
-              >
-                {AUDIENCE_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-2 text-sm text-white/80">
-              Schedule for <span className="text-muted">(optional)</span>
-              <input
-                name="scheduledFor"
-                type="datetime-local"
-                defaultValue={
-                  editingCampaign?.scheduledFor
-                    ? editingCampaign.scheduledFor.slice(0, 16)
-                    : ''
-                }
-                className="h-11 rounded-xs border border-line bg-ink px-3 text-paper outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
-              />
-            </label>
-          </div>
-
-          <label className="flex flex-col gap-2 text-sm text-white/80">
-            Custom recipients{' '}
-            <span className="text-muted">
-              (used only for the “Custom recipients” audience; one per line)
-            </span>
-            <textarea
-              name="customRecipients"
-              rows={2}
-              defaultValue={editingCampaign?.customRecipients?.join('\n') ?? ''}
-              placeholder="a@example.com&#10;b@example.com"
-              className="rounded-xs border border-line bg-ink px-3 py-2 font-mono text-sm text-paper outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
-            />
-          </label>
-
-          <div className="flex flex-col gap-2 text-sm text-white/80">
-            Email body
-            <TiptapEditor
-              key={editingCampaign?.id ?? 'new'}
-              initialHtml={
-                editingCampaign
-                  ? (editingCampaign.htmlContent ??
-                    (editingCampaign.content === ''
-                      ? undefined
-                      : editingCampaign.content))
-                  : undefined
-              }
-              onChange={(doc) => {
-                documentRef.current = doc;
-              }}
-              ariaLabel="Campaign email body"
-            />
-          </div>
-
-          {saveMutation.error && (
-            <p role="alert" className="text-sm text-[#ff9d91]">
-              {saveMutation.error.message}
-            </p>
-          )}
-
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="submit"
-              disabled={saveMutation.isPending}
-              className="flex h-11 items-center gap-2 rounded-xs bg-brand-blue px-5 text-button text-white transition-colors hover:bg-brand-blue-strong disabled:opacity-50"
-            >
-              <Save size={16} strokeWidth={2} aria-hidden="true" />
-              {saveMutation.isPending
-                ? 'Saving…'
-                : editingCampaign
-                  ? 'Save changes'
-                  : 'Save draft'}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setSearch({ finalist: true, confirmText: undefined });
-              }}
-              className="flex h-11 items-center gap-2 rounded-xs border border-brand-amber/40 px-5 text-button text-brand-amber transition-colors hover:bg-brand-amber/10"
-            >
-              <Rocket size={16} strokeWidth={2} aria-hidden="true" />
-              Finalist invites…
-            </button>
-            <label className="ml-auto flex items-center gap-2 text-xs text-muted">
-              Finalist subject
-              <input
-                ref={finalistSubjectRef}
-                type="text"
-                placeholder="You're a finalist"
-                className="h-9 w-48 rounded-xs border border-line bg-ink px-2 text-sm text-paper outline-none focus:border-brand-blue"
-              />
-            </label>
-          </div>
-          <p className="flex items-start gap-2 text-xs text-muted">
-            <Info size={14} className="mt-0.5 shrink-0" aria-hidden="true" />
-            Finalist invites send immediately to every finalist team and bypass the
-            campaign list. The subject field on the right is the subject those teams
-            receive.
-          </p>
-        </form>
+        {/* Composer — Medium-style long-form canvas */}
+        <div className="xl:col-span-3">
+          <CampaignComposer
+            key={editingCampaign?.id ?? 'new'}
+            campaign={editingCampaign}
+            saving={saveMutation.isPending}
+            error={saveMutation.error?.message}
+            finalistSubjectRef={finalistSubjectRef}
+            onSubmit={(data) => {
+              saveMutation.mutate(data);
+            }}
+            onBodyChange={(doc) => {
+              documentRef.current = doc;
+            }}
+            onNew={() => {
+              setSearch({ compose: undefined });
+            }}
+            onRequestFinalist={() => {
+              setSearch({ finalist: true, confirmText: undefined });
+            }}
+          />
+        </div>
 
         {/* Campaign list */}
         <section className="flex flex-col gap-4 xl:col-span-2">
@@ -572,6 +412,17 @@ function AdminEmail() {
                           ` · scheduled ${new Date(campaign.scheduledFor).toLocaleString()}`}
                       </span>
                       <div className="flex items-center gap-1">
+                        <a
+                          href={exportUrl(
+                            `api/admin/exports/campaign-recipients/${encodeURIComponent(campaign.id)}`,
+                          )}
+                          download
+                          title="Export campaign recipients"
+                          aria-label={`Export recipients for ${campaign.name}`}
+                          className="flex h-9 w-9 items-center justify-center rounded-xs text-white/60 transition-colors hover:bg-ink-soft hover:text-white"
+                        >
+                          <Download size={16} aria-hidden="true" />
+                        </a>
                         <button
                           type="button"
                           onClick={() => {
