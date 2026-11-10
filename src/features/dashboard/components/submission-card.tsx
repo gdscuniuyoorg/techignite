@@ -42,8 +42,7 @@ function SubmissionLink({ href, label, icon: Icon }: SubmissionLinkProps) {
 
 /** Read-only view of the team's judged project submission. */
 export function SubmissionCard({ team, status }: SubmissionCardProps) {
-  const hasDetails =
-    team.projectTitle.length > 0 || team.projectDescription.length > 0;
+  const hasDetails = team.projectTitle.length > 0 || team.projectDescription.length > 0;
 
   return (
     <article className="rounded-xl border border-slate-200 bg-white p-4">

@@ -14,11 +14,7 @@ export function DashboardLoading({ label = 'Loading…' }: DashboardLoadingProps
       aria-busy="true"
       className="flex min-h-64 flex-col items-center justify-center gap-3 text-sm text-slate-500"
     >
-      <Loader2
-        size={22}
-        className="animate-spin text-violet-600"
-        aria-hidden="true"
-      />
+      <Loader2 size={22} className="animate-spin text-violet-600" aria-hidden="true" />
       <span>{label}</span>
     </div>
   );
@@ -29,10 +25,7 @@ interface DashboardErrorStateProps {
   readonly onRetry?: () => void;
 }
 
-export function DashboardErrorState({
-  message,
-  onRetry,
-}: DashboardErrorStateProps) {
+export function DashboardErrorState({ message, onRetry }: DashboardErrorStateProps) {
   return (
     <Card className="items-center py-10 text-center">
       <span className="flex h-10 w-10 items-center justify-center rounded-full bg-red-50 text-red-600">
@@ -40,9 +33,7 @@ export function DashboardErrorState({
       </span>
       <div>
         <p className="text-sm font-medium text-slate-900">We couldn’t load this</p>
-        <p className="mt-1 max-w-md text-xs leading-relaxed text-slate-500">
-          {message}
-        </p>
+        <p className="mt-1 max-w-md text-xs leading-relaxed text-slate-500">{message}</p>
       </div>
       {onRetry && (
         <Button type="button" variant="outline" size="sm" onClick={onRetry}>

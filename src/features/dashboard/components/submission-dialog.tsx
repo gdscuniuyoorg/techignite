@@ -110,8 +110,8 @@ export function SubmissionDialog({ team, onClose, onSave }: SubmissionDialogProp
               Submit your project
             </h2>
             <p className="mt-1 text-sm leading-relaxed text-slate-500">
-              Judges see exactly what you enter here. Drafts stay private until
-              you submit for judging.
+              Judges see exactly what you enter here. Drafts stay private until you submit
+              for judging.
             </p>
           </div>
           <button
@@ -141,7 +141,6 @@ export function SubmissionDialog({ team, onClose, onSave }: SubmissionDialogProp
               id="submission-title"
               name="title"
               required
-              autoFocus
               value={title}
               onChange={(event) => {
                 setTitle(event.target.value);

@@ -24,12 +24,16 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminEmailRouteImport } from './routes/admin.email'
 import { Route as AdminSubmissionsRouteImport } from './routes/admin.submissions'
+import { Route as AdminTeamsRouteImport } from './routes/admin.teams'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard.submissions'
 import { Route as DashboardTeamRouteImport } from './routes/dashboard.team'
+import { Route as TeamIdOnboardingRouteImport } from './routes/team.$id.onboarding'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -106,6 +110,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCouponsRoute = AdminCouponsRouteImport.update({
   id: '/coupons',
   path: '/coupons',
@@ -119,6 +128,16 @@ const AdminEmailRoute = AdminEmailRouteImport.update({
 const AdminSubmissionsRoute = AdminSubmissionsRouteImport.update({
   id: '/submissions',
   path: '/submissions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTeamsRoute = AdminTeamsRouteImport.update({
+  id: '/teams',
+  path: '/teams',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -136,6 +155,11 @@ const DashboardTeamRoute = DashboardTeamRouteImport.update({
   path: '/team',
   getParentRoute: () => DashboardRoute,
 } as any)
+const TeamIdOnboardingRoute = TeamIdOnboardingRouteImport.update({
+  id: '/team/$id/onboarding',
+  path: '/team/$id/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -152,13 +176,17 @@ export interface FileRoutesByFullPath {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/email': typeof AdminEmailRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin/teams': typeof AdminTeamsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/team': typeof DashboardTeamRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/team/$id/onboarding': typeof TeamIdOnboardingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -173,13 +201,17 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/email': typeof AdminEmailRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin/teams': typeof AdminTeamsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/team': typeof DashboardTeamRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/team/$id/onboarding': typeof TeamIdOnboardingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -197,13 +229,17 @@ export interface FileRoutesById {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speakers': typeof SpeakersRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/email': typeof AdminEmailRoute
   '/admin/submissions': typeof AdminSubmissionsRoute
+  '/admin/teams': typeof AdminTeamsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/team': typeof DashboardTeamRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/team/$id/onboarding': typeof TeamIdOnboardingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -222,13 +258,17 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/speakers'
+    | '/admin/applications'
     | '/admin/coupons'
     | '/admin/email'
     | '/admin/submissions'
+    | '/admin/teams'
+    | '/admin/users'
     | '/dashboard/submissions'
     | '/dashboard/team'
     | '/admin/'
     | '/dashboard/'
+    | '/team/$id/onboarding'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -243,13 +283,17 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/speakers'
+    | '/admin/applications'
     | '/admin/coupons'
     | '/admin/email'
     | '/admin/submissions'
+    | '/admin/teams'
+    | '/admin/users'
     | '/dashboard/submissions'
     | '/dashboard/team'
     | '/admin'
     | '/dashboard'
+    | '/team/$id/onboarding'
   id:
     | '__root__'
     | '/'
@@ -266,13 +310,17 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/speakers'
+    | '/admin/applications'
     | '/admin/coupons'
     | '/admin/email'
     | '/admin/submissions'
+    | '/admin/teams'
+    | '/admin/users'
     | '/dashboard/submissions'
     | '/dashboard/team'
     | '/admin/'
     | '/dashboard/'
+    | '/team/$id/onboarding'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -290,6 +338,7 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SpeakersRoute: typeof SpeakersRoute
+  TeamIdOnboardingRoute: typeof TeamIdOnboardingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -399,6 +448,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/coupons': {
       id: '/admin/coupons'
       path: '/coupons'
@@ -418,6 +474,20 @@ declare module '@tanstack/react-router' {
       path: '/submissions'
       fullPath: '/admin/submissions'
       preLoaderRoute: typeof AdminSubmissionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/teams': {
+      id: '/admin/teams'
+      path: '/teams'
+      fullPath: '/admin/teams'
+      preLoaderRoute: typeof AdminTeamsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
     '/dashboard/': {
@@ -441,20 +511,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTeamRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/team/$id/onboarding': {
+      id: '/team/$id/onboarding'
+      path: '/team/$id/onboarding'
+      fullPath: '/team/$id/onboarding'
+      preLoaderRoute: typeof TeamIdOnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminEmailRoute: typeof AdminEmailRoute
   AdminSubmissionsRoute: typeof AdminSubmissionsRoute
+  AdminTeamsRoute: typeof AdminTeamsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminApplicationsRoute: AdminApplicationsRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminEmailRoute: AdminEmailRoute,
   AdminSubmissionsRoute: AdminSubmissionsRoute,
+  AdminTeamsRoute: AdminTeamsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -491,6 +574,7 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SpeakersRoute: SpeakersRoute,
+  TeamIdOnboardingRoute: TeamIdOnboardingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -44,9 +44,7 @@ export function HackathonLogin({ onSubmit }: HackathonLoginProps) {
     try {
       await onSubmit(values);
     } catch (error) {
-      setSubmitError(
-        await teamErrorMessage(error, 'Email or password is incorrect.'),
-      );
+      setSubmitError(await teamErrorMessage(error, 'Email or password is incorrect.'));
     }
   });
 

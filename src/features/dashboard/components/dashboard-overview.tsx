@@ -81,17 +81,11 @@ export function DashboardOverview() {
     return (
       <DashboardErrorState
         message={
-          error instanceof Error
-            ? error.message
-            : 'Could not load your team profile.'
+          error instanceof Error ? error.message : 'Could not load your team profile.'
         }
         onRetry={() => void refetch()}
       />
     );
-  }
-
-  if (!team) {
-    return <DashboardLoading label="Loading your team…" />;
   }
 
   const status = toSubmissionStatus(team);
@@ -268,9 +262,7 @@ export function DashboardOverview() {
               <div>
                 <p className="text-xs font-medium text-slate-500">Project</p>
                 <h2 className="mt-1 text-base font-semibold text-slate-950">
-                  {team.projectTitle.length > 0
-                    ? team.projectTitle
-                    : 'Untitled project'}
+                  {team.projectTitle.length > 0 ? team.projectTitle : 'Untitled project'}
                 </h2>
               </div>
               <SubmissionStatusBadge status={status} />
@@ -390,9 +382,7 @@ export function DashboardOverview() {
                   >
                     {step.label}
                   </span>
-                  <span className="mt-0.5 block text-xs text-slate-500">
-                    {step.hint}
-                  </span>
+                  <span className="mt-0.5 block text-xs text-slate-500">{step.hint}</span>
                 </span>
               </li>
             );

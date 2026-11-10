@@ -289,5 +289,111 @@
   color: rgba(255, 250, 240, 0.35);
 }
 
+/* Long-form "document" variant: the composer canvas, not a boxed field. */
+.tiptap-content-document {
+  min-height: 26rem;
+  max-height: none;
+  overflow-y: visible;
+  padding: 0.5rem 0 2.5rem;
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+
+@media (min-width: 640px) {
+  .tiptap-content-document {
+    font-size: 1.25rem;
+  }
+}
+
+/* The admin screens share the participant dashboard's light product theme.
+   These aliases keep older admin components readable while they use the same
+   white surfaces, slate hierarchy, and brand-blue actions as the dashboard. */
+.admin-dashboard-theme .bg-ink {
+  background-color: var(--color-slate-50);
+}
+
+.admin-dashboard-theme .bg-ink-raised {
+  background-color: var(--color-white);
+}
+
+.admin-dashboard-theme .bg-ink-soft {
+  background-color: var(--color-slate-100);
+}
+
+.admin-dashboard-theme .border-line,
+.admin-dashboard-theme [class~='border-line/50'],
+.admin-dashboard-theme [class~='border-line/60'] {
+  border-color: var(--color-slate-200);
+}
+
+.admin-dashboard-theme .divide-line > :not(:last-child) {
+  border-color: var(--color-slate-200);
+}
+
+.admin-dashboard-theme .text-paper,
+.admin-dashboard-theme .text-white {
+  color: var(--color-slate-950);
+}
+
+.admin-dashboard-theme .text-muted {
+  color: var(--color-slate-500);
+}
+
+.admin-dashboard-theme [class~='text-white/85'],
+.admin-dashboard-theme [class~='text-white/80'] {
+  color: var(--color-slate-800);
+}
+
+.admin-dashboard-theme [class~='text-white/75'],
+.admin-dashboard-theme [class~='text-white/70'],
+.admin-dashboard-theme [class~='text-white/65'] {
+  color: var(--color-slate-600);
+}
+
+.admin-dashboard-theme [class~='text-white/60'],
+.admin-dashboard-theme [class~='text-white/50'],
+.admin-dashboard-theme [class~='text-white/45'],
+.admin-dashboard-theme [class~='text-white/40'],
+.admin-dashboard-theme [class~='text-white/30'] {
+  color: var(--color-slate-500);
+}
+
+.admin-dashboard-theme .text-brand-blue-soft {
+  color: var(--color-brand-blue-strong);
+}
+
+.admin-dashboard-theme .text-brand-green-bright {
+  color: var(--color-brand-green-vivid);
+}
+
+.admin-dashboard-theme [class~='text-[#ff9d91]'] {
+  color: var(--color-brand-red);
+}
+
+.admin-dashboard-theme [class~='hover:text-white']:hover {
+  color: var(--color-slate-950);
+}
+
+.admin-dashboard-theme [class~='hover:bg-ink-soft']:hover {
+  background-color: var(--color-slate-100);
+}
+
+.admin-dashboard-theme .bg-brand-blue.text-white,
+.admin-dashboard-theme .bg-brand-red.text-white {
+  color: var(--color-white);
+}
+
+.admin-dashboard-theme .tiptap-content {
+  color: var(--color-slate-900);
+}
+
+.admin-dashboard-theme .tiptap-content blockquote {
+  color: var(--color-slate-600);
+}
+
+.admin-dashboard-theme .tiptap-content p.is-editor-empty:first-child::before {
+  color: var(--color-slate-400);
+}
+
 /* Preview mode footers/links inside the sender-safe view can't be interacted
    with; the wrapper already sets pointer-events-none and select-none. */

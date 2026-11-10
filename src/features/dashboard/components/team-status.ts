@@ -27,9 +27,7 @@ export function toSubmissionStatus(team: TeamProfile): DashboardSubmissionStatus
 /** Writes are blocked once the team is submitted/locked. */
 export function isSubmissionLocked(team: TeamProfile): boolean {
   return (
-    team.status === 'LOCKED' ||
-    team.status === 'SUBMITTED' ||
-    team.submittedAt !== null
+    team.status === 'LOCKED' || team.status === 'SUBMITTED' || team.submittedAt !== null
   );
 }
 

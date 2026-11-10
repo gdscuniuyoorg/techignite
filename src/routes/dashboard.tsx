@@ -23,6 +23,8 @@ export const Route = createFileRoute('/dashboard')({
   beforeLoad: () => {
     // The token lives in sessionStorage, so only guard in the browser.
     if (typeof window !== 'undefined' && !hasStoredToken()) {
+      // TanStack Router redirects are thrown as control flow.
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect({ to: '/auth' });
     }
   },
