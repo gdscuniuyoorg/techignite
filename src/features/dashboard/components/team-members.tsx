@@ -14,7 +14,7 @@ import { useTeamProfile } from '../hooks/use-team-profile';
 import { EVENT } from '../data';
 
 /**
- * Read-only roster straight from GET /api/team. The API has no member write
+ * Read-only roster straight from GET /api/teams. The API has no member write
  * endpoints, so nothing is invented and no invite/remove actions are shown.
  */
 export function TeamMembers() {

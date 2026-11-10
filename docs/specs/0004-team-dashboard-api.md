@@ -16,8 +16,8 @@ Members screens.
 - The dashboard was built against `src/features/dashboard/data.ts`; nothing is
   fetched or persisted yet.
 - The draft API exposes: `POST /api/auth/register`, `POST /api/auth/login`,
-  `GET /api/auth/me`, `GET|PATCH /api/team`, `PATCH /api/team/repo`,
-  `POST /api/team/submit`, plus admin team routes.
+  `GET /api/auth/me`, `GET|PATCH /api/teams`, `PATCH /api/teams/repo`,
+  `POST /api/teams/submit`, plus admin team routes.
 - Existing patterns to mirror:
   - `src/lib/api.ts` — public applications client (ky, defensive error mapping).
   - `src/lib/admin-api.ts` — cookie auth, `expectData`/`map*` runtime narrowing.
@@ -29,10 +29,10 @@ Members screens.
 
 | #   | Gap                                                                  | Impact                                          | Proposal                                                                    |
 | --- | -------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------- |
-| G1  | `GET /api/team` response body is untyped (`data: {}`)                | Cannot map fields safely                        | Backend documents the team payload (members, repoUrl, submission status)    |
-| G2  | No team-member endpoints                                             | Team Members screen has no data source          | Add `GET/POST/DELETE /api/team/members`, or include members in `/api/team`  |
+| G1  | `GET /api/teams` response body is untyped (`data: {}`)               | Cannot map fields safely                        | Backend documents the team payload (members, repoUrl, submission status)    |
+| G2  | No team-member endpoints                                             | Team Members screen has no data source          | Add `GET/POST/DELETE /api/teams/members`, or include members in `/api/teams` |
 | G3  | No hackathon vs project submission split                             | Current two-group UI cannot be honest           | One submission per team; hackathon group becomes informational/removed (D2) |
-| G4  | `PATCH /api/team` has no `videoUrl`                                  | Demo video field cannot persist                 | Add `videoUrl` to the patch schema, or drop the field                       |
+| G4  | `PATCH /api/teams` has no `videoUrl`                                 | Demo video field cannot persist                 | Add `videoUrl` to the patch schema, or drop the field                       |
 | G5  | No dashboard stats, checklist, or timeline endpoints                 | Overview aggregates must be derived or dropped  | Derive from team payload + fixed event config; drop timeline for v1         |
 | G6  | `securitySchemes` sits at the document root, not `components`        | Spec is invalid OpenAPI; tooling will reject it | Move it under `components.securitySchemes` (docs-only fix)                  |
 | G7  | Login returns a bearer JWT, unlike admin's HTTP-only cookie          | Token storage/security model must be chosen     | `sessionStorage` + `Authorization: Bearer` (D1)                             |
@@ -45,8 +45,8 @@ Each feature is independently deliverable and validated.
 
 ### BE-1 · Contract confirmation (backend / docs)
 
-- Publish typed response examples for `/api/auth/me`, `/api/team`,
-  `/api/team/submit`, including members, repo, and submission timestamps.
+- Publish typed response examples for `/api/auth/me`, `/api/teams`,
+  `/api/teams/submit`, including members, repo, and submission timestamps.
 - Decide G2 and G3 (members source, one-vs-many submissions).
 - Fix G6 and add `videoUrl` (G4) if retained.
 - **Done when**: the frontend can map every field it renders without guessing.
@@ -90,16 +90,16 @@ Each feature is independently deliverable and validated.
 
 ### FE-5 · Application Submissions (live)
 
-- Detail card renders `GET /api/team` (title, description, stack, demo, repo).
-- Dialog saves via `PATCH /api/team` + `PATCH /api/team/repo`.
-- Submit → confirmation → `POST /api/team/submit`; lock the form on `LOCKED`.
+- Detail card renders `GET /api/teams` (title, description, stack, demo, repo).
+- Dialog saves via `PATCH /api/teams` + `PATCH /api/teams/repo`.
+- Submit → confirmation → `POST /api/teams/submit`; lock the form on `LOCKED`.
 - **Done when**: edits survive reload, submit locks the team, and `403` is shown
   as a locked state rather than a generic error.
 
 ### FE-6 · Team Members
 
 - If G2 lands: list/invite/remove with confirmation dialogs.
-- If not: read-only roster from `/api/team` when present, otherwise hide the
+- If not: read-only roster from `/api/teams` when present, otherwise hide the
   section behind a "coming soon" state instead of fake names.
 - **Done when**: no invented members are rendered.
 
@@ -109,7 +109,7 @@ Each feature is independently deliverable and validated.
   logout and on `401`. Rationale: no refresh endpoint; limits persistence.
   Trade-off: readable by XSS. Cookie auth would need a backend change.
 - **D2 — Submission model (ratified)**: one project submission per team
-  (`/api/team`). The "Hackathon Submissions" group becomes a read-only info
+  (`/api/teams`). The "Hackathon Submissions" group becomes a read-only info
   card; "Project Submissions" is the real, judged submission.
 - **D3 — Team members (ratified)**: wait for BE-1; do not invent members
   client-side. The screen shows a coming-soon state until the API exposes them.
@@ -137,9 +137,9 @@ Each feature is independently deliverable and validated.
 
 ## Open questions
 
-1. Does `GET /api/team` include members, `repoUrl`, `videoUrl`, and submission
+1. Does `GET /api/teams` include members, `repoUrl`, `videoUrl`, and submission
    timestamps? Can the backend publish the exact JSON?
 2. Keep the hackathon/project grouping, or collapse to a single judged project
    submission (D2)?
-3. Add `videoUrl` to `PATCH /api/team`, or remove the demo-video field (G4)?
+3. Add `videoUrl` to `PATCH /api/teams`, or remove the demo-video field (G4)?
 4. Is the local API (`localhost:3030`) available for end-to-end verification?

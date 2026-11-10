@@ -2,14 +2,10 @@ import { useCallback, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, Outlet, useNavigate, useRouterState } from '@tanstack/react-router';
 import {
-  Bell,
-  CalendarClock,
-  ChevronDown,
   FileText,
   LayoutDashboard,
   Loader2,
   LogOut,
-  Sparkles,
   Users,
   Zap,
 } from 'lucide-react';
@@ -22,19 +18,18 @@ import {
 } from '@/lib/team-api';
 import { memberInitials } from './team-status';
 import { useTeamProfile } from '../hooks/use-team-profile';
-import { EVENT } from '../data';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
   {
     to: '/dashboard/submissions',
-    label: 'Application Submissions',
+    label: 'Submission',
     icon: FileText,
     exact: false,
   },
   {
     to: '/dashboard/team',
-    label: 'Team Members',
+    label: 'Team',
     icon: Users,
     exact: false,
   },
@@ -42,15 +37,15 @@ const NAV_ITEMS = [
 
 function sectionLabel(pathname: string): string {
   if (pathname.startsWith('/dashboard/submissions')) {
-    return 'Application Submissions';
+    return 'Submission';
   }
   if (pathname.startsWith('/dashboard/team')) {
-    return 'Team Members';
+    return 'Team';
   }
   return 'Overview';
 }
 
-/** Full-width, shadcn-style app shell: sticky sidebar + sticky top bar. */
+/** Minimal team portal shell with responsive navigation and account controls. */
 export function DashboardShell() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const navigate = useNavigate();
@@ -98,14 +93,14 @@ export function DashboardShell() {
             className={cn(
               'flex h-9 shrink-0 items-center gap-2.5 rounded-lg px-3 text-sm transition-colors',
               active
-                ? 'bg-slate-100 font-medium text-slate-900'
+                ? 'bg-slate-100 font-medium text-slate-950'
                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
             )}
           >
             <Icon
               size={16}
               strokeWidth={1.75}
-              className={active ? 'text-violet-600' : 'text-slate-400'}
+              className={active ? 'text-brand-blue' : 'text-slate-400'}
               aria-hidden="true"
             />
             {label}
@@ -121,7 +116,7 @@ export function DashboardShell() {
       className="flex items-center gap-2.5"
       aria-label="Tech Ignite team dashboard"
     >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-white">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-950 text-brand-cream">
         <Zap size={18} aria-hidden="true" />
       </span>
       <span className="flex min-w-0 flex-col">
@@ -135,7 +130,7 @@ export function DashboardShell() {
     <div className="min-h-dvh w-full bg-slate-50 text-slate-900">
       <div className="flex w-full">
         {/* Desktop sidebar */}
-        <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col justify-between border-r border-slate-200 bg-white px-3 py-5 lg:flex">
+        <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col justify-between border-r border-slate-200 bg-white px-3 py-5 lg:flex">
           <div className="flex flex-col gap-6">
             <div className="px-2">{brand}</div>
 
@@ -148,30 +143,23 @@ export function DashboardShell() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="rounded-xl bg-slate-50 p-3">
-              <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                <CalendarClock size={13} aria-hidden="true" className="text-amber-500" />
-                Submission closes
-              </div>
-              <p className="mt-1 text-sm font-medium text-slate-900">
-                {EVENT.deadline}
-              </p>
-              <p className="text-xs text-amber-600">{String(EVENT.daysLeft)} days left</p>
-            </div>
-
-            <div className="flex items-center gap-2 rounded-xl border border-slate-100 p-2">
+            <div className="flex items-center gap-2 border-t border-slate-100 px-2 pt-4">
               {isPending ? (
                 <span
                   role="status"
                   aria-busy="true"
                   className="flex min-w-0 flex-1 items-center gap-2 px-1 py-1 text-xs text-slate-500"
                 >
-                  <Loader2 size={14} className="animate-spin text-violet-600" aria-hidden="true" />
+                  <Loader2
+                    size={14}
+                    className="animate-spin text-brand-blue"
+                    aria-hidden="true"
+                  />
                   Loading account…
                 </span>
               ) : team && lead ? (
                 <>
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-600 text-xs font-semibold text-white">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-blue-pale text-xs font-semibold text-brand-blue-strong">
                     {memberInitials(lead.name)}
                   </span>
                   <span className="min-w-0 flex-1">
@@ -182,7 +170,6 @@ export function DashboardShell() {
                       {team.name}
                     </span>
                   </span>
-                  <ChevronDown size={14} className="text-slate-400" aria-hidden="true" />
                 </>
               ) : (
                 <span className="min-w-0 flex-1 px-1 py-1 text-xs text-slate-500">
@@ -213,23 +200,6 @@ export function DashboardShell() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  aria-label="Notifications"
-                  className={cn(
-                    buttonVariants({ variant: 'outline', size: 'icon' }),
-                    'text-slate-600',
-                  )}
-                >
-                  <Bell size={16} aria-hidden="true" />
-                </button>
-                <Link
-                  to="/dashboard/submissions"
-                  className={cn(buttonVariants({ size: 'sm' }), 'hidden sm:inline-flex')}
-                >
-                  <Sparkles size={14} aria-hidden="true" />
-                  Submit Project
-                </Link>
-                <button
-                  type="button"
                   aria-label="Sign out"
                   onClick={signOut}
                   className={cn(
@@ -246,8 +216,13 @@ export function DashboardShell() {
             <div className="border-t border-slate-100 px-3 py-2 lg:hidden">{nav}</div>
           </div>
 
-          <main id="dashboard-main" className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
-            <Outlet />
+          <main
+            id="dashboard-main"
+            className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
+          >
+            <div className="mx-auto w-full max-w-7xl">
+              <Outlet />
+            </div>
           </main>
         </div>
       </div>

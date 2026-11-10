@@ -251,22 +251,22 @@ export async function getSession(): Promise<TeamProfile> {
 
 // ─── Team profile & submission ──────────────────────────────────────────────
 
-/** GET /api/team — team profile plus its submission fields. */
+/** GET /api/teams — team profile plus its submission fields. */
 export async function getTeam(): Promise<TeamProfile> {
-  const body: unknown = await teamApi.get('api/team').json();
+  const body: unknown = await teamApi.get('api/teams').json();
   return mapTeam(expectData(body));
 }
 
 export async function updateTeam(input: TeamUpdateInput): Promise<void> {
-  await teamApi.patch('api/team', { json: input });
+  await teamApi.patch('api/teams', { json: input });
 }
 
 export async function connectRepository(repositoryUrl: string): Promise<void> {
-  await teamApi.patch('api/team/repo', { json: { repoUrl: repositoryUrl } });
+  await teamApi.patch('api/teams/repo', { json: { repoUrl: repositoryUrl } });
 }
 
 export async function submitTeam(): Promise<void> {
-  await teamApi.post('api/team/submit');
+  await teamApi.post('api/teams/submit');
 }
 
 // ─── Error messages ────────────────────────────────────────────────────────

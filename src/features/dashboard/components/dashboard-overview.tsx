@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import {
   ArrowRight,
@@ -6,44 +5,24 @@ import {
   Check,
   CircleDot,
   Clock3,
-  FileText,
-  ListChecks,
   Mail,
-  Plus,
   Users,
 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { cn } from '@/lib/utils';
 import type { TeamProfile } from '@/lib/team-api';
 import { DashboardPageHeader } from './dashboard-page-header';
 import { DashboardErrorState, DashboardLoading } from './dashboard-loading';
-import { DashboardStat } from './dashboard-stat';
 import { SubmissionStatusBadge } from './submission-status-badge';
-import {
-  STATUS_LABELS,
-  type DashboardSubmissionStatus,
-} from './submission-status';
+import { STATUS_LABELS } from './submission-status';
 import {
   formatTeamDate,
+  isSubmissionLocked,
   memberInitials,
   toSubmissionStatus,
 } from './team-status';
 import { useTeamProfile } from '../hooks/use-team-profile';
 import { EVENT, STEP_INDEX, STEPS } from '../data';
-
-const STATUS: DashboardSubmissionStatus = 'draft';
-
-const FILTERS = ['all', 'done', 'pending'] as const;
-type CheckFilter = (typeof FILTERS)[number];
 
 interface Requirement {
   readonly id: string;
@@ -93,7 +72,6 @@ function buildRequirements(team: TeamProfile): readonly Requirement[] {
 
 export function DashboardOverview() {
   const { data: team, isPending, isError, error, refetch } = useTeamProfile();
-  const [filter, setFilter] = useState<CheckFilter>('all');
 
   if (isPending) {
     return <DashboardLoading label="Loading your team…" />;
@@ -124,330 +102,310 @@ export function DashboardOverview() {
   const lead = team.members.find((member) => member.role === 'LEAD');
   const memberCount = team.members.length;
   const currentStep = STEP_INDEX[status];
-
-  const visibleRequirements = requirements.filter((item) => {
-    if (filter === 'done') return item.met;
-    if (filter === 'pending') return !item.met;
-    return true;
-  });
+  const remaining = total - completed;
+  const nextRequirement = requirements.find((item) => !item.met);
+  const locked = isSubmissionLocked(team);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-7">
       <DashboardPageHeader
         eyebrow={`${EVENT.name} · ${EVENT.track}`}
         title="Overview"
-        description="Ship your project, keep the team aligned, and submit before the clock runs out."
-        aside={
-          <Link
-            to="/dashboard/submissions"
-            className={cn(buttonVariants(), 'gap-2')}
-          >
-            <Plus size={16} aria-hidden="true" />
-            Submit project
-          </Link>
-        }
+        description="Everything your team needs to finish and submit the project."
       />
 
-      {/* Summary */}
       <section
         aria-label="Team submission summary"
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
       >
-        <DashboardStat
-          label="Submission"
-          value={STATUS_LABELS[status]}
-          hint={
-            team.submittedAt !== null
-              ? `Locked ${formatTeamDate(team.submittedAt)}`
-              : 'Not submitted yet'
-          }
-          icon={FileText}
-          badge={{
-            label: status === 'draft' ? 'In progress' : STATUS_LABELS[status],
-            variant: status === 'draft' ? 'warning' : 'success',
-          }}
-        />
-        <DashboardStat
-          label="Deadline"
-          value={`${String(EVENT.daysLeft)} days`}
-          hint={EVENT.deadline}
-          icon={CalendarClock}
-          badge={{ label: 'On track', variant: 'success' }}
-        />
-        <DashboardStat
-          label="Team"
-          value={`${String(memberCount)}`}
-          hint={
-            lead
-              ? `${lead.name} leads · ${String(memberCount)} members`
-              : `${String(memberCount)} members`
-          }
-          icon={Users}
-          badge={{
-            label: `${String(memberCount)} ${memberCount === 1 ? 'member' : 'members'}`,
-            variant: 'default',
-          }}
-        />
-        <DashboardStat
-          label="Checklist"
-          value={`${String(completion)}%`}
-          hint={`${String(completed)} of ${String(total)} requirements met`}
-          icon={ListChecks}
-          badge={{
-            label: `${String(completed)}/${String(total)}`,
-            variant: completion === 100 ? 'success' : 'warning',
-          }}
-        />
+        <div className="grid lg:grid-cols-[minmax(0,1fr)_18rem]">
+          <div className="p-5 sm:p-7 lg:p-8">
+            <div className="flex flex-wrap items-center gap-3">
+              <SubmissionStatusBadge status={status} />
+              <span className="text-xs text-slate-500">
+                {String(completed)} of {String(total)} requirements complete
+              </span>
+            </div>
+
+            <h2 className="mt-5 max-w-xl text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+              {locked
+                ? `Your project is ${STATUS_LABELS[status].toLowerCase()}`
+                : completion === 100
+                  ? 'Your submission is ready'
+                  : `${String(remaining)} ${remaining === 1 ? 'item' : 'items'} left to finish`}
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+              {locked
+                ? 'Your entry is locked while organisers review it. You can still view the submitted details.'
+                : nextRequirement
+                  ? `Next: ${nextRequirement.label}. ${nextRequirement.detail}`
+                  : 'Review the details once more, then send the project to the judging team.'}
+            </p>
+
+            <div
+              className="mt-6 h-2 overflow-hidden rounded-full bg-slate-100"
+              role="progressbar"
+              aria-label="Submission completion"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={completion}
+            >
+              <span
+                className="block h-full rounded-full bg-brand-blue"
+                style={{ width: `${String(completion)}%` }}
+              />
+            </div>
+
+            <dl className="mt-6 grid grid-cols-2 gap-5 border-t border-slate-100 pt-5 sm:grid-cols-3">
+              <div>
+                <dt className="text-xs text-slate-500">Checklist</dt>
+                <dd className="mt-1 text-sm font-semibold text-slate-900">
+                  {String(completion)}% complete
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-slate-500">Team</dt>
+                <dd className="mt-1 text-sm font-semibold text-slate-900">
+                  {String(memberCount)} {memberCount === 1 ? 'member' : 'members'}
+                </dd>
+              </div>
+              <div className="col-span-2 sm:col-span-1">
+                <dt className="text-xs text-slate-500">Last updated</dt>
+                <dd className="mt-1 text-sm font-semibold text-slate-900">
+                  {formatTeamDate(team.updatedAt)}
+                </dd>
+              </div>
+            </dl>
+
+            <Link
+              to="/dashboard/submissions"
+              className={cn(
+                buttonVariants({ size: 'lg' }),
+                'mt-6 bg-slate-950 text-white shadow-none hover:bg-slate-800',
+              )}
+            >
+              {locked ? 'View submission' : 'Continue submission'}
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="flex flex-col justify-between bg-slate-950 p-6 text-white sm:p-7">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-brand-cream">
+              <CalendarClock size={19} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <div className="mt-10">
+              <p className="text-xs font-medium tracking-wide text-slate-400 uppercase">
+                Submission closes
+              </p>
+              <p className="mt-2 text-5xl font-semibold tracking-tight tabular-nums">
+                {String(EVENT.daysLeft)}
+              </p>
+              <p className="mt-1 text-sm text-slate-300">days remaining</p>
+              <p className="mt-6 border-t border-white/10 pt-4 text-sm leading-6 text-slate-300">
+                {EVENT.deadline}
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <div className="grid gap-4 xl:grid-cols-3">
-        {/* Requirements */}
-        <Card className="xl:col-span-2">
-          <CardHeader className="flex-wrap">
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.7fr)_minmax(17rem,0.8fr)]">
+        <section className="rounded-2xl border border-slate-200 bg-white">
+          <div className="flex items-start justify-between gap-4 border-b border-slate-100 px-5 py-5 sm:px-6">
             <div>
-              <CardTitle>Submission requirements</CardTitle>
-              <CardDescription>
-                Finish every item before the portal closes.
-              </CardDescription>
+              <h2 className="text-base font-semibold tracking-tight text-slate-950">
+                Submission checklist
+              </h2>
+              <p className="mt-1 text-xs text-slate-500">
+                Complete every item before submitting.
+              </p>
             </div>
-            <div className="flex items-center gap-1 rounded-lg bg-slate-100 p-1">
-              {FILTERS.map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => {
-                    setFilter(value);
-                  }}
-                  aria-pressed={filter === value}
+            <span className="text-sm font-semibold text-slate-900 tabular-nums">
+              {String(completed)}/{String(total)}
+            </span>
+          </div>
+          <ul className="divide-y divide-slate-100">
+            {requirements.map((item) => (
+              <li key={item.id} className="flex items-start gap-3 px-5 py-4 sm:px-6">
+                <span
                   className={cn(
-                    'rounded-md px-3 py-1 text-xs font-medium capitalize transition-colors',
-                    filter === value
-                      ? 'bg-white text-slate-900 shadow-sm'
-                      : 'text-slate-500 hover:text-slate-700',
+                    'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg',
+                    item.met
+                      ? 'bg-emerald-50 text-emerald-600'
+                      : 'bg-amber-50 text-amber-600',
                   )}
                 >
-                  {value}
-                </button>
-              ))}
+                  {item.met ? (
+                    <Check size={14} strokeWidth={2.5} aria-hidden="true" />
+                  ) : (
+                    <Clock3 size={14} aria-hidden="true" />
+                  )}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-medium text-slate-900">
+                    {item.label}
+                  </span>
+                  <span className="mt-0.5 block text-xs leading-5 text-slate-500">
+                    {item.detail}
+                  </span>
+                </span>
+                <span
+                  className={cn(
+                    'shrink-0 text-xs font-medium',
+                    item.met ? 'text-emerald-700' : 'text-amber-700',
+                  )}
+                >
+                  {item.met ? 'Done' : 'Pending'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <div className="flex flex-col gap-5">
+          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-medium text-slate-500">Project</p>
+                <h2 className="mt-1 text-base font-semibold text-slate-950">
+                  {team.projectTitle.length > 0
+                    ? team.projectTitle
+                    : 'Untitled project'}
+                </h2>
+              </div>
+              <SubmissionStatusBadge status={status} />
             </div>
-          </CardHeader>
-          <CardContent>
-            {visibleRequirements.length === 0 ? (
-              <p className="rounded-xl border border-dashed border-slate-200 px-4 py-10 text-center text-sm text-slate-500">
-                Nothing here.
+            <p className="mt-3 line-clamp-3 text-xs leading-5 text-slate-500">
+              {team.projectDescription.length > 0
+                ? team.projectDescription
+                : 'Add a short description of the problem and your solution.'}
+            </p>
+            <dl className="mt-4 divide-y divide-slate-100 border-y border-slate-100">
+              <div className="flex items-center justify-between gap-3 py-3 text-xs">
+                <dt className="text-slate-500">Demo link</dt>
+                <dd className="font-medium text-slate-900">
+                  {team.demoUrl.length > 0 ? 'Added' : 'Missing'}
+                </dd>
+              </div>
+              <div className="flex items-center justify-between gap-3 py-3 text-xs">
+                <dt className="text-slate-500">Repository</dt>
+                <dd className="font-medium text-slate-900">
+                  {team.repositoryUrl.length > 0 ? 'Connected' : 'Missing'}
+                </dd>
+              </div>
+            </dl>
+            <Link
+              to="/dashboard/submissions"
+              className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-blue-strong hover:text-brand-blue"
+            >
+              Open submission
+              <ArrowRight size={13} aria-hidden="true" />
+            </Link>
+          </section>
+
+          <section className="rounded-2xl border border-slate-200 bg-white p-5">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-base font-semibold text-slate-950">Team</h2>
+                <p className="mt-1 text-xs text-slate-500">
+                  {lead ? `Led by ${lead.name}` : `${String(memberCount)} members`}
+                </p>
+              </div>
+              <Users size={17} className="text-slate-400" aria-hidden="true" />
+            </div>
+            {memberCount === 0 ? (
+              <p className="mt-4 border-t border-slate-100 pt-4 text-xs leading-5 text-slate-500">
+                No members are attached to this team yet.
               </p>
             ) : (
-              <ul className="grid gap-3 sm:grid-cols-2">
-                {visibleRequirements.map((item) => (
-                  <li
-                    key={item.id}
-                    className="rounded-xl border border-slate-200 bg-white p-4"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <span
-                        className={cn(
-                          'flex h-8 w-8 items-center justify-center rounded-lg',
-                          item.met
-                            ? 'bg-emerald-50 text-emerald-600'
-                            : 'bg-amber-50 text-amber-600',
-                        )}
-                      >
-                        {item.met ? (
-                          <Check size={16} aria-hidden="true" />
-                        ) : (
-                          <Clock3 size={16} aria-hidden="true" />
-                        )}
-                      </span>
-                      <Badge variant={item.met ? 'success' : 'warning'}>
-                        {item.met ? 'Done' : 'Pending'}
-                      </Badge>
-                    </div>
-                    <p className="mt-3 text-sm font-medium text-slate-900">
-                      {item.label}
-                    </p>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-500">
-                      {item.detail}
-                    </p>
+              <ul className="mt-4 divide-y divide-slate-100 border-y border-slate-100">
+                {team.members.slice(0, 3).map((member) => (
+                  <li key={member.id} className="flex items-center gap-2.5 py-3">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-blue-pale text-xs font-semibold text-brand-blue-strong">
+                      {memberInitials(member.name)}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-slate-900">
+                      {member.name}
+                    </span>
+                    <span className="text-xs text-slate-500">
+                      {member.role === 'LEAD' ? 'Lead' : 'Member'}
+                    </span>
                   </li>
                 ))}
               </ul>
             )}
-          </CardContent>
-        </Card>
-
-        <div className="flex flex-col gap-4">
-          {/* Submission snapshot */}
-          <Card>
-            <CardHeader>
-              <div>
-                <CardTitle>Submission snapshot</CardTitle>
-                <CardDescription>
-                  Updated {formatTeamDate(team.updatedAt)}
-                </CardDescription>
-              </div>
-              <SubmissionStatusBadge status={status} />
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm font-medium text-slate-900">
-                {team.projectTitle.length > 0
-                  ? team.projectTitle
-                  : 'Untitled project'}
-              </p>
-              <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-slate-500">
-                {team.projectDescription.length > 0
-                  ? team.projectDescription
-                  : 'No description yet.'}
-              </p>
-              <dl className="mt-4 grid grid-cols-2 gap-2">
-                <div className="rounded-lg bg-slate-50 p-3">
-                  <dt className="text-xs text-slate-500">Checklist</dt>
-                  <dd className="mt-0.5 text-sm font-medium text-slate-900">
-                    {String(completed)} of {String(total)}
-                  </dd>
-                </div>
-                <div className="rounded-lg bg-slate-50 p-3">
-                  <dt className="text-xs text-slate-500">Deadline</dt>
-                  <dd className="mt-0.5 text-sm font-medium text-slate-900">
-                    {String(EVENT.daysLeft)} days
-                  </dd>
-                </div>
-              </dl>
-            </CardContent>
-            <CardFooter>
-              <Link
-                to="/dashboard/submissions"
-                className={cn(
-                  buttonVariants({ variant: 'outline', size: 'sm' }),
-                  'w-full',
-                )}
-              >
-                Open submission
-                <ArrowRight size={14} aria-hidden="true" />
-              </Link>
-            </CardFooter>
-          </Card>
-
-          {/* Team preview */}
-          <Card>
-            <CardHeader>
-              <div>
-                <CardTitle>Team</CardTitle>
-                <CardDescription>
-                  {String(memberCount)}{' '}
-                  {memberCount === 1 ? 'member' : 'members'} on the roster
-                </CardDescription>
-              </div>
-              <Link
-                to="/dashboard/team"
-                className="text-xs font-medium text-violet-600 hover:text-violet-700"
-              >
-                View all
-              </Link>
-            </CardHeader>
-            <CardContent>
-              {memberCount === 0 ? (
-                <p className="rounded-lg border border-dashed border-slate-200 px-3 py-6 text-center text-xs text-slate-500">
-                  No members on the roster yet.
-                </p>
-              ) : (
-                <ul className="flex flex-col gap-3">
-                  {team.members.slice(0, 4).map((member) => (
-                    <li key={member.id} className="flex items-center gap-2.5">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-50 text-xs font-semibold text-violet-700">
-                        {memberInitials(member.name)}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-medium text-slate-900">
-                          {member.name}
-                        </span>
-                        <span className="block truncate text-xs text-slate-500">
-                          {member.role === 'LEAD' ? 'Team lead' : 'Member'}
-                        </span>
-                      </span>
-                      <Badge variant={member.role === 'LEAD' ? 'default' : 'secondary'}>
-                        {member.role === 'LEAD' ? 'Lead' : 'Member'}
-                      </Badge>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CardContent>
-          </Card>
+            <Link
+              to="/dashboard/team"
+              className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-blue-strong hover:text-brand-blue"
+            >
+              View team
+              <ArrowRight size={13} aria-hidden="true" />
+            </Link>
+          </section>
         </div>
       </div>
 
-      {/* Status stepper */}
-      <Card>
-        <CardHeader>
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <CardTitle>Submission status</CardTitle>
-            <CardDescription>
-              Drafts stay private until you send them to the judging team.
-            </CardDescription>
+            <h2 className="text-base font-semibold tracking-tight text-slate-950">
+              Submission journey
+            </h2>
+            <p className="mt-1 text-xs text-slate-500">
+              Drafts stay private until they are sent to the judging team.
+            </p>
           </div>
-          <SubmissionStatusBadge status={STATUS} />
-        </CardHeader>
-        <CardContent>
-          <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {STEPS.map((step, index) => {
-              const done = index < currentStep;
-              const current = index === currentStep;
-              return (
-                <li
-                  key={step.label}
+          <SubmissionStatusBadge status={status} />
+        </div>
+        <ol className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {STEPS.map((step, index) => {
+            const done = index < currentStep;
+            const current = index === currentStep;
+            return (
+              <li key={step.label} className="flex items-start gap-3">
+                <span
                   className={cn(
-                    'flex items-start gap-3 rounded-xl border px-3 py-3',
-                    current
-                      ? 'border-violet-200 bg-violet-50/60'
-                      : 'border-slate-200 bg-white',
+                    'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-medium',
+                    done
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-600'
+                      : current
+                        ? 'border-brand-blue bg-brand-blue text-white'
+                        : 'border-slate-200 text-slate-400',
                   )}
                 >
+                  {done ? (
+                    <Check size={12} strokeWidth={2.5} aria-hidden="true" />
+                  ) : current ? (
+                    <CircleDot size={12} aria-hidden="true" />
+                  ) : (
+                    String(index + 1)
+                  )}
+                </span>
+                <span>
                   <span
                     className={cn(
-                      'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs',
-                      done
-                        ? 'border-emerald-200 bg-emerald-50 text-emerald-600'
-                        : current
-                          ? 'border-violet-600 bg-violet-600 text-white'
-                          : 'border-slate-200 text-slate-400',
+                      'block text-sm font-medium',
+                      current ? 'text-slate-950' : 'text-slate-600',
                     )}
                   >
-                    {done ? (
-                      <Check size={12} strokeWidth={2.5} aria-hidden="true" />
-                    ) : current ? (
-                      <CircleDot size={12} aria-hidden="true" />
-                    ) : (
-                      String(index + 1)
-                    )}
+                    {step.label}
                   </span>
-                  <span className="min-w-0">
-                    <span
-                      className={cn(
-                        'block text-sm',
-                        current
-                          ? 'font-medium text-slate-900'
-                          : 'text-slate-600',
-                      )}
-                    >
-                      {step.label}
-                    </span>
-                    <span className="block text-xs text-slate-500">
-                      {step.hint}
-                    </span>
+                  <span className="mt-0.5 block text-xs text-slate-500">
+                    {step.hint}
                   </span>
-                </li>
-              );
-            })}
-          </ol>
-        </CardContent>
-      </Card>
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
 
-      <p className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+      <p className="flex flex-wrap items-center gap-1.5 border-t border-slate-200 pt-5 text-xs text-slate-500">
         <Mail size={12} aria-hidden="true" />
         Need a hand? Email
         <a
           href="mailto:support@techignite.net"
-          className="font-medium text-violet-600 hover:text-violet-700"
+          className="font-medium text-brand-blue-strong hover:text-brand-blue"
         >
           support@techignite.net
         </a>

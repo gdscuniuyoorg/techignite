@@ -19,6 +19,7 @@ import {
 } from '@/lib/team-api';
 import { DashboardPageHeader } from './dashboard-page-header';
 import { DashboardErrorState, DashboardLoading } from './dashboard-loading';
+import { SubmissionCard } from './submission-card';
 import {
   SubmissionDialog,
   type SubmissionFormValues,
