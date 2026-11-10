@@ -30,7 +30,14 @@ const TREND_COLOR: Record<StatTrend, string> = {
  * Light analytics tile: an icon square, a small label, one prominent number,
  * and an optional trend line — the layout used across the admin overview.
  */
-export function StatCard({ label, value, hint, icon: Icon, meter, trend }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  hint,
+  icon: Icon,
+  meter,
+  trend,
+}: StatCardProps) {
   const TrendIcon = trend ? TREND_ICON[trend] : null;
 
   return (

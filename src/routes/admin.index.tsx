@@ -273,7 +273,11 @@ function AdminOverview() {
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-500">
           {isFetching && (
-            <Loader2 size={13} className="animate-spin text-slate-400" aria-hidden="true" />
+            <Loader2
+              size={13}
+              className="animate-spin text-slate-400"
+              aria-hidden="true"
+            />
           )}
           Last updated: {new Date(data.asOf).toLocaleString()}
         </span>
@@ -354,15 +358,12 @@ function AdminOverview() {
                 {applicationsByStatus.map(([status, count]) => {
                   const percent = (count / data.applications.total) * 100;
                   return (
-                    <li
-                      key={status}
-                      className="flex items-center gap-3 text-sm"
-                    >
+                    <li key={status} className="flex items-center gap-3 text-sm">
                       <span
                         className={`h-2.5 w-2.5 shrink-0 rounded-full ${toneFor(status).dot}`}
                         aria-hidden="true"
                       />
-                      <span className="capitalize text-slate-600">
+                      <span className="text-slate-600 capitalize">
                         {status.replaceAll('_', ' ')}
                       </span>
                       <span className="ml-auto font-medium text-slate-950 tabular-nums">
@@ -381,9 +382,7 @@ function AdminOverview() {
               </p>
             </div>
           ) : (
-            <p className="mt-6 text-sm text-slate-500">
-              No applications recorded yet.
-            </p>
+            <p className="mt-6 text-sm text-slate-500">No applications recorded yet.</p>
           )}
         </Panel>
 
@@ -402,14 +401,20 @@ function AdminOverview() {
             )}
             <ul className="w-full max-w-52 space-y-4">
               <li className="flex items-center gap-2 text-sm">
-                <span className="h-2.5 w-2.5 rounded-full bg-brand-blue" aria-hidden="true" />
+                <span
+                  className="h-2.5 w-2.5 rounded-full bg-brand-blue"
+                  aria-hidden="true"
+                />
                 <span className="text-slate-600">Allocated</span>
                 <span className="ml-auto font-medium text-slate-950 tabular-nums">
                   {data.coupons.usedSlots}
                 </span>
               </li>
               <li className="flex items-center gap-2 text-sm">
-                <span className="h-2.5 w-2.5 rounded-full bg-slate-200" aria-hidden="true" />
+                <span
+                  className="h-2.5 w-2.5 rounded-full bg-slate-200"
+                  aria-hidden="true"
+                />
                 <span className="text-slate-600">Remaining</span>
                 <span className="ml-auto font-medium text-slate-950 tabular-nums">
                   {data.coupons.remainingSlots}
@@ -431,9 +436,7 @@ function AdminOverview() {
               label="Onboarded"
               value={data.teams.onboarded}
               percent={
-                data.teams.total > 0
-                  ? (data.teams.onboarded / data.teams.total) * 100
-                  : 0
+                data.teams.total > 0 ? (data.teams.onboarded / data.teams.total) * 100 : 0
               }
               caption={`${String(data.teams.totalMembers)} members in total`}
               color="bg-brand-green-bright"
@@ -453,9 +456,7 @@ function AdminOverview() {
               label="Finalists"
               value={data.teams.finalists}
               percent={
-                data.teams.total > 0
-                  ? (data.teams.finalists / data.teams.total) * 100
-                  : 0
+                data.teams.total > 0 ? (data.teams.finalists / data.teams.total) * 100 : 0
               }
               caption="Shortlisted for judging"
               color="bg-brand-blue"
