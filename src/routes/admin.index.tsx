@@ -335,6 +335,7 @@ function AdminOverview() {
           action={
             <Link
               to="/admin/applications"
+              search={{ offset: 0 }}
               className="flex items-center gap-1 text-xs font-medium text-brand-blue hover:text-brand-blue-strong"
             >
               Manage <ArrowRight size={13} aria-hidden="true" />
