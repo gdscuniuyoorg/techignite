@@ -374,7 +374,7 @@ function mapEmbeddedTeam(record: Record<string, unknown>): TeamProfile {
     status,
     projectTitle: firstString(record, ['projectTitle', 'title']),
     projectDescription: firstString(record, ['projectDescription', 'description']),
-    technologies: toStringArray(record['technologies'] ?? record['techStack']),
+    technologies: toStringArray(record.technologies ?? record.techStack),
     demoUrl: firstString(record, ['demoUrl']),
     repositoryUrl: firstString(record, ['repositoryUrl', 'repoUrl']),
     submittedAt: optionalString(record, ['submittedAt', 'submitted_at', 'lockedAt']),
