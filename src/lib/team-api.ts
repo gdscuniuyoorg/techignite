@@ -363,10 +363,38 @@ export function logout(): void {
   clearStoredToken();
 }
 
+/** Parse a single embedded team record (as returned by GET /api/auth/me) into a TeamProfile-shaped value. */
+function mapEmbeddedTeam(record: Record<string, unknown>): TeamProfile {
+  const role = firstString(record, ['role']);
+  const status = toTeamStatus(role);
+  return {
+    id: firstString(record, ['id', 'teamId', '_id']),
+    name: firstString(record, ['teamName', 'name']),
+    description: firstString(record, ['description', 'teamDescription']),
+    status,
+    projectTitle: firstString(record, ['projectTitle', 'title']),
+    projectDescription: firstString(record, ['projectDescription', 'description']),
+    technologies: toStringArray(record['technologies'] ?? record['techStack']),
+    demoUrl: firstString(record, ['demoUrl']),
+    repositoryUrl: firstString(record, ['repositoryUrl', 'repoUrl']),
+    submittedAt: optionalString(record, ['submittedAt', 'submitted_at', 'lockedAt']),
+    members: [],
+    createdAt: optionalString(record, ['createdAt', 'created_at']),
+    updatedAt: optionalString(record, ['updatedAt', 'updated_at']),
+  };
+}
+
 /** GET /api/auth/me — the signed-in team for the current token. */
-export async function getSession(): Promise<TeamProfile> {
+export async function getSession(): Promise<TeamProfile | undefined> {
   const body: unknown = await teamApi.get('api/auth/me').json();
-  return mapTeam(expectData(body));
+  const data = expectData(body);
+  const container = isRecord(data) ? data : isRecord(body) ? body : {};
+  const userRecord = isRecord(container.user) ? container.user : container;
+  const teamsRaw: readonly unknown[] = Array.isArray(userRecord.teams)
+    ? userRecord.teams
+    : [];
+  const firstTeam = teamsRaw[0];
+  return firstTeam && isRecord(firstTeam) ? mapEmbeddedTeam(firstTeam) : undefined;
 }
 
 // ─── Team profile & submission ──────────────────────────────────────────────
