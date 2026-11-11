@@ -3,7 +3,7 @@ export type FooterLinkItem =
       readonly label: string;
       /** Internal route. Standalone pages link directly; sections still hosted
        * on the home page use `'/'` together with `hash`. */
-      readonly to: '/' | '/about' | '/speakers';
+      readonly to: '/' | '/about' | '/speakers' | '/get-your-picture';
       readonly hash?: string;
       readonly isExternal?: false;
     }
@@ -33,6 +33,7 @@ export const footerNavLinks: readonly FooterLinkItem[] = [
   { label: 'About', to: '/about' },
   { label: 'Agenda', to: '/', hash: 'agenda' },
   { label: 'Speakers', to: '/speakers' },
+  { label: 'Get Your Picture', to: '/get-your-picture' },
   {
     label: 'Past Photos',
     href: 'https://photos.app.goo.gl/9y5H4u4u7N5bF3Y38',

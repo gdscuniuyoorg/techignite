@@ -17,6 +17,7 @@ import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as GetYourPictureRouteImport } from './routes/get-your-picture'
 import { Route as HackathonRouteImport } from './routes/hackathon'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as PhotosRouteImport } from './routes/photos'
@@ -74,6 +75,11 @@ const AuthRoute = AuthRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetYourPictureRoute = GetYourPictureRouteImport.update({
+  id: '/get-your-picture',
+  path: '/get-your-picture',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HackathonRoute = HackathonRouteImport.update({
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/get-your-picture': typeof GetYourPictureRoute
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
+  '/get-your-picture': typeof GetYourPictureRoute
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
@@ -231,6 +239,7 @@ export interface FileRoutesById {
   '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/get-your-picture': typeof GetYourPictureRoute
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/photos': typeof PhotosRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
     | '/apply'
     | '/auth'
     | '/dashboard'
+    | '/get-your-picture'
     | '/hackathon'
     | '/llms.txt'
     | '/photos'
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/agenda'
     | '/apply'
     | '/auth'
+    | '/get-your-picture'
     | '/hackathon'
     | '/llms.txt'
     | '/photos'
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/apply'
     | '/auth'
     | '/dashboard'
+    | '/get-your-picture'
     | '/hackathon'
     | '/llms.txt'
     | '/photos'
@@ -344,6 +356,7 @@ export interface RootRouteChildren {
   ApplyRoute: typeof ApplyRoute
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  GetYourPictureRoute: typeof GetYourPictureRoute
   HackathonRoute: typeof HackathonRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   PhotosRoute: typeof PhotosRoute
@@ -410,6 +423,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-your-picture': {
+      id: '/get-your-picture'
+      path: '/get-your-picture'
+      fullPath: '/get-your-picture'
+      preLoaderRoute: typeof GetYourPictureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hackathon': {
@@ -588,6 +608,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApplyRoute: ApplyRoute,
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  GetYourPictureRoute: GetYourPictureRoute,
   HackathonRoute: HackathonRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   PhotosRoute: PhotosRoute,

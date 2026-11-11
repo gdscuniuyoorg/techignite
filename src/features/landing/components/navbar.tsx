@@ -7,6 +7,7 @@ const navLinks = [
   { label: 'Speakers', hash: '/speakers' },
   { label: 'Hackathon', hash: '/hackathon' },
   { label: 'Agenda', hash: '/agenda' },
+  { label: 'Get Your Picture', hash: '/get-your-picture' },
 ] as const;
 
 export function Navbar() {

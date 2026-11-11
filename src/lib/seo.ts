@@ -49,6 +49,10 @@ const HOME_AND_HACKATHON: readonly BreadcrumbLink[] = [
   { name: 'Home', path: '/' },
   { name: 'Hackathon', path: '/hackathon' },
 ];
+const HOME_AND_GET_PICTURE: readonly BreadcrumbLink[] = [
+  { name: 'Home', path: '/' },
+  { name: 'Get Your Picture', path: '/get-your-picture' },
+];
 
 /** The six indexable routes. Server routes (sitemap, llms.txt) render from
  * this table, so a route missing here is invisible to search. */
@@ -93,6 +97,13 @@ export const seoRoutes: readonly SeoRouteEntry[] = [
     description:
       "The Tech Ignite '26 hackathon in Uyo: build, ship and demo in front of judges, with mentors, prizes and a community of builders.",
     breadcrumb: HOME_AND_HACKATHON,
+  },
+  {
+    path: '/get-your-picture',
+    title: "Get Your Picture — Tech Ignite '26",
+    description:
+      "Put your photo inside the official Tech Ignite '26 frame and download it for free. Upload a picture, we crop and place it, you share it.",
+    breadcrumb: HOME_AND_GET_PICTURE,
   },
 ] as const;
 
