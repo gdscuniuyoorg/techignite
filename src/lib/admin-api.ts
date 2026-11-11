@@ -4,20 +4,73 @@ import { httpErrorMessage } from '@/lib/api-error';
 /**
  * Shared client for the Tech Ignite admin API (api.techignite.net).
  *
- * Auth is the HTTP-only `authToken` cookie set by POST /api/admin/login, so
- * every request uses `credentials: 'include'` and the token is never readable
- * from JavaScript. The base URL is env-driven for local development; see
- * .env.local (git-ignored) and spec 0003.
+ * Auth is a bearer JWT returned by POST /api/admin/login and supplemented by
+ * the HTTP-only `authToken` cookie when supported. The token is kept in
+ * storage (localStorage with sessionStorage fallback) and attached as
+ * `Authorization: Bearer <token>` on every request. The base URL is
+ * env-driven for local development; see .env.local (git-ignored) and spec 0003.
  */
 const ADMIN_API_BASE_URL =
   (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
   'https://api.techignite.net/';
+
+const ADMIN_TOKEN_KEY = 'techignite.admin.token';
+
+export function getAdminStoredToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return (
+    window.localStorage.getItem(ADMIN_TOKEN_KEY) ??
+    window.sessionStorage.getItem(ADMIN_TOKEN_KEY)
+  );
+}
+
+export function setAdminStoredToken(token: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(ADMIN_TOKEN_KEY, token);
+  } catch {
+    // Ignore quota or private browsing exceptions
+  }
+  try {
+    window.sessionStorage.setItem(ADMIN_TOKEN_KEY, token);
+  } catch {
+    // Ignore storage exceptions
+  }
+}
+
+export function clearAdminStoredToken(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(ADMIN_TOKEN_KEY);
+  } catch {
+    // Ignore
+  }
+  try {
+    window.sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+  } catch {
+    // Ignore
+  }
+}
+
+export function hasAdminStoredToken(): boolean {
+  return getAdminStoredToken() !== null;
+}
 
 export const adminApi = ky.create({
   baseUrl: ADMIN_API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 15_000,
   credentials: 'include',
+  hooks: {
+    beforeRequest: [
+      ({ request }) => {
+        const token = getAdminStoredToken();
+        if (token) {
+          request.headers.set('Authorization', `Bearer ${token}`);
+        }
+      },
+    ],
+  },
 });
 
 // ─── Types (mirrors backend entities in techignite-backend/src/entities) ─────
@@ -538,6 +591,7 @@ export async function getSession(): Promise<SessionResult> {
   try {
     const body: unknown = await adminApi.get('api/auth/me').json();
     if (!isRecord(body) || body.success !== true || !isRecord(body.user)) {
+      clearAdminStoredToken();
       return { status: 'unauthenticated' };
     }
     const user = body.user;
@@ -569,6 +623,7 @@ export async function getSession(): Promise<SessionResult> {
       error instanceof HTTPError &&
       (error.response.status === 401 || error.response.status === 403)
     ) {
+      clearAdminStoredToken();
       return { status: 'unauthenticated' };
     }
     throw error;
@@ -583,6 +638,10 @@ export async function login(email: string, password: string): Promise<AdminSessi
     throw new Error(
       isRecord(body) && typeof body.message === 'string' ? body.message : 'Login failed',
     );
+  }
+  const token = typeof body.token === 'string' ? body.token : null;
+  if (token) {
+    setAdminStoredToken(token);
   }
   const user = body.user;
   const roleRecord = isRecord(user.role) ? user.role : null;
@@ -601,7 +660,11 @@ export async function login(email: string, password: string): Promise<AdminSessi
 }
 
 export async function logout(): Promise<void> {
-  await adminApi.post('api/auth/logout');
+  try {
+    await adminApi.post('api/auth/logout');
+  } finally {
+    clearAdminStoredToken();
+  }
 }
 
 // ─── Stats ──────────────────────────────────────────────────────────────────
@@ -1094,7 +1157,12 @@ export async function adminErrorMessage(error: unknown): Promise<string> {
     : 'Something went wrong.';
 }
 
-/** URL for CSV exports; opens with the browser's cookie-authenticated download. */
+/** URL for CSV exports; includes bearer token query param for download authentication. */
 export function exportUrl(path: string): string {
-  return new URL(path, ADMIN_API_BASE_URL).toString();
+  const url = new URL(path, ADMIN_API_BASE_URL);
+  const token = getAdminStoredToken();
+  if (token) {
+    url.searchParams.set('token', token);
+  }
+  return url.toString();
 }
