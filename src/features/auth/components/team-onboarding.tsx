@@ -4,12 +4,16 @@ import {
   AlertCircle,
   ArrowRight,
   Check,
+  Eye,
+  EyeOff,
   Loader2,
   ShieldCheck,
   Users,
   Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   activateOnboarding,
   teamErrorMessage,
@@ -66,6 +70,9 @@ export function TeamOnboarding({ teamId, token, onActivated }: TeamOnboardingPro
   );
   const [activating, setActivating] = useState(false);
   const [activationError, setActivationError] = useState<string | null>(null);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -96,9 +103,17 @@ export function TeamOnboarding({ teamId, token, onActivated }: TeamOnboardingPro
 
   const activate = async (invite: OnboardingVerification): Promise<void> => {
     setActivationError(null);
+    if (password.length > 0 && password.length < 8) {
+      setActivationError('Your password must be at least 8 characters.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setActivationError('The passwords do not match.');
+      return;
+    }
     setActivating(true);
     try {
-      await activateOnboarding(token, invite.memberEmail);
+      await activateOnboarding(token, invite.memberEmail, password || undefined);
       await onActivated();
     } catch (error) {
       setActivationError(await inviteErrorMessage(error));
@@ -227,6 +242,57 @@ export function TeamOnboarding({ teamId, token, onActivated }: TeamOnboardingPro
                   <dd className="text-white/85">{roleLabel(verification.invite.role)}</dd>
                 </div>
               </dl>
+
+              <div className="mt-5 flex flex-col gap-2">
+                <Label htmlFor="onboarding-password" className="text-white/80">
+                  Set a password{' '}
+                  <span className="font-normal text-white/40">(optional)</span>
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="onboarding-password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    placeholder="At least 8 characters"
+                    value={password}
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                    }}
+                    className="h-11 border-line bg-ink pr-10 text-paper placeholder:text-muted focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-pressed={showPassword}
+                    className="absolute top-1/2 right-2 -translate-y-1/2 rounded-xs p-1.5 text-white/60 transition-colors hover:text-white"
+                  >
+                    {showPassword ? (
+                      <EyeOff size={16} strokeWidth={2} aria-hidden="true" />
+                    ) : (
+                      <Eye size={16} strokeWidth={2} aria-hidden="true" />
+                    )}
+                  </button>
+                </div>
+                {password.length > 0 && (
+                  <Input
+                    id="onboarding-confirm-password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    placeholder="Confirm your password"
+                    value={confirmPassword}
+                    onChange={(event) => {
+                      setConfirmPassword(event.target.value);
+                    }}
+                    className="h-11 border-line bg-ink text-paper placeholder:text-muted focus:border-brand-blue focus:ring-2 focus:ring-brand-blue"
+                  />
+                )}
+                <p className="text-xs leading-5 text-white/45">
+                  Leave this blank and we&apos;ll email you a temporary password.
+                </p>
+              </div>
 
               {activationError && (
                 <p

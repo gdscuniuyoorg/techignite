@@ -1,4 +1,5 @@
 import ky, { HTTPError, TimeoutError } from 'ky';
+import { httpErrorMessage } from '@/lib/api-error';
 
 /**
  * Client for the team-facing hackathon API. The base URL is env-driven so a
@@ -218,7 +219,7 @@ function toOnboardingStatus(record: Record<string, unknown>): TeamMemberOnboardi
     default:
       return optionalString(record, ['userId', 'user_id']) !== null
         ? 'ACTIVE'
-        : 'UNKNOWN';
+        : 'PENDING';
   }
 }
 
@@ -373,7 +374,26 @@ export async function getSession(): Promise<TeamProfile> {
 /** GET /api/teams — team profile plus its submission fields. */
 export async function getTeam(): Promise<TeamProfile> {
   const body: unknown = await teamApi.get('api/teams').json();
-  return mapTeam(expectData(body));
+  const data = expectData(body);
+  // The endpoint returns a paginated list of the caller's teams; the dashboard
+  // shows the signed-in user's own team (newest first).
+  const team: unknown = Array.isArray(data)
+    ? (data as readonly unknown[])[0]
+    : isRecord(data) && Array.isArray(data.teams)
+      ? (data.teams as readonly unknown[])[0]
+      : data;
+  if (team === undefined) {
+    throw new Error('No team is linked to this account yet.');
+  }
+  const profile = mapTeam(team);
+  // The list payload omits the roster, but the dashboard's sidebar, overview
+  // and submission pages all read team.members. Hydrate it from the roster
+  // endpoint so those views have complete team details.
+  if (profile.id.length > 0 && profile.members.length === 0) {
+    const { members } = await getTeamMembers(profile.id);
+    return { ...profile, members };
+  }
+  return profile;
 }
 
 export async function getTeamMembers(teamId: string): Promise<TeamMemberList> {
@@ -422,11 +442,14 @@ export async function verifyOnboardingToken(
 export async function activateOnboarding(
   token: string,
   memberEmail: string,
+  password?: string,
 ): Promise<LoginResult> {
   const normalized = token.trim();
   if (normalized.length === 0) throw new Error('The invite token is missing.');
   const body: unknown = await teamApi
-    .post('api/onboarding/activate', { json: { token: normalized } })
+    .post('api/onboarding/activate', {
+      json: password ? { token: normalized, password } : { token: normalized },
+    })
     .json();
   return sessionFromBody(body, memberEmail);
 }
@@ -460,14 +483,9 @@ export async function teamErrorMessage(
   } = {},
 ): Promise<string> {
   if (error instanceof HTTPError) {
-    try {
-      const body: unknown = await error.response.clone().json();
-      const message = errorMessageFromBody(body);
-      if (message.length > 0) {
-        return message;
-      }
-    } catch {
-      // Unparseable error body — fall through to the status-based message.
+    const message = await httpErrorMessage(error);
+    if (message.length > 0) {
+      return message;
     }
     if (error.response.status === 401) return unauthorizedMessage;
     if (error.response.status === 404) {

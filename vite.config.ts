@@ -28,12 +28,23 @@ export default defineConfig({
           '/about',
           '/agenda',
           '/apply',
+          '/auth',
           '/dashboard',
           '/dashboard/submissions',
           '/dashboard/team',
           '/hackathon',
           '/photos',
           '/speakers',
+          // The admin app is a single client-rendered shell. Apache serves this
+          // prerendered page for every /admin/* URL; the router resolves the
+          // child route after hydration. Prerendering each child would emit
+          // empty files because their validateSearch redirects to canonical
+          // query strings.
+          '/admin',
+          // Dynamic invite links (/team/<id>/onboarding?token=…) cannot be
+          // prerendered per team. This placeholder gives Apache a chromeless
+          // shell to serve before the router hydrates the real invite.
+          '/team/invite/onboarding',
           '/sitemap.xml',
           '/robots.txt',
           '/llms.txt',

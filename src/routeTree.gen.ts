@@ -34,6 +34,7 @@ import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard.submissions'
 import { Route as DashboardTeamRouteImport } from './routes/dashboard.team'
 import { Route as TeamIdOnboardingRouteImport } from './routes/team.$id.onboarding'
+import { Route as TeamInviteOnboardingRouteImport } from './routes/team.invite.onboarding'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -160,6 +161,11 @@ const TeamIdOnboardingRoute = TeamIdOnboardingRouteImport.update({
   path: '/team/$id/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeamInviteOnboardingRoute = TeamInviteOnboardingRouteImport.update({
+  id: '/team/invite/onboarding',
+  path: '/team/invite/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/team/$id/onboarding': typeof TeamIdOnboardingRoute
+  '/team/invite/onboarding': typeof TeamInviteOnboardingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/team/$id/onboarding': typeof TeamIdOnboardingRoute
+  '/team/invite/onboarding': typeof TeamInviteOnboardingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -240,6 +248,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/team/$id/onboarding': typeof TeamIdOnboardingRoute
+  '/team/invite/onboarding': typeof TeamInviteOnboardingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -269,6 +278,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/dashboard/'
     | '/team/$id/onboarding'
+    | '/team/invite/onboarding'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -294,6 +304,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/team/$id/onboarding'
+    | '/team/invite/onboarding'
   id:
     | '__root__'
     | '/'
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/dashboard/'
     | '/team/$id/onboarding'
+    | '/team/invite/onboarding'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -339,6 +351,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SpeakersRoute: typeof SpeakersRoute
   TeamIdOnboardingRoute: typeof TeamIdOnboardingRoute
+  TeamInviteOnboardingRoute: typeof TeamInviteOnboardingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -518,6 +531,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamIdOnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/team/invite/onboarding': {
+      id: '/team/invite/onboarding'
+      path: '/team/invite/onboarding'
+      fullPath: '/team/invite/onboarding'
+      preLoaderRoute: typeof TeamInviteOnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -575,6 +595,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SpeakersRoute: SpeakersRoute,
   TeamIdOnboardingRoute: TeamIdOnboardingRoute,
+  TeamInviteOnboardingRoute: TeamInviteOnboardingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

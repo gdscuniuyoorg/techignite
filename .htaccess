@@ -9,6 +9,25 @@ DirectorySlash Off
   RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
 
+  # The admin app is a single client-rendered shell. Every /admin/* URL uses
+  # the prerendered shell so production never falls back to the public landing
+  # page; the router resolves the child route after hydration.
+  RewriteRule ^admin(/.*)?$ /admin/index.html [L]
+
+  # Pre-rendered routes live in folders (auth/index.html, dashboard/index.html).
+  # DirectorySlash Off stops Apache from resolving /auth to /auth/ on its own,
+  # so serve the folder's index.html explicitly. Without this, every route
+  # falls through to the landing page and briefly shows the public navbar and
+  # footer before hydration.
+  RewriteCond %{REQUEST_URI} !^/$
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.*?)/?$ /$1/index.html [L]
+
+  # Dynamic invite links (/team/<id>/onboarding?token=…) reuse the prerendered
+  # chromeless onboarding shell until the router hydrates the real invite.
+  RewriteRule ^team/[^/]+/onboarding/?$ /team/invite/onboarding/index.html [L]
+
   # Missing files under /assets return a real 404 instead of the app shell.
   RewriteRule ^assets/ - [R=404,L]
 

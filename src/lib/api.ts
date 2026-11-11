@@ -1,11 +1,17 @@
 import ky, { HTTPError, TimeoutError } from 'ky';
+import { httpErrorMessage } from '@/lib/api-error';
 
 /**
  * Shared client for the Tech Ignite API. The hackathon applications endpoint
- * lives at `https://api.techignite.net/api/applications`.
+ * lives at `/api/applications`. The base URL is env-driven for local
+ * development (`.env.local`); production falls back to the public API.
  */
+const API_BASE_URL =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
+  'https://api.techignite.net/';
+
 export const api = ky.create({
-  baseUrl: 'https://api.techignite.net/',
+  baseUrl: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 15_000,
 });
@@ -27,10 +33,6 @@ export async function submitApplication(
   await api.post('api/applications', { json: application });
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
 /**
  * Best-effort, human readable message from a failed submission. The API's
  * error body shape is not guaranteed, so every step is narrowed defensively
@@ -38,16 +40,9 @@ function isRecord(value: unknown): value is Record<string, unknown> {
  */
 export async function getApplicationErrorMessage(error: unknown): Promise<string> {
   if (error instanceof HTTPError) {
-    try {
-      const body: unknown = await error.response.clone().json();
-      if (isRecord(body)) {
-        const message = body.message ?? body.error;
-        if (typeof message === 'string' && message.trim()) {
-          return message;
-        }
-      }
-    } catch {
-      // Unparseable or empty error body — fall through to the generic message.
+    const message = await httpErrorMessage(error);
+    if (message.length > 0) {
+      return message;
     }
     if (error.response.status === 429) {
       return 'Too many attempts. Give it a minute, then try again.';

@@ -1,4 +1,5 @@
 import ky, { HTTPError, TimeoutError } from 'ky';
+import { httpErrorMessage } from '@/lib/api-error';
 
 /**
  * Shared client for the Tech Ignite admin API (api.techignite.net).
@@ -704,7 +705,9 @@ export async function batchUpdateApplicationStatus(
     readonly status: Exclude<ApplicationStatus, 'pending'>;
   }[],
 ): Promise<void> {
-  await adminApi.patch('api/applications/batch/update', { json: updates });
+  await adminApi.patch('api/applications/batch/update', {
+    json: { applications: updates },
+  });
 }
 
 export async function deleteApplication(id: string): Promise<void> {
@@ -1077,14 +1080,8 @@ export async function sendFinalistInvite(input: {
 
 export async function adminErrorMessage(error: unknown): Promise<string> {
   if (error instanceof HTTPError) {
-    try {
-      const body: unknown = await error.response.clone().json();
-      if (isRecord(body) && typeof body.message === 'string' && body.message.trim()) {
-        return body.message;
-      }
-    } catch {
-      // Unparseable error body — fall through.
-    }
+    const message = await httpErrorMessage(error);
+    if (message.length > 0) return message;
     if (error.response.status === 401) return 'Your session expired. Sign in again.';
     if (error.response.status === 403) return 'You do not have permission to do that.';
     return `The server refused the request (HTTP ${String(error.response.status)}).`;
