@@ -9,16 +9,16 @@ Add a public page at `/get-your-picture` where an attendee uploads a photo,
 sees it placed inside the official "I Will Be Attending" frame artwork, and
 downloads the framed result as a PNG.
 
-The frame artwork lives at `public/images/template.jpg` (1280x1280 JPEG). The
-white panel inside it is the photo slot. Everything runs in the browser: the
+The frame artwork lives at `public/images/template.png` (2160x2160 PNG). The
+yellow panel inside it is the photo slot. Everything runs in the browser: the
 photo is never uploaded to a server.
 
 ## Context
 
-- The event ships a square social frame artwork with a white panel where a
-  person puts their face. The panel is not a plain rectangle: it has a large
-  rounded top left corner, and the black and green checker squares of the
-  mosaic are drawn on top of it.
+- The event ships a square social frame artwork with a yellow panel where a
+  person puts their face. The panel is not a plain rectangle: it has a narrow
+  tab on the top left, a stepped bottom edge and a notch that keeps the artwork
+  visible. A separate yellow bar to the right of the panel holds the name.
 - The artwork sits in `public/`, so it is served from the same origin as the
   site. That matters: a canvas that draws it stays untainted, so `toBlob`
   works and the download is a real file, not a broken preview.
@@ -43,16 +43,15 @@ photo is never uploaded to a server.
 - **AC-2**: The page has its own title, meta description, canonical link, Open
   Graph and Twitter card tags, and a BreadcrumbList, via the shared SEO table
   in `src/lib/seo.ts`. It appears in `sitemap.xml` and `llms.txt`.
-- **AC-3**: The uploaded photo is scaled and cropped so it fills the white
+- **AC-3**: The uploaded photo is scaled and cropped so it fills the yellow
   panel completely. A cover crop is used: portrait photos lose top and bottom,
   landscape photos lose their sides, and neither is squashed.
-- **AC-4**: The composite keeps the artwork intact. The rounded corner, the
-  black checker squares and the green squares stay on top of the photo, and the
-  small decorative white square of the mosaic stays white.
+- **AC-4**: The composite keeps the artwork intact. The notch, the stepped
+  bottom edge and the separate name bar stay on top of the photo.
 - **AC-5**: The panel is located in the artwork by flood filling the bright
   pixels from the centre of the panel, not by hardcoding a rectangle. A change
   to the artwork that moves the panel does not need a code change.
-- **AC-6**: The download produces a 1280x1280 PNG named
+- **AC-6**: The download produces a 2160x2160 PNG named
   `techignite-26-my-picture.png`, and the file is a valid image.
 - **AC-7**: Only JPG, PNG and WebP are accepted, and only up to 15 MB. Anything
   else is refused with an inline message, and the page stays usable.
@@ -71,22 +70,22 @@ business hoarding it. The cost is that the artwork must be maskable at
 runtime, which the flood fill handles.
 
 **The panel is found by flood fill, not by a hardcoded rectangle.** The
-artwork's panel has a rounded corner and mosaic squares sitting on top of it,
-so a rectangle would either clip the corner or bury the squares. Flood filling
-the bright pixels from the centre of the panel yields exactly the region the
-photo should occupy, and the artwork's own luminance then fades the photo in
-along the edges so the corner and the square edges stay crisp.
+artwork's panel has a stepped bottom edge, a notch and a separate name bar
+beside it, so a rectangle would either clip the shape or cover the name bar.
+Flood filling the bright pixels from the centre of the panel yields exactly
+the region the photo should occupy, and the artwork's own luminance then fades
+the photo in along the edges so the notch and the stepped edge stay crisp.
 
 **The photo is composited, not pasted.** The artwork is drawn first, then each
 pixel of the photo is blended over it using an opacity derived from the
 artwork's luminance at that pixel. Bright artwork pixels (the panel) take the
-photo fully, dark pixels (the mosaic squares) take none of it, and the pixels
-in between (the antialiased edges) take a proportion. This keeps the frame
+photo fully, dark pixels (the notch) take none of it, and the pixels in
+between (the antialiased edges) take a proportion. This keeps the frame
 looking hand made rather than cut out.
 
-**Slot geometry is verified against the file, not guessed.** The pure white
-bounding box of the panel in `template.jpg` is x 423 to 860 and y 433 to 870,
-which is the 438 by 438 slot recorded as `PHOTO_SLOT` in
+**Slot geometry is verified against the file, not guessed.** The pure yellow
+bounding box of the panel in `template.png` is x 418 to 1541 and y 680 to 1633,
+which is the 1124 by 954 slot recorded as `PHOTO_SLOT` in
 `src/lib/photo-frame.ts`.
 
 ### Implementation skills
@@ -97,6 +96,8 @@ which is the 438 by 438 slot recorded as `PHOTO_SLOT` in
   wrappers over them.
 - `src/features/get-picture/components/photo-frame-studio.tsx` holds the
   upload, preview and download UI.
+- The attendee's name is drawn into the yellow bar beside the panel: it is
+  uppercased, shrunk to fit and truncated with an ellipsis when needed.
 - `src/features/get-picture/components/get-picture-hero.tsx` holds the page
   hero.
 - `src/routes/get-your-picture.tsx` is the route.
@@ -117,7 +118,7 @@ which is the 438 by 438 slot recorded as `PHOTO_SLOT` in
 - The artwork and the slot constants must agree. A change to the artwork
   needs `node scripts/build-photo-frame-fixture.mjs` re-run, and the mask
   tests then prove the panel is still found correctly.
-- The composite costs one flood fill over 438 by 438 pixels and one pass over
+- The composite costs one flood fill over 1124 by 954 pixels and one pass over
   the same area. That runs in a few milliseconds, well inside a frame budget
   for a user triggered action.
 - Large photos are decoded in the browser, so a 15 MB upload costs memory.
@@ -125,8 +126,5 @@ which is the 438 by 438 slot recorded as `PHOTO_SLOT` in
 
 ## Follow-up
 
-- The frame currently has no caption. The artwork reserves a white bar under
-  the panel for a name, and adding a text field that renders into it is a
-  natural next slice.
 - A server side render is not needed, but a shared preview image of the empty
   frame would help the social card for this route.

@@ -1,62 +1,67 @@
 /**
  * Geometry and pixel compositing for the "I Will Be Attending" photo frame.
  *
- * The frame artwork (`public/images/template.jpg`) is a 1280x1280 JPEG. Inside
- * it, a white panel marks where the photo goes. That panel is not a plain
- * rectangle: it has a large rounded top left corner, and the black and green
- * checker squares of the mosaic sit on top of it.
+ * The frame artwork (`public/images/template.png`) is a 2160x2160 PNG. Inside
+ * it, a solid yellow panel marks where the photo goes. The panel is a ticket
+ * shaped cutout: a narrow tab on the top left, a stepped bottom edge and a
+ * notch that keeps the artwork visible. A separate yellow bar to the right of
+ * the panel holds the attendee's name.
  *
  * So the photo is placed by flood filling the panel from its centre and
  * treating everything the fill did not reach as artwork that stays on top.
- * The result is the artwork with the photo showing through the white panel,
- * with every decorative square and the rounded corner preserved.
+ * The result is the artwork with the photo showing through the yellow panel,
+ * with the notch, the stepped edge and the name bar preserved.
  *
  * Everything here is browser only except the pure geometry helpers, which are
  * unit tested in `scripts/photo-frame.test.mjs`.
  */
 
 /** Path of the frame artwork in `public/`. */
-export const TEMPLATE_SOURCE = '/images/template.jpg';
+export const TEMPLATE_SOURCE = '/images/template.png';
 
 /** Edge length of the frame artwork in pixels. */
-export const TEMPLATE_SIZE = 1280;
+export const TEMPLATE_SIZE = 2160;
 
 /**
- * The white panel inside the artwork, in artwork pixels. Verified against the
- * JPEG: the pure white bounding box of the panel is x 423..860 and y 433..870.
+ * The yellow panel inside the artwork, in artwork pixels. Verified against the
+ * PNG: the panel's bounding box is x 418..1541 and y 680..1633.
  */
 export const PHOTO_SLOT = {
-  x: 423,
-  y: 433,
-  width: 438,
-  height: 438,
+  x: 418,
+  y: 680,
+  width: 1124,
+  height: 954,
 } as const;
 
 /**
- * The white name bar inside the artwork, in artwork pixels. Verified against
- * the JPEG: the pure white bounding box of the bar is x 421..858 and y 907..975.
+ * The yellow name bar inside the artwork, in artwork pixels. Verified against
+ * the PNG: the bar is x 1458..2069 and y 1472..1611.
  */
 export const NAME_BAR = {
-  x: 421,
-  y: 907,
-  width: 437,
-  height: 68,
+  x: 1458,
+  y: 1472,
+  width: 612,
+  height: 140,
 } as const;
 
 /** Font size range for the name, in artwork pixels. */
-export const NAME_MAX_FONT_SIZE = 44;
-export const NAME_MIN_FONT_SIZE = 22;
+export const NAME_MAX_FONT_SIZE = 72;
+export const NAME_MIN_FONT_SIZE = 32;
 
 /** Padding inside the bar, in artwork pixels. */
 export const NAME_BAR_PADDING = 28;
 
 /**
- * Luminance window used to build the panel mask. Pixels darker than
- * `MASK_FLOOR` are artwork (checker squares, corner edge), pixels brighter
- * than `MASK_CEILING` are fully replaced by the photo.
+ * Luminance window used to build the panel mask. The yellow panel has a
+ * luminance of about 193, the red accents about 115 and the black background
+ * 0. Pixels darker than `MASK_FLOOR` are artwork, pixels brighter than
+ * `MASK_CEILING` are fully replaced by the photo.
  */
-export const MASK_FLOOR = 170;
-export const MASK_CEILING = 250;
+export const MASK_FLOOR = 140;
+export const MASK_CEILING = 180;
+
+/** Solid yellow used for the photo panel and the name bar in the artwork. */
+const PANEL_COLOR = '#fbc31d';
 
 /** Largest upload accepted, in bytes. */
 export const MAX_UPLOAD_BYTES = 15 * 1024 * 1024;
@@ -142,12 +147,12 @@ export function toLuminance(data: Uint8ClampedArray): Uint8Array {
 }
 
 /**
- * Flood fills the white panel of the artwork.
+ * Flood fills the yellow panel of the artwork.
  *
  * Returns a mask, one byte per pixel of the slot, where 255 means the pixel
  * belongs to the panel and the photo may show through it. The fill starts at
- * the centre of the panel and only spreads over bright pixels, so the checker
- * squares and the separate decorative white square are left out.
+ * the centre of the panel and only spreads over bright pixels, so the dark
+ * notch, the stepped edge and the separate name bar are left out.
  */
 export function buildPanelMask(
   luminance: Uint8Array,
@@ -217,8 +222,7 @@ export function buildPanelMask(
 
 /**
  * Grows the mask by one pixel in every direction so the antialiased edge of
- * the panel (the rounded corner and the square edges) is included and can be
- * faded smoothly.
+ * the panel is included and can be faded smoothly.
  */
 export function dilateMask(mask: Uint8Array, width: number, height: number): Uint8Array {
   const grown = new Uint8Array(mask.length);
@@ -247,9 +251,9 @@ export function dilateMask(mask: Uint8Array, width: number, height: number): Uin
 }
 
 /**
- * Composites a photo into the white panel of the frame artwork.
+ * Composites a photo into the yellow panel of the frame artwork.
  *
- * Returns a fresh 1280x1280 canvas: the artwork with the photo placed in the
+ * Returns a fresh 2160x2160 canvas: the artwork with the photo placed in the
  * panel and the name drawn into the name bar. The canvas is not tainted (same
  * origin artwork, same origin upload), so it can be exported with `toBlob`.
  */
@@ -273,8 +277,8 @@ export function compositePhoto(
   const artworkPixels = context.getImageData(slot.x, slot.y, slot.width, slot.height);
 
   // Draw the photo into a slot sized canvas using a cover crop. The canvas is
-  // filled white first so a transparent PNG blends into the white panel
-  // instead of punching a hole in it.
+  // filled with the panel colour first so a transparent PNG blends into the
+  // panel instead of punching a hole in it.
   const photoCanvas = document.createElement('canvas');
   photoCanvas.width = slot.width;
   photoCanvas.height = slot.height;
@@ -282,7 +286,7 @@ export function compositePhoto(
   if (!photoContext) {
     throw new Error('Canvas 2D context is unavailable');
   }
-  photoContext.fillStyle = '#ffffff';
+  photoContext.fillStyle = PANEL_COLOR;
   photoContext.fillRect(0, 0, slot.width, slot.height);
 
   const crop = coverSourceRect(
@@ -342,8 +346,8 @@ export function compositePhoto(
  */
 const NAME_FONT_FAMILY = 'Product Sans';
 
-/** Colour of the name text, sampled from the "TECH IGNITE'26" lockup. */
-const NAME_FONT_COLOR = '#9b80e9';
+/** Colour of the name text: the artwork's black, for contrast on yellow. */
+const NAME_FONT_COLOR = '#000000';
 
 /**
  * Waits for the display font to load, so canvas text is measured and drawn
@@ -398,7 +402,7 @@ export function truncateName(
 }
 
 /**
- * Draws the name into the white name bar of the artwork.
+ * Draws the name into the yellow name bar of the artwork.
  *
  * The name is uppercased and centred in the bar, shrunk to fit and then
  * truncated if it is still too long. An empty name leaves the bar blank,

@@ -6,6 +6,7 @@ import {
   loadArtwork,
   loadNameFont,
   MAX_UPLOAD_BYTES,
+  TEMPLATE_SIZE,
 } from '@/lib/photo-frame';
 
 type StudioStatus = 'idle' | 'working' | 'ready' | 'error';
@@ -20,9 +21,9 @@ function isAccepted(file: File): boolean {
  * Upload → preview → download for the "I Will Be Attending" photo frame.
  *
  * All image work happens in the browser: the artwork is fetched once, the
- * user's photo is composited into the artwork's white slot, the name is drawn
- * into the name bar, and the result is exported as a PNG. Nothing is uploaded
- * to a server.
+ * user's photo is composited into the artwork's yellow panel, the name is
+ * drawn into the name bar, and the result is exported as a PNG. Nothing is
+ * uploaded to a server.
  */
 export function PhotoFrameStudio() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -197,8 +198,8 @@ export function PhotoFrameStudio() {
         <div className="overflow-hidden rounded-panel border border-line bg-ink-raised p-4 sm:p-6">
           <canvas
             ref={canvasRef}
-            width={1280}
-            height={1280}
+            width={TEMPLATE_SIZE}
+            height={TEMPLATE_SIZE}
             aria-label="Preview of your photo inside the Tech Ignite '26 frame"
             className="w-full rounded-xs bg-ink"
           />
@@ -271,8 +272,8 @@ export function PhotoFrameStudio() {
             className="h-11 w-full rounded-xs border border-line bg-ink-raised px-4 text-label text-paper outline-none placeholder:text-muted focus-visible:border-brand-blue focus-visible:ring-2 focus-visible:ring-brand-blue/40"
           />
           <p className="text-sm text-muted">
-            Printed in the bar under your photo. Leave it empty to leave the bar
-            blank.
+            Printed in the bar beside your photo. Leave it empty to leave the
+            bar blank.
           </p>
         </div>
 

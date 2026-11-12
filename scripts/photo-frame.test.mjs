@@ -26,16 +26,24 @@ async function loadSlotLuminance() {
   return new Uint8Array(buffer);
 }
 
-test('the photo slot sits inside the 1280px artwork', () => {
-  assert.equal(TEMPLATE_SIZE, 1280);
+test('the photo slot sits inside the 2160px artwork', () => {
+  assert.equal(TEMPLATE_SIZE, 2160);
   assert.ok(PHOTO_SLOT.x >= 0);
   assert.ok(PHOTO_SLOT.y >= 0);
   assert.ok(PHOTO_SLOT.x + PHOTO_SLOT.width <= TEMPLATE_SIZE);
   assert.ok(PHOTO_SLOT.y + PHOTO_SLOT.height <= TEMPLATE_SIZE);
 });
 
-test('the photo slot is square', () => {
-  assert.equal(PHOTO_SLOT.width, PHOTO_SLOT.height);
+test('the photo slot is wider than it is tall', () => {
+  assert.ok(PHOTO_SLOT.width > PHOTO_SLOT.height);
+});
+
+test('the name bar sits inside the artwork and beside the panel', () => {
+  assert.ok(NAME_BAR.x >= 0);
+  assert.ok(NAME_BAR.y >= 0);
+  assert.ok(NAME_BAR.x + NAME_BAR.width <= TEMPLATE_SIZE);
+  assert.ok(NAME_BAR.y + NAME_BAR.height <= TEMPLATE_SIZE);
+  assert.ok(NAME_BAR.x + NAME_BAR.width / 2 > PHOTO_SLOT.x + PHOTO_SLOT.width);
 });
 
 test('a cover crop keeps the whole target box filled', () => {
@@ -77,7 +85,7 @@ test('a cover crop rejects empty images', () => {
   assert.throws(() => coverSourceRect(100, 0, 438, 438));
 });
 
-test('the mask keeps the artwork dark and replaces the artwork white', () => {
+test('the mask keeps the artwork dark and replaces the artwork yellow', () => {
   assert.equal(maskOpacity(0), 0);
   assert.equal(maskOpacity(MASK_FLOOR), 0);
   assert.equal(maskOpacity(255), 1);
@@ -91,11 +99,11 @@ test('the mask ramps smoothly between the artwork and the photo', () => {
   assert.ok(maskOpacity(mid + 1) > maskOpacity(mid));
 });
 
-test('the panel mask covers the white panel of the real artwork', async () => {
+test('the panel mask covers the yellow panel of the real artwork', async () => {
   const luminance = await loadSlotLuminance();
   const mask = buildPanelMask(luminance, SLOT_WIDTH, SLOT_HEIGHT);
 
-  // The panel centre is white artwork, so the fill reaches it.
+  // The panel centre is yellow artwork, so the fill reaches it.
   const centre = (SLOT_HEIGHT / 2) * SLOT_WIDTH + SLOT_WIDTH / 2;
   assert.equal(mask[centre], 255);
 
@@ -105,31 +113,41 @@ test('the panel mask covers the white panel of the real artwork', async () => {
   assert.ok(covered < SLOT_WIDTH * SLOT_HEIGHT);
 });
 
-test('the panel mask leaves the black mosaic squares on top', async () => {
+test('the panel mask leaves the black notch on top', async () => {
   const luminance = await loadSlotLuminance();
   const mask = buildPanelMask(luminance, SLOT_WIDTH, SLOT_HEIGHT);
 
-  // The black square that overlaps the panel, near the bottom left.
-  const blackSquare = (790 - PHOTO_SLOT.y) * SLOT_WIDTH + (505 - PHOTO_SLOT.x);
-  assert.equal(mask[blackSquare], 0);
+  // The rectangular notch cut out of the bottom left of the panel.
+  const notch = (1400 - PHOTO_SLOT.y) * SLOT_WIDTH + (600 - PHOTO_SLOT.x);
+  assert.equal(mask[notch], 0);
 });
 
-test('the panel mask leaves the decorative white square on top', async () => {
+test('the panel mask leaves the separate name bar on top', async () => {
   const luminance = await loadSlotLuminance();
   const mask = buildPanelMask(luminance, SLOT_WIDTH, SLOT_HEIGHT);
 
-  // The small white square of the checker mosaic, below the black square.
-  const whiteSquare = (845 - PHOTO_SLOT.y) * SLOT_WIDTH + (505 - PHOTO_SLOT.x);
-  assert.equal(mask[whiteSquare], 0);
+  // The left edge of the name bar overlaps the slot bounding box, but it is
+  // separated from the panel by the black perforation.
+  const nameBar = (1540 - PHOTO_SLOT.y) * SLOT_WIDTH + (1500 - PHOTO_SLOT.x);
+  assert.equal(mask[nameBar], 0);
 });
 
-test('the panel mask reaches the rounded top left corner of the panel', async () => {
+test('the panel mask reaches the top tab of the panel', async () => {
   const luminance = await loadSlotLuminance();
   const mask = buildPanelMask(luminance, SLOT_WIDTH, SLOT_HEIGHT);
 
-  // A pixel inside the panel, down and right of the corner arc.
-  const insideCorner = (500 - PHOTO_SLOT.y) * SLOT_WIDTH + (470 - PHOTO_SLOT.x);
-  assert.equal(mask[insideCorner], 255);
+  // The narrow tab that rises above the main panel on the left.
+  const tab = (700 - PHOTO_SLOT.y) * SLOT_WIDTH + (500 - PHOTO_SLOT.x);
+  assert.equal(mask[tab], 255);
+});
+
+test('the panel mask reaches the stepped bottom edge of the panel', async () => {
+  const luminance = await loadSlotLuminance();
+  const mask = buildPanelMask(luminance, SLOT_WIDTH, SLOT_HEIGHT);
+
+  // The lower part of the panel, below the notch.
+  const step = (1550 - PHOTO_SLOT.y) * SLOT_WIDTH + (600 - PHOTO_SLOT.x);
+  assert.equal(mask[step], 255);
 });
 
 test('dilating the mask grows it by one pixel in every direction', async () => {
@@ -147,4 +165,17 @@ test('dilating the mask grows it by one pixel in every direction', async () => {
       assert.equal(grown[index], 255);
     }
   }
+});
+
+test('the name font shrinks to fit the available width', () => {
+  const measure = (fontSize) => fontSize * 10;
+  assert.equal(fitNameFontSize(measure, 600), 60);
+  assert.equal(fitNameFontSize(measure, 1000), NAME_MAX_FONT_SIZE);
+  assert.equal(fitNameFontSize(measure, 1), NAME_MIN_FONT_SIZE);
+});
+
+test('a name that is too long is truncated with an ellipsis', () => {
+  const measure = (text) => text.length * 10;
+  assert.equal(truncateName(measure, 'ADA', 80), 'ADA');
+  assert.equal(truncateName(measure, 'ADA LOVELACE', 80), 'ADA LOV…');
 });
