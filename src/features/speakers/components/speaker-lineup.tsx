@@ -5,10 +5,9 @@ import { FaLinkedin } from 'react-icons/fa6';
 import { lineupSpeakers } from '@/utils/speakers';
 import { DummySpeakerCard } from '@/features/speakers/components/dummy-speaker-card';
 import { REGISTER_URL } from '@/utils/footer';
-import { imageSettle, slideInRight, springUp, staggerContainer, useScrollGate } from '@/lib/motion';
+import { imageSettle, slideInRight, springUp, staggerContainer } from '@/lib/motion';
 
 export function SpeakerLineup() {
-  const userScrolled = useScrollGate();
   /** Speakers whose bio overlay the visitor explicitly dismissed with the X.
    * Stored as a Set so dismissing one card never affects another. */
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
@@ -39,10 +38,10 @@ export function SpeakerLineup() {
       className="border-t border-line bg-ink pt-10 pb-20 text-paper sm:pt-14 sm:pb-24"
     >
       <motion.div
-        variants={staggerContainer(0.16)}
+        variants={staggerContainer(0.12)}
         initial="hidden"
-        whileInView={userScrolled ? 'visible' : 'hidden'}
-        viewport={{ once: false, amount: 0.15 }}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.05 }}
         className="container"
       >
         <motion.h2

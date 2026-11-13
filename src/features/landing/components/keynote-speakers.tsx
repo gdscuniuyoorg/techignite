@@ -11,13 +11,11 @@ import {
   slideInRight,
   springUp,
   staggerContainer,
-  useScrollGate,
 } from '@/lib/motion';
 
 const MotionLink = motion.create(Link);
 
 export function KeynoteSpeakers() {
-  const userScrolled = useScrollGate();
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
 
   const dismissBio = (name: string, event: ReactMouseEvent) => {
@@ -36,10 +34,10 @@ export function KeynoteSpeakers() {
       className="overflow-hidden bg-ink text-paper"
     >
       <motion.div
-        variants={staggerContainer(0.16)}
+        variants={staggerContainer(0.12)}
         initial="hidden"
-        whileInView={userScrolled ? 'visible' : 'hidden'}
-        viewport={{ once: false, amount: 0.2 }}
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.05 }}
         className="container pt-16 sm:pt-20"
       >
         <div className="border-t border-border pt-8">
@@ -80,10 +78,10 @@ export function KeynoteSpeakers() {
       {/* Featured speaker carousel / list */}
       <div className="mt-16 scrollbar-none overflow-x-auto sm:mt-20">
         <motion.ul
-          variants={staggerContainer(0.09)}
+          variants={staggerContainer(0.08)}
           initial="hidden"
-          whileInView={userScrolled ? 'visible' : 'hidden'}
-          viewport={{ once: false, amount: 0.2 }}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.05 }}
           className="flex w-max items-start gap-4 pr-8 pl-[max(1.25rem,calc((100vw-90rem)/2+1.5rem))]"
         >
           {lineupSpeakers.map((speaker, index) => {
