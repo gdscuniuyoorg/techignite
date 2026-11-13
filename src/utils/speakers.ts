@@ -73,7 +73,7 @@ export const lineupSpeakers: readonly LineupSpeaker[] = [
   {
     name: 'Chizoba Okoye',
     role: 'Senior Technical Product Manager, Paga',
-    image: 'chizoba-paga.jpeg',
+    image: 'chizoba-paga.png',
     width: 832,
     height: 880,
     linkedin: 'https://www.linkedin.com/in/okoye-chizoba-anthony',
