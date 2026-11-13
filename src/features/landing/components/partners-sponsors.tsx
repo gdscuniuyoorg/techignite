@@ -60,14 +60,14 @@ const sponsorTiers: readonly SponsorTier[] = [
 
 /** Community partners displayed in the unending marquee carousel. */
 const communityPartners: readonly SponsorLogo[] = [
-  { name: 'GDG on Campus, Aksu', src: '/images/sponsors/gdgoc-aksu.png' },
+  { name: 'GDG on Campus, Aksu', src: '/images/sponsors/gdgoc-aksu.png', sizeClass: 'h-30' },
   { name: 'AWS Student builders', src: '/images/sponsors/aws.png' },
   { name: 'Event Sparks', src: '/images/sponsors/event-sparks.jpg' },
-  { name: 'SheFi', src: '/images/sponsors/shefi.png' },
+  { name: 'SheFi', src: '/images/sponsors/shefi.png', sizeClass: 'h-30' },
   { name: 'Notion uniuyo', src: '/images/sponsors/notion-uniuyo.png' },
-  { name: 'Square One', src: '/images/sponsors/square-one.png' },
+  { name: 'Square One', src: '/images/sponsors/square-one.png', sizeClass: 'h-30' },
   { name: 'Interswitch Developer Community', src: '/images/sponsors/interswitch.png' },
-  { name: 'PIFOSA Creative Africa', src: '/images/sponsors/pifosa.png' },
+  { name: 'PIFOSA Creative Africa', src: '/images/sponsors/pifosa.png', sizeClass: 'h-30' },
   // { name: 'The Builders Network', src: '/images/sponsors/tbn.png' },
 ];
 
