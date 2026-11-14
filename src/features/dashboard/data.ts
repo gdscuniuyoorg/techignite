@@ -30,3 +30,14 @@ export const STEP_INDEX: Record<DashboardSubmissionStatus, number> = {
   accepted: 3,
   rejected: 3,
 };
+
+/**
+ * Hackathon team hosting coupon. Displayed on the dashboard submissions page.
+ */
+export const HACKATHON_COUPON = {
+  code: 'TECH_IGNITE_UYO_2026',
+  discount: '100% off Premium',
+  uses: 20,
+  perClient: 1,
+  validUntil: '13 Nov 2026',
+} as const;

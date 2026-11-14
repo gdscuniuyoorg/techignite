@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Check, FolderGit2, Lock, Send, Trophy } from 'lucide-react';
+import { Check, Copy, FolderGit2, Lock, Send, Trophy, Tag } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -28,7 +28,7 @@ import {
 import { SubmissionStatusBadge } from './submission-status-badge';
 import { formatTeamDate, isSubmissionLocked, toSubmissionStatus } from './team-status';
 import { TEAM_PROFILE_KEY, useTeamProfile } from '../hooks/use-team-profile';
-import { EVENT } from '../data';
+import { EVENT, HACKATHON_COUPON } from '../data';
 
 /** Hackathon info card plus the live, judged project submission. */
 export function ApplicationSubmissions() {
@@ -136,6 +136,63 @@ export function ApplicationSubmissions() {
               <dt className="text-xs text-slate-500">Deadline</dt>
               <dd className="mt-0.5 text-sm font-medium text-slate-900">
                 {EVENT.deadline}
+              </dd>
+            </div>
+          </dl>
+        </CardContent>
+      </Card>
+
+      {/* Hackathon team hosting coupon */}
+      <Card className="bg-slate-50/60">
+        <CardHeader className="flex-wrap">
+          <div className="flex items-center gap-2">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-brand-blue ring-1 ring-slate-200">
+              <Tag size={17} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <div>
+              <CardTitle>LiteHosting coupon</CardTitle>
+              <CardDescription>
+                For hackathon teams — copy the code at checkout.
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <dl className="grid gap-3 sm:grid-cols-4">
+            <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
+              <dt className="text-xs text-slate-500">Coupon code</dt>
+              <dd className="mt-1 flex items-center justify-between gap-2">
+                <code className="font-mono text-sm font-semibold text-slate-900">
+                  {HACKATHON_COUPON.code}
+                </code>
+                <button
+                  type="button"
+                  aria-label="Copy coupon code"
+                  onClick={() => {
+                    void navigator.clipboard?.writeText(HACKATHON_COUPON.code).catch(() => {});
+                  }}
+                  className="flex shrink-0 items-center justify-center rounded-xs p-1 text-slate-400 transition-colors hover:text-brand-blue"
+                >
+                  <Copy size={14} aria-hidden="true" />
+                </button>
+              </dd>
+            </div>
+            <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
+              <dt className="text-xs text-slate-500">Discount</dt>
+              <dd className="mt-0.5 text-sm font-medium text-slate-900">
+                {HACKATHON_COUPON.discount}
+              </dd>
+            </div>
+            <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
+              <dt className="text-xs text-slate-500">Valid until</dt>
+              <dd className="mt-0.5 text-sm font-medium text-slate-900">
+                {HACKATHON_COUPON.validUntil}
+              </dd>
+            </div>
+            <div className="rounded-lg bg-white p-3 ring-1 ring-slate-200">
+              <dt className="text-xs text-slate-500">Limits</dt>
+              <dd className="mt-0.5 text-sm font-medium text-slate-900">
+                {String(HACKATHON_COUPON.uses)} total · {String(HACKATHON_COUPON.perClient)}/client
               </dd>
             </div>
           </dl>
