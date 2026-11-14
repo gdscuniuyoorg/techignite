@@ -80,8 +80,17 @@ export const lineupSpeakers: readonly LineupSpeaker[] = [
     bio: "Chizoba Okoye is a Senior Technical Product Manager who seamlessly bridges the gap between engineering and business strategy to build scalable, user-focused solutions. His tech journey began with a Computer Science degree from UNN and a passion for community building at the campus Google Developer Group (GDG). Having navigated both fast-paced startups and structured tech giants, Chizoba brings a highly adaptable, full-picture perspective to software engineering and product development.\n\n\nCurrently at Paga, he drives the technical vision for critical B2B payment infrastructures. Chizoba excels at guiding cross-functional teams through the entire product lifecycle, delivering frictionless digital payment experiences that advance financial inclusion."
   },
   {
+    name: 'Stephen Jude',
+    role: 'Founder, Litehost',
+    image: 'stephen-litehost.jpeg',
+    width: 832,
+    height: 880,
+    linkedin: 'https://www.linkedin.com/in/stephenjudeso/',
+    bio: "He's a backend engineer with about nine years of experience, mostly in PHP and Laravel, and He has spent much of that time in payments.\n\n\nMost recently He was a Senior Backend Engineer on the Payment Rails team at Cauridor, a cross-border payments company operating across African markets. There He built a double-entry ledger integrated with Blnk. Before that He was Engineering Manager at Radius (Pay4Me, Techstars ‘22), which helps international students make cross-border payments. Earlier He worked on electricity subscription and activation systems at Greenlite Energy Systems.\n\n\nHe's also the Director of Litehost (getlitehost.com), a developer-focused web hosting company serving small and medium businesses in Nigeria. Running it keeps him close to infrastructure: servers, migrations, email, and the day-to-day work of keeping customer sites online. He's now building fastdeploy, a server management and deployment platform for Laravel apps.\n\n\nHe maintains 21 open-source Laravel and Filament packages, including filament-two-factor-authentication, filament-feature-flags, and filament-debugger, which together have passed 1,000,000 downloads on Packagist and have been featured on Laravel News and Filament Daily. He also write about Laravel, cPanel, and DevOps at stephenjude.me."
+  },
+  {
     name: 'Saviour Inyang',
-    role: 'Senior Product Designer, Cowrywise',
+    role: 'Product Designer, Cowrywise',
     image: 'saviour-cowrywise.jpg',
     width: 832,
     height: 880,
