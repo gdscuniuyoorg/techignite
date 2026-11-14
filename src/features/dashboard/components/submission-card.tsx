@@ -53,7 +53,7 @@ export function SubmissionCard({ team, status }: SubmissionCardProps) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <h3 className="text-sm font-semibold text-slate-900">
-              {team.projectTitle.length > 0 ? team.projectTitle : 'Untitled project'}
+              {team.projectTitle.length > 0 ? team.projectTitle : ''}
             </h3>
             <SubmissionStatusBadge status={status} />
           </div>

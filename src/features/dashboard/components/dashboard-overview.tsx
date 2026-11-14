@@ -262,7 +262,7 @@ export function DashboardOverview() {
               <div>
                 <p className="text-xs font-medium text-slate-500">Project</p>
                 <h2 className="mt-1 text-base font-semibold text-slate-950">
-                  {team.projectTitle.length > 0 ? team.projectTitle : 'Untitled project'}
+                  {team.projectTitle.length > 0 ? team.projectTitle : ''}
                 </h2>
               </div>
               <SubmissionStatusBadge status={status} />
