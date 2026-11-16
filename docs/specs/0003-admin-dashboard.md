@@ -175,3 +175,55 @@ Depth target: **Alpha** (build + `/check verify`) unless the user says otherwise
 
 1. Production verification of the full login + mutation flows (after local sign-off).
 2. Beta depth / adding a test runner.
+
+## Addendum 2026-11-16 · user management, password reset, campaign delivery
+
+The v1 scope above lists admin user management as a non-goal. Two organizer
+requests pulled part of it forward: one-button password resets for any managed
+user, and campaigns that actually send on schedule. Both needed backend
+changes, recorded here so the admin UI and API stay in sync.
+
+### Password reset
+
+- New endpoint: `POST /api/admin/users/:userId/reset-password` (admin).
+- The backend generates a random password, hashes and stores it, revokes the
+  user's existing sessions (`tokensRevokedAt`), and emails the plaintext
+  password once via the new `password-updated` template.
+- Self-reset and inactive/suspended accounts are rejected. The plaintext
+  password is returned in the response only when the email fails, so an
+  organizer can hand it over out-of-band; it is never logged.
+- The Users screen exposes a per-user **Reset password** action with a
+  confirmation dialog. Success shows "A new password was emailed to …"; the
+  fallback notice displays the password when `emailSent` is false.
+
+### Admin login and custom roles
+
+- `POST /api/admin/login` now accepts active staff with `UserRole.CUSTOM` whose
+  custom role resolves to at least one permission, and returns the resolved
+  `permissions` plus `customRoleId`. Applicants and custom roles with no
+  permissions still receive 403.
+- The login audit event is written once, by `userAuthService.login`; the
+  controller no longer duplicates it.
+
+### Campaign delivery
+
+- Scheduled campaigns previously never fired without a manual send. A
+  `CampaignService` sweeper now runs at startup and every 60s, sending due
+  `SCHEDULED` campaigns. The scheduled-email sweeper gained a re-entrancy guard
+  so overlapping ticks cannot double-send.
+- Audience resolution is authoritative: `accepted_teams` requires an accepted
+  application, `all_applicants` uses application emails, and newsletter
+  unsubscribes are filtered. Empty audiences and empty bodies fail loudly
+  instead of silently completing.
+- Duplicate sends are rejected; a run stuck `IN_PROGRESS` for more than ten
+  minutes is recovered and reverted to `SCHEDULED` (or `DRAFT` when it had no
+  schedule). `sentAt` is written only for delivered recipients.
+- `POST /api/campaigns` and the finalist invite accept HTML-only campaigns
+  (`content` or `htmlContent`), so image-led emails no longer need filler text.
+- The composer has a **Send now** action that snapshots the form, saves the
+  latest edits, then runs the existing typed-confirmation send. Body validation
+  lives in `src/lib/email-body.ts` (`hasEmailBody`) with a regression test, so
+  image-only emails are accepted while truly empty ones are rejected.
+- The Tiptap editor keeps a persistent toolbar (headings, lists, quote, link,
+  image, alignment, merge variables, clear formatting) with a live preview that
+  substitutes sample recipient values.

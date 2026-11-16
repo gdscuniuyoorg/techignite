@@ -98,9 +98,9 @@ function AdminTeams() {
     ]);
 
   const finalistMutation = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async ({ id, isFinalist }: { id: string; isFinalist: boolean }) => {
       try {
-        await toggleTeamFinalist(id);
+        await toggleTeamFinalist(id, isFinalist);
       } catch (error) {
         throw new Error(await adminErrorMessage(error), { cause: error });
       }
@@ -273,7 +273,10 @@ function AdminTeams() {
                     type="button"
                     disabled={finalistMutation.isPending}
                     onClick={() => {
-                      finalistMutation.mutate(team.id);
+                      finalistMutation.mutate({
+                        id: team.id,
+                        isFinalist: !team.isFinalist,
+                      });
                     }}
                     className="flex h-10 items-center gap-2 rounded-xs border border-line px-3 text-xs text-white/75 hover:border-brand-amber hover:text-white disabled:opacity-50"
                   >

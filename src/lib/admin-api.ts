@@ -805,8 +805,14 @@ export async function getTeam(id: string): Promise<AdminTeam> {
   return mapTeam(team);
 }
 
-export async function toggleTeamFinalist(id: string): Promise<void> {
-  await adminApi.patch(`api/teams/${encodeURIComponent(id)}/finalist`);
+export async function toggleTeamFinalist(
+  id: string,
+  isFinalist?: boolean,
+): Promise<void> {
+  const json = isFinalist !== undefined ? { isFinalist } : {};
+  await adminApi.patch(`api/teams/${encodeURIComponent(id)}/finalist`, {
+    json,
+  });
 }
 
 export async function deleteTeam(id: string): Promise<void> {
@@ -892,6 +898,27 @@ export async function updateAdminUserRole(
 
 export async function deactivateAdminUser(id: string): Promise<void> {
   await adminApi.patch(`api/admin/users/${encodeURIComponent(id)}/deactivate`);
+}
+
+export interface ResetPasswordResult {
+  readonly emailSent: boolean;
+  /** Present only when the notification email failed, as a manual fallback. */
+  readonly password?: string;
+}
+
+/**
+ * Reset a user's dashboard password. The backend generates the password and
+ * emails it to the user; it returns the password only if the email failed.
+ */
+export async function resetAdminUserPassword(id: string): Promise<ResetPasswordResult> {
+  const body: unknown = await adminApi
+    .post(`api/admin/users/${encodeURIComponent(id)}/reset-password`)
+    .json();
+  const data = isRecord(body) ? body : {};
+  return {
+    emailSent: data.emailSent === true,
+    ...(typeof data.password === 'string' ? { password: data.password } : {}),
+  };
 }
 
 export async function listUsers(params: {
@@ -1079,8 +1106,8 @@ export interface CampaignInput {
   content: string;
   htmlContent: string;
   audience: CampaignAudience;
-  customRecipients?: readonly string[];
-  scheduledFor?: string;
+  customRecipients?: readonly string[] | null;
+  scheduledFor?: string | null;
 }
 
 export async function createCampaign(input: CampaignInput): Promise<EmailCampaign> {

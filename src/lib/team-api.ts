@@ -482,16 +482,21 @@ export async function activateOnboarding(
   return sessionFromBody(body, memberEmail);
 }
 
-export async function updateTeam(input: TeamUpdateInput): Promise<void> {
-  await teamApi.patch('api/teams', { json: input });
+export async function updateTeam(teamId: string, input: TeamUpdateInput): Promise<void> {
+  await teamApi.patch(`api/teams/${encodeURIComponent(teamId)}/submission`, { json: input });
 }
 
-export async function connectRepository(repositoryUrl: string): Promise<void> {
-  await teamApi.patch('api/teams/repo', { json: { repoUrl: repositoryUrl } });
+export async function connectRepository(
+  teamId: string,
+  repositoryUrl: string,
+): Promise<void> {
+  await teamApi.patch(`api/teams/${encodeURIComponent(teamId)}/repository`, {
+    json: { repoUrl: repositoryUrl },
+  });
 }
 
-export async function submitTeam(): Promise<void> {
-  await teamApi.post('api/teams/submit');
+export async function submitTeam(teamId: string): Promise<void> {
+  await teamApi.post(`api/teams/${encodeURIComponent(teamId)}/submit`);
 }
 
 // ─── Error messages ────────────────────────────────────────────────────────

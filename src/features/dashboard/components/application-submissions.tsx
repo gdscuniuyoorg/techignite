@@ -65,14 +65,14 @@ export function ApplicationSubmissions() {
       techStack: values.technologies.join(', '),
       ...(values.demoUrl.length > 0 ? { demoUrl: values.demoUrl } : {}),
     };
-    await updateTeam(input);
+    await updateTeam(team.id, input);
 
     if (values.repositoryUrl.length > 0 && values.repositoryUrl !== team.repositoryUrl) {
-      await connectRepository(values.repositoryUrl);
+      await connectRepository(team.id, values.repositoryUrl);
     }
 
     if (mode === 'submit') {
-      await submitTeam();
+      await submitTeam(team.id);
     }
 
     await queryClient.invalidateQueries({ queryKey: TEAM_PROFILE_KEY });

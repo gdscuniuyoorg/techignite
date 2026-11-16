@@ -1,6 +1,7 @@
 import { formText } from '@/lib/form';
+import { hasEmailBody } from '@/lib/email-body';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useRef, type SyntheticEvent } from 'react';
+import { useRef, useState, type SyntheticEvent } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Mail, Download, Send, FlaskConical, Ban, Trash2 } from 'lucide-react';
 import {
@@ -19,6 +20,7 @@ import {
   adminErrorMessage,
   type CampaignAudience,
   type CampaignStatus,
+  type EmailCampaign,
 } from '@/lib/admin-api';
 import type { EmailDocument } from '@/features/admin/components/tiptap-editor';
 import { CampaignComposer } from '@/features/admin/components/campaign-composer';
@@ -76,6 +78,13 @@ function AdminEmail() {
   const testAddressRef = useRef<HTMLInputElement>(null);
   const documentRef = useRef<EmailDocument>({ html: '<p></p>', text: '' });
   const finalistSubjectRef = useRef<HTMLInputElement>(null);
+  const [createdCampaignForSend, setCreatedCampaignForSend] = useState<EmailCampaign | null>(null);
+  const [composerError, setComposerError] = useState<string | null>(null);
+  /**
+   * Composer form snapshot captured when "Send now" is pressed. Saving it
+   * before sending guarantees the delivered email matches the composer.
+   */
+  const pendingSendDataRef = useRef<FormData | null>(null);
 
   const setSearch = (patch: Partial<EmailSearch>) =>
     void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true });
@@ -110,48 +119,57 @@ function AdminEmail() {
   const invalidateCampaigns = () =>
     void queryClient.invalidateQueries({ queryKey: ['admin', 'campaigns'] });
 
+  /**
+   * Parse and persist the composer form. Returns the created campaign, or null
+   * when an existing campaign was updated. Throws plain validation errors;
+   * callers wrap them for display.
+   */
+  const persistCampaign = async (input: FormData): Promise<EmailCampaign | null> => {
+    const name = formText(input, 'name').trim();
+    const subject = formText(input, 'subject').trim();
+    const audience = formText(input, 'audience') as CampaignAudience;
+    const scheduledForRaw = formText(input, 'scheduledFor').trim();
+    const customRaw = formText(input, 'customRecipients');
+    const { html, text } = documentRef.current;
+
+    if (!name || !subject) {
+      throw new Error('Campaign name and subject are required.');
+    }
+    if (!hasEmailBody(html, text)) {
+      throw new Error('The email body is empty.');
+    }
+
+    const customRecipients = customRaw
+      .split(/[\n,;]+/)
+      .map((entry) => entry.trim())
+      .filter((entry) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(entry));
+    if (audience === 'custom' && customRecipients.length === 0) {
+      throw new Error('Add at least one valid email address for a custom audience.');
+    }
+
+    const payload = {
+      name,
+      subject,
+      content: text,
+      htmlContent: html,
+      audience,
+      customRecipients: audience === 'custom' ? customRecipients : null,
+      scheduledFor: scheduledForRaw
+        ? new Date(scheduledForRaw).toISOString()
+        : null,
+    };
+
+    if (editingCampaign) {
+      await updateCampaign(editingCampaign.id, payload);
+      return null;
+    }
+    return await createCampaign(payload);
+  };
+
   const saveMutation = useMutation({
     mutationFn: async (input: FormData) => {
-      const name = formText(input, 'name').trim();
-      const subject = formText(input, 'subject').trim();
-      const audience = formText(input, 'audience') as CampaignAudience;
-      const scheduledForRaw = formText(input, 'scheduledFor').trim();
-      const customRaw = formText(input, 'customRecipients');
-      const { html, text } = documentRef.current;
-
-      if (!name || !subject) {
-        throw new Error('Campaign name and subject are required.');
-      }
-      if (!text.trim()) {
-        throw new Error('The email body is empty.');
-      }
-
-      const customRecipients = customRaw
-        .split(/[\n,;]+/)
-        .map((entry) => entry.trim())
-        .filter((entry) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(entry));
-      if (audience === 'custom' && customRecipients.length === 0) {
-        throw new Error('Add at least one valid email address for a custom audience.');
-      }
-
-      const payload = {
-        name,
-        subject,
-        content: text,
-        htmlContent: html,
-        audience,
-        ...(audience === 'custom' ? { customRecipients } : {}),
-        ...(scheduledForRaw
-          ? { scheduledFor: new Date(scheduledForRaw).toISOString() }
-          : {}),
-      };
-
       try {
-        if (editingCampaign) {
-          await updateCampaign(editingCampaign.id, payload);
-          return null;
-        }
-        return await createCampaign(payload);
+        return await persistCampaign(input);
       } catch (error) {
         throw new Error(await adminErrorMessage(error), { cause: error });
       }
@@ -166,16 +184,32 @@ function AdminEmail() {
   });
 
   const sendMutation = useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (input: {
+      readonly id: string;
+      readonly data: FormData | null;
+    }) => {
       try {
+        let id = input.id;
+        if (input.data) {
+          // Save the composer's latest edits before sending so the email
+          // matches what the author sees.
+          const saved = await persistCampaign(input.data);
+          id = saved?.id ?? input.id;
+        }
         await sendCampaign(id);
+        return id;
       } catch (error) {
         throw new Error(await adminErrorMessage(error), { cause: error });
       }
     },
-    onSuccess: () => {
+    onSuccess: (id, input) => {
+      pendingSendDataRef.current = null;
       invalidateCampaigns();
-      setSearch({ sending: undefined, confirmText: undefined });
+      setSearch({
+        sending: undefined,
+        confirmText: undefined,
+        ...(input.data ? { compose: id } : {}),
+      });
     },
   });
 
@@ -292,9 +326,11 @@ function AdminEmail() {
     });
   };
 
-  const sendingCampaign = campaigns.data?.items.find(
-    (item) => item.id === search.sending,
-  );
+  const sendingCampaign =
+    (search.sending
+      ? campaigns.data?.items.find((item) => item.id === search.sending)
+      : undefined) ??
+    (createdCampaignForSend?.id === search.sending ? createdCampaignForSend : undefined);
   const deletingCampaign = campaigns.data?.items.find(
     (item) => item.id === search.deleting,
   );
@@ -329,15 +365,46 @@ function AdminEmail() {
             key={editingCampaign?.id ?? 'new'}
             campaign={editingCampaign}
             saving={saveMutation.isPending}
-            error={saveMutation.error?.message}
+            sending={sendMutation.isPending}
+            error={saveMutation.error?.message ?? composerError ?? undefined}
             finalistSubjectRef={finalistSubjectRef}
             onSubmit={(data) => {
+              setComposerError(null);
               saveMutation.mutate(data);
+            }}
+            onSendNow={async (data) => {
+              try {
+                setComposerError(null);
+                sendMutation.reset();
+                pendingSendDataRef.current = data;
+                if (editingCampaign) {
+                  setSearch({ sending: editingCampaign.id, confirmText: undefined });
+                } else {
+                  const created = await persistCampaign(data);
+                  if (created) {
+                    setCreatedCampaignForSend(created);
+                    invalidateCampaigns();
+                    setSearch({
+                      compose: created.id,
+                      sending: created.id,
+                      confirmText: undefined,
+                    });
+                  }
+                }
+              } catch (error) {
+                setComposerError(
+                  error instanceof Error
+                    ? error.message
+                    : 'Failed to prepare campaign for sending.',
+                );
+              }
             }}
             onBodyChange={(doc) => {
               documentRef.current = doc;
             }}
             onNew={() => {
+              setComposerError(null);
+              setCreatedCampaignForSend(null);
               setSearch({ compose: undefined });
             }}
             onRequestFinalist={() => {
@@ -440,6 +507,8 @@ function AdminEmail() {
                           <button
                             type="button"
                             onClick={() => {
+                              sendMutation.reset();
+                              pendingSendDataRef.current = null;
                               setSearch({ sending: campaign.id, confirmText: undefined });
                             }}
                             title="Send now"
@@ -623,6 +692,7 @@ function AdminEmail() {
         title="Send this campaign now?"
         body={
           <p>
+            Any unsaved composer changes are saved first, then{' '}
             <strong className="text-white">{sendingCampaign?.name}</strong> goes to its
             configured audience immediately. This cannot be recalled. Type the campaign
             name to confirm.
@@ -636,10 +706,18 @@ function AdminEmail() {
         }}
         destructive
         confirming={sendMutation.isPending}
+        error={sendMutation.error?.message}
         onConfirm={() => {
-          if (sendingCampaign) sendMutation.mutate(sendingCampaign.id);
+          if (sendingCampaign) {
+            sendMutation.mutate({
+              id: sendingCampaign.id,
+              data: pendingSendDataRef.current,
+            });
+          }
         }}
         onCancel={() => {
+          pendingSendDataRef.current = null;
+          sendMutation.reset();
           setSearch({ sending: undefined, confirmText: undefined });
         }}
       />

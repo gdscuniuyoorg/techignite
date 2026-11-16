@@ -22,6 +22,7 @@ import {
   listCustomRoles,
   listDefaultRoles,
   listUsers,
+  resetAdminUserPassword,
   updateAdminUserRole,
   updateCustomRole,
   type AdminRole,
@@ -83,6 +84,12 @@ function AdminUsers() {
   const [editingRole, setEditingRole] = useState<AdminRole | null>(null);
   const [deactivatingAdminId, setDeactivatingAdminId] = useState<string | null>(null);
   const [deletingRoleId, setDeletingRoleId] = useState<string | null>(null);
+  const [resettingUserId, setResettingUserId] = useState<string | null>(null);
+  const [resetResult, setResetResult] = useState<{
+    readonly email: string;
+    readonly emailSent: boolean;
+    readonly password?: string;
+  } | null>(null);
 
   const setSearch = (patch: Partial<UsersSearch>) =>
     void navigate({
@@ -163,6 +170,24 @@ function AdminUsers() {
       await invalidateUsers();
     },
   });
+  const resetPasswordMutation = useMutation({
+    mutationFn: async (input: { readonly id: string; readonly email: string }) => {
+      try {
+        return await resetAdminUserPassword(input.id);
+      } catch (error) {
+        throw new Error(await adminErrorMessage(error), { cause: error });
+      }
+    },
+    onSuccess: async (result, input) => {
+      setResettingUserId(null);
+      setResetResult({
+        email: input.email,
+        emailSent: result.emailSent,
+        ...(result.password ? { password: result.password } : {}),
+      });
+      await invalidateUsers();
+    },
+  });
   const roleMutation = useMutation({
     mutationFn: async (input: {
       readonly id: string | null;
@@ -234,6 +259,8 @@ function AdminUsers() {
 
   const deactivatingAdmin =
     adminsQuery.data?.find((user) => user.id === deactivatingAdminId) ?? null;
+  const resettingUser =
+    usersQuery.data?.items.find((user) => user.id === resettingUserId) ?? null;
   const deletingRole =
     customRolesQuery.data?.find((role) => role.id === deletingRoleId) ?? null;
   const defaultRoles = defaultRolesQuery.data ?? [];
@@ -284,6 +311,35 @@ function AdminUsers() {
         ))}
       </div>
 
+      {resetResult && (
+        <div
+          role="status"
+          className="rounded-card border border-brand-green-bright/40 bg-brand-green-bright/10 px-4 py-3 text-sm text-white/85"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p>
+              {resetResult.emailSent
+                ? `A new password was emailed to ${resetResult.email}.`
+                : `Password updated, but the email could not be sent. Share this password securely:`}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setResetResult(null);
+              }}
+              className="text-xs text-white/60 hover:text-white"
+            >
+              Dismiss
+            </button>
+          </div>
+          {!resetResult.emailSent && resetResult.password && (
+            <code className="mt-2 block rounded-xs bg-ink px-3 py-2 font-mono text-sm text-paper">
+              {resetResult.password}
+            </code>
+          )}
+        </div>
+      )}
+
       {search.tab === 'users' && (
         <div role="tabpanel">
           <section>
@@ -308,7 +364,7 @@ function AdminUsers() {
               <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-ink-raised">
                 {usersQuery.data.items.map((user) => (
                   <li key={user.id}>
-                    <div className="flex w-full items-center gap-3 px-4 py-4 text-left">
+                    <div className="flex w-full flex-wrap items-center gap-3 px-4 py-4 text-left">
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xs bg-ink-soft text-sm font-medium text-white">
                         {(user.firstName[0] ?? user.email[0] ?? '?').toUpperCase()}
                       </span>
@@ -323,6 +379,18 @@ function AdminUsers() {
                       <span className="text-xs text-white/60 capitalize">
                         {user.role}
                       </span>
+                      <button
+                        type="button"
+                        aria-label={`Reset password for ${user.email}`}
+                        onClick={() => {
+                          resetPasswordMutation.reset();
+                          setResettingUserId(user.id);
+                        }}
+                        className="flex h-10 items-center gap-1.5 rounded-xs border border-line px-3 text-xs text-white/70 hover:text-white"
+                      >
+                        <KeyRound size={14} aria-hidden="true" />
+                        Reset password
+                      </button>
                     </div>
                   </li>
                 ))}
@@ -668,6 +736,32 @@ function AdminUsers() {
         </div>
       )}
 
+      <ConfirmDialog
+        open={resettingUser !== null}
+        title="Reset this user's password?"
+        body={
+          <p>
+            We&apos;ll generate a new password for{' '}
+            <strong className="text-white">{resettingUser?.email}</strong>, sign out
+            their existing sessions, and email them the new password.
+          </p>
+        }
+        confirmLabel="Reset and email"
+        confirming={resetPasswordMutation.isPending}
+        error={resetPasswordMutation.error?.message}
+        onConfirm={() => {
+          if (resettingUser) {
+            resetPasswordMutation.mutate({
+              id: resettingUser.id,
+              email: resettingUser.email,
+            });
+          }
+        }}
+        onCancel={() => {
+          resetPasswordMutation.reset();
+          setResettingUserId(null);
+        }}
+      />
       <ConfirmDialog
         open={deactivatingAdmin !== null}
         title="Deactivate this admin?"

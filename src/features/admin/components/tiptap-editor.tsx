@@ -22,6 +22,8 @@ import {
   Minus,
   AlignLeft,
   AlignCenter,
+  AlignRight,
+  Braces,
   Eye,
   PencilLine,
   Undo2,
@@ -78,6 +80,239 @@ function ToolbarButton({
 
 function ToolbarSeparator() {
   return <span className="mx-1 h-4 w-px bg-line" aria-hidden="true" />;
+}
+
+/**
+ * Always-visible formatting toolbar. Uses `useEditorState` so button states
+ * track the cursor/selection instead of going stale between renders.
+ */
+function EditorToolbar({
+  editor,
+  dialog,
+  document,
+  onImage,
+  onLink,
+}: {
+  readonly editor: Editor;
+  readonly dialog: 'none' | 'link' | 'image';
+  readonly document: boolean;
+  readonly onImage: () => void;
+  readonly onLink: () => void;
+}) {
+  const state = useEditorState({
+    editor,
+    selector: ({ editor: instance }) => ({
+      bold: instance.isActive('bold'),
+      italic: instance.isActive('italic'),
+      underline: instance.isActive('underline'),
+      strike: instance.isActive('strike'),
+      h2: instance.isActive('heading', { level: 2 }),
+      h3: instance.isActive('heading', { level: 3 }),
+      bulletList: instance.isActive('bulletList'),
+      orderedList: instance.isActive('orderedList'),
+      blockquote: instance.isActive('blockquote'),
+      link: instance.isActive('link'),
+      alignLeft: instance.isActive({ textAlign: 'left' }),
+      alignCenter: instance.isActive({ textAlign: 'center' }),
+      alignRight: instance.isActive({ textAlign: 'right' }),
+    }),
+  });
+
+  return (
+    <div
+      className={`flex flex-wrap items-center gap-0.5 px-2 py-1.5 ${
+        document
+          ? 'border-b border-line bg-transparent px-0 pt-0 pb-3'
+          : 'border-b border-line bg-ink-raised'
+      }`}
+      role="toolbar"
+      aria-label="Email formatting"
+    >
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleBold().run();
+        }}
+        active={state.bold}
+        label="Bold"
+      >
+        <Bold size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleItalic().run();
+        }}
+        active={state.italic}
+        label="Italic"
+      >
+        <Italic size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleUnderline().run();
+        }}
+        active={state.underline}
+        label="Underline"
+      >
+        <UnderlineIcon size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleStrike().run();
+        }}
+        active={state.strike}
+        label="Strikethrough"
+      >
+        <Strikethrough size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarSeparator />
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleHeading({ level: 2 }).run();
+        }}
+        active={state.h2}
+        label="Heading 2"
+      >
+        <Heading2 size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleHeading({ level: 3 }).run();
+        }}
+        active={state.h3}
+        label="Heading 3"
+      >
+        <Heading3 size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarSeparator />
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleBulletList().run();
+        }}
+        active={state.bulletList}
+        label="Bullet list"
+      >
+        <List size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleOrderedList().run();
+        }}
+        active={state.orderedList}
+        label="Numbered list"
+      >
+        <ListOrdered size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().toggleBlockquote().run();
+        }}
+        active={state.blockquote}
+        label="Blockquote"
+      >
+        <Quote size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().setHorizontalRule().run();
+        }}
+        label="Horizontal rule"
+      >
+        <Minus size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarSeparator />
+      <ToolbarButton
+        onPress={() => {
+          if (state.link) {
+            editor.chain().focus().extendMarkRange('link').unsetLink().run();
+          } else {
+            onLink();
+          }
+        }}
+        active={state.link || dialog === 'link'}
+        label={state.link ? 'Remove link' : 'Add or edit link'}
+      >
+        {state.link ? (
+          <Unlink size={15} strokeWidth={2} />
+        ) : (
+          <Link2 size={15} strokeWidth={2} />
+        )}
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={onImage}
+        active={dialog === 'image'}
+        label="Insert image"
+      >
+        <ImageIcon size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarSeparator />
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().setTextAlign('left').run();
+        }}
+        active={state.alignLeft}
+        label="Align left"
+      >
+        <AlignLeft size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().setTextAlign('center').run();
+        }}
+        active={state.alignCenter}
+        label="Align center"
+      >
+        <AlignCenter size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().setTextAlign('right').run();
+        }}
+        active={state.alignRight}
+        label="Align right"
+      >
+        <AlignRight size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarSeparator />
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().insertContent('{{recipientName}}').run();
+        }}
+        label="Insert recipient name variable"
+      >
+        <Braces size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().unsetAllMarks().clearNodes().run();
+        }}
+        label="Clear formatting"
+      >
+        <RemoveFormatting size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarSeparator />
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().undo().run();
+        }}
+        label="Undo"
+      >
+        <Undo2 size={15} strokeWidth={2} />
+      </ToolbarButton>
+      <ToolbarButton
+        onPress={() => {
+          editor.chain().focus().redo().run();
+        }}
+        label="Redo"
+      >
+        <Redo2 size={15} strokeWidth={2} />
+      </ToolbarButton>
+      {!document && (
+        <span className="ml-auto hidden text-xs text-muted sm:inline">
+          {'{{recipientName}}'} is replaced with each recipient's name
+        </span>
+      )}
+    </div>
+  );
 }
 
 /** Inline form panel for link / image entry. Enter submits, Escape closes. */
@@ -496,109 +731,38 @@ export function TiptapEditor({
         />
       )}
 
-      {/* Slim block-level actions — the full formatting kit floats on selection. */}
-      <div
-        className={`flex flex-wrap items-center gap-0.5 px-2 py-1.5 ${
-          document
-            ? 'border-b-0 bg-transparent px-0 pt-0 pb-3'
-            : 'border-b border-line bg-ink-raised'
-        }`}
-        role="toolbar"
-        aria-label="Insert and structure"
-      >
-        <ToolbarButton
-          onPress={() => {
-            openDialog('image');
-          }}
-          active={dialog === 'image'}
-          label="Insert image"
-        >
-          <ImageIcon size={15} strokeWidth={2} />
-        </ToolbarButton>
-        <ToolbarButton
-          onPress={() => {
-            editor.chain().focus().toggleBlockquote().run();
-          }}
-          active={editor.isActive('blockquote')}
-          label="Blockquote"
-        >
-          <Quote size={15} strokeWidth={2} />
-        </ToolbarButton>
-        <ToolbarButton
-          onPress={() => {
-            editor.chain().focus().toggleBulletList().run();
-          }}
-          active={editor.isActive('bulletList')}
-          label="Bullet list"
-        >
-          <List size={15} strokeWidth={2} />
-        </ToolbarButton>
-        <ToolbarButton
-          onPress={() => {
-            editor.chain().focus().toggleOrderedList().run();
-          }}
-          active={editor.isActive('orderedList')}
-          label="Numbered list"
-        >
-          <ListOrdered size={15} strokeWidth={2} />
-        </ToolbarButton>
-        <ToolbarButton
-          onPress={() => {
-            editor.chain().focus().setHorizontalRule().run();
-          }}
-          label="Horizontal rule"
-        >
-          <Minus size={15} strokeWidth={2} />
-        </ToolbarButton>
-        <ToolbarSeparator />
-        <ToolbarButton
-          onPress={() => {
-            editor.chain().focus().setTextAlign('left').run();
-          }}
-          active={editor.isActive({ textAlign: 'left' })}
-          label="Align left"
-        >
-          <AlignLeft size={15} strokeWidth={2} />
-        </ToolbarButton>
-        <ToolbarButton
-          onPress={() => {
-            editor.chain().focus().setTextAlign('center').run();
-          }}
-          active={editor.isActive({ textAlign: 'center' })}
-          label="Align center"
-        >
-          <AlignCenter size={15} strokeWidth={2} />
-        </ToolbarButton>
-        <ToolbarSeparator />
-        <ToolbarButton
-          onPress={() => {
-            editor.chain().focus().undo().run();
-          }}
-          label="Undo"
-        >
-          <Undo2 size={15} strokeWidth={2} />
-        </ToolbarButton>
-        <ToolbarButton
-          onPress={() => {
-            editor.chain().focus().redo().run();
-          }}
-          label="Redo"
-        >
-          <Redo2 size={15} strokeWidth={2} />
-        </ToolbarButton>
-        {!document && (
-          <span className="ml-auto text-xs text-muted">
-            Select text for the format bar
-          </span>
-        )}
-      </div>
+      <EditorToolbar
+        editor={editor}
+        dialog={dialog}
+        document={document}
+        onImage={() => {
+          openDialog('image');
+        }}
+        onLink={() => {
+          openDialog('link');
+        }}
+      />
 
       {previewing ? (
-        <div
-          className="tiptap-content pointer-events-none select-none"
-          aria-hidden="true"
-          dangerouslySetInnerHTML={{ __html: editor.getHTML() }}
-        />
+        <div className="border-t border-line bg-ink-soft/30">
+          <div className="flex flex-wrap items-center gap-2 border-b border-line px-4 py-2 text-xs text-muted">
+            <span className="font-medium text-white/75">Preview</span>
+            <span className="text-white/40">·</span>
+            <span>
+              To: <span className="text-white/75">Alex (sample recipient)</span>
+            </span>
+          </div>
+          <div
+            className="tiptap-content pointer-events-none max-h-none select-none"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{
+              __html: editor.getHTML().replace(/\{\{recipientName\}\}/g, 'Alex'),
+            }}
+          />
+          <p className="border-t border-line px-4 py-2 text-xs text-muted">
+            Variables are shown with a sample name. Real recipients see their own name.
+          </p>
+        </div>
       ) : (
         <>
           <BubbleMenu

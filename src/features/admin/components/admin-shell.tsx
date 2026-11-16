@@ -6,6 +6,7 @@ import {
   KeyRound,
   LayoutDashboard,
   LogOut,
+  Mail,
   Menu,
   UsersRound,
 } from 'lucide-react';
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
   { to: '/admin/applications', label: 'Applications', icon: FileText, exact: false },
   { to: '/admin/teams', label: 'Teams', icon: UsersRound, exact: false },
   { to: '/admin/submissions', label: 'Submissions', icon: Inbox, exact: false },
+  { to: '/admin/email', label: 'Email campaigns', icon: Mail, exact: false },
   { to: '/admin/users', label: 'Users & access', icon: KeyRound, exact: false },
 ] as const;
 

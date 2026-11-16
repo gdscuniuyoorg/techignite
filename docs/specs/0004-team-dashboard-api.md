@@ -91,8 +91,11 @@ Each feature is independently deliverable and validated.
 ### FE-5 · Application Submissions (live)
 
 - Detail card renders `GET /api/teams` (title, description, stack, demo, repo).
-- Dialog saves via `PATCH /api/teams` + `PATCH /api/teams/repo`.
-- Submit → confirmation → `POST /api/teams/submit`; lock the form on `LOCKED`.
+- Dialog saves via `PATCH /api/teams/:id/submission` and
+  `PATCH /api/teams/:id/repository` (team-scoped facade over
+  `ProjectSubmission`).
+- Submit → confirmation → `POST /api/teams/:id/submit`; lock the form on
+  `LOCKED`/`SUBMITTED`.
 - **Done when**: edits survive reload, submit locks the team, and `403` is shown
   as a locked state rather than a generic error.
 
@@ -128,6 +131,25 @@ Each feature is independently deliverable and validated.
 - Manual against the local API: register → login → edit profile → connect repo →
   submit → reload (locked) → sign out → deep link guard.
 - Error paths: wrong password, expired token, `403` after submit, network timeout.
+
+## Addendum 2026-11-16 · team-scoped submission facade
+
+- The dashboard speaks in teams, while the judged record lives in
+  `ProjectSubmission`. Rather than teach the UI a second resource, the backend
+  exposes team-scoped routes:
+  - `PATCH /api/teams/:id/submission` — save a partial draft (title,
+    description, stack, demo URL, video URL).
+  - `PATCH /api/teams/:id/repository` — attach or replace the repository URL.
+  - `POST /api/teams/:id/submit` — validate title/description, lock the record,
+    and email the lead a receipt.
+- `GET /api/teams` and `GET /api/teams/:id` merge the submission fields and
+  report `SUBMITTED` once the record is submitted or locked; otherwise
+  `ACTIVE`. Drafts are therefore visible after reload without a schema change.
+- Draft saves are intentionally partial: `ProjectSubmission.projectTitle` and
+  `projectDescription` are non-null, so an unsaved draft stores `''` until the
+  author submits.
+- Staff with `UPDATE_SUBMISSION_STATUS` may edit any team; members may edit
+  their own team until it is locked or the deadline passes.
 
 ## Non-goals (v1)
 
