@@ -259,11 +259,9 @@ function AdminEmail() {
 
   const finalistMutation = useMutation({
     mutationFn: async () => {
-      const subject = (finalistSubjectRef.current?.value ?? '').trim();
+      const subject =
+        (finalistSubjectRef.current?.value ?? '').trim() || "You're a finalist — next steps";
       const { html, text } = documentRef.current;
-      if (!subject) {
-        throw new Error('Enter a subject for the finalist invitation.');
-      }
       try {
         await sendFinalistInvite({
           name: 'Finalist Invitations',
@@ -368,6 +366,7 @@ function AdminEmail() {
             sending={sendMutation.isPending}
             error={saveMutation.error?.message ?? composerError ?? undefined}
             finalistSubjectRef={finalistSubjectRef}
+            templates={templates.data ?? []}
             onSubmit={(data) => {
               setComposerError(null);
               saveMutation.mutate(data);
@@ -777,6 +776,7 @@ function AdminEmail() {
         }}
         destructive
         confirming={finalistMutation.isPending}
+        error={finalistMutation.error?.message}
         onConfirm={() => {
           finalistMutation.mutate();
         }}

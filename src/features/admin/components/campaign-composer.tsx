@@ -1,10 +1,22 @@
 import { useRef, useState, type RefObject, type SyntheticEvent } from 'react';
-import { CalendarClock, ChevronDown, Plus, Rocket, Save, Send, Users } from 'lucide-react';
-import type { CampaignAudience, EmailCampaign } from '@/lib/admin-api';
+import { CalendarClock, ChevronDown, LayoutTemplate, Plus, Rocket, Save, Send, Sparkles, Users } from 'lucide-react';
+import {
+  type CampaignAudience,
+  type EmailCampaign,
+  type EmailTemplateInfo,
+  getEmailTemplateContent,
+} from '@/lib/admin-api';
 import {
   TiptapEditor,
   type EmailDocument,
 } from '@/features/admin/components/tiptap-editor';
+
+const MERGE_TAGS = [
+  { tag: '$first_name', label: 'First name', example: 'Ada' },
+  { tag: '$team_name', label: 'Team name', example: 'Fintech Innovators' },
+  { tag: '$project_title', label: 'Project title', example: 'PayFlow' },
+  { tag: '$email', label: 'Email', example: 'ada@example.com' },
+] as const;
 
 const AUDIENCE_OPTIONS: readonly { value: CampaignAudience; label: string }[] = [
   { value: 'subscribers', label: 'Newsletter subscribers' },
@@ -22,6 +34,7 @@ interface CampaignComposerProps {
   readonly sending: boolean;
   readonly error: string | undefined;
   readonly finalistSubjectRef: RefObject<HTMLInputElement | null>;
+  readonly templates?: readonly EmailTemplateInfo[] | undefined;
   readonly onSubmit: (data: FormData) => void;
   readonly onSendNow: (data: FormData) => void;
   readonly onBodyChange: (doc: EmailDocument) => void;
@@ -47,6 +60,7 @@ export function CampaignComposer({
   sending,
   error,
   finalistSubjectRef,
+  templates = [],
   onSubmit,
   onSendNow,
   onBodyChange,
@@ -54,6 +68,8 @@ export function CampaignComposer({
   onRequestFinalist,
 }: CampaignComposerProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const subjectInputRef = useRef<HTMLInputElement>(null);
   const [audience, setAudience] = useState<CampaignAudience>(
     campaign?.audience ?? 'subscribers',
   );
@@ -64,11 +80,59 @@ export function CampaignComposer({
     campaign?.customRecipients?.join('\n') ?? '',
   );
   const [finalistOpen, setFinalistOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const [composerKey, setComposerKey] = useState<number>(0);
+  const [copiedTag, setCopiedTag] = useState<string | null>(null);
+  const [editorInitialHtml, setEditorInitialHtml] = useState<string | undefined>(
+    campaign
+      ? (campaign.htmlContent ?? (campaign.content === '' ? undefined : campaign.content))
+      : undefined,
+  );
 
   const customRecipientCount = customEmailsText
     .split(/[\n,;]+/)
     .map((entry) => entry.trim())
     .filter((entry) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(entry)).length;
+
+  const handleTemplateSelect = async (templateName: string) => {
+    setSelectedTemplate(templateName);
+    if (!templateName) return;
+    try {
+      const templateData = await getEmailTemplateContent(templateName);
+      if (templateData) {
+        if (subjectInputRef.current) {
+          subjectInputRef.current.value = templateData.subject;
+        }
+        if (nameInputRef.current && (!nameInputRef.current.value || nameInputRef.current.value === 'Campaign title')) {
+          nameInputRef.current.value = templateData.name.replace(/-/g, ' ');
+        }
+        setEditorInitialHtml(templateData.body);
+        setComposerKey((k) => k + 1);
+        onBodyChange({
+          html: templateData.body,
+          text: templateData.body.replace(/<[^>]+>/g, ' '),
+        });
+      }
+    } catch (err) {
+      console.error('Failed to load template content:', err);
+    }
+  };
+
+  const handleInsertTag = (tag: string) => {
+    if (document.activeElement === subjectInputRef.current && subjectInputRef.current) {
+      const input = subjectInputRef.current;
+      const start = input.selectionStart ?? input.value.length;
+      const end = input.selectionEnd ?? input.value.length;
+      const nextVal = input.value.slice(0, start) + ' ' + tag + ' ' + input.value.slice(end);
+      input.value = nextVal.trim();
+    } else {
+      navigator.clipboard.writeText(tag).catch(() => {});
+    }
+    setCopiedTag(tag);
+    setTimeout(() => {
+      setCopiedTag(null);
+    }, 2500);
+  };
 
   const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -135,6 +199,7 @@ export function CampaignComposer({
             <input
               ref={finalistSubjectRef}
               type="text"
+              defaultValue="You're a finalist — next steps"
               placeholder="You're a finalist — next steps"
               className="h-10 w-full rounded-lg border border-brand-amber/30 bg-white px-3 text-sm font-normal text-slate-900 outline-none placeholder:text-slate-400 focus:border-brand-amber focus:ring-2 focus:ring-brand-amber/25"
             />
@@ -158,8 +223,7 @@ export function CampaignComposer({
             </button>
           </div>
           <p className="w-full text-xs text-slate-500">
-            Sends immediately to every finalist team using the body below and this
-            subject. There is no undo.
+            Sends immediately to every finalist team using the body in the composer and this subject.
           </p>
         </div>
       )}
@@ -170,6 +234,7 @@ export function CampaignComposer({
           Campaign title
         </label>
         <input
+          ref={nameInputRef}
           id="campaign-name"
           name="name"
           required
@@ -183,16 +248,17 @@ export function CampaignComposer({
           Subject line
         </label>
         <input
+          ref={subjectInputRef}
           id="campaign-subject"
           name="subject"
           required
           autoComplete="off"
           defaultValue={campaign?.subject ?? ''}
-          placeholder="Add a subject line so readers know what this is about"
+          placeholder="Add a subject line (e.g. Congratulations $team_name!)"
           className="mt-3 w-full border-0 bg-transparent text-lg text-slate-600 outline-none placeholder:text-slate-400 sm:text-xl"
         />
 
-        {/* Publishing controls: Audience selection & Schedule */}
+        {/* Publishing controls: Audience selection, Template preset & Schedule */}
         <div className="mt-7 flex flex-wrap items-center gap-3 text-sm text-slate-600">
           <span className="flex items-center gap-2">
             <img
@@ -225,6 +291,32 @@ export function CampaignComposer({
                 {AUDIENCE_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={14}
+                className="pointer-events-none absolute right-2 text-slate-400"
+                aria-hidden="true"
+              />
+            </label>
+          </div>
+          <span aria-hidden="true" className="text-slate-300">
+            ·
+          </span>
+          <div className="flex items-center gap-1.5">
+            <LayoutTemplate size={15} className="text-slate-400" aria-hidden="true" />
+            <label className="relative flex items-center">
+              <span className="sr-only">Load starter template</span>
+              <select
+                value={selectedTemplate}
+                onChange={(e) => void handleTemplateSelect(e.target.value)}
+                className="cursor-pointer appearance-none rounded-lg border border-slate-200 bg-slate-50 py-1.5 pr-7 pl-2.5 text-xs font-medium text-slate-800 transition-colors outline-none hover:border-slate-300 hover:bg-white focus:border-brand-blue focus:bg-white"
+              >
+                <option value="">Load template…</option>
+                {templates.map((tpl) => (
+                  <option key={tpl.name} value={tpl.name}>
+                    Template: {tpl.name}
                   </option>
                 ))}
               </select>
@@ -296,16 +388,37 @@ export function CampaignComposer({
           </div>
         )}
 
-        <div className="mt-8 border-t border-slate-200/80 pt-6">
+        {/* Dynamic merge variables toolbar */}
+        <div className="mt-6 flex flex-wrap items-center gap-2 rounded-xl border border-slate-200/80 bg-slate-50/80 p-3 text-xs">
+          <span className="font-semibold text-slate-700">Dynamic variables:</span>
+          {MERGE_TAGS.map(({ tag, label }) => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => handleInsertTag(tag)}
+              title={`Click to copy ${tag} (or insert into subject if focused)`}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 font-mono text-[11px] font-semibold text-brand-blue shadow-xs transition hover:border-brand-blue/50 hover:bg-brand-blue/5 active:scale-95"
+            >
+              <span>+{tag}</span>
+              <span className="font-sans text-[10px] text-slate-400">({label})</span>
+            </button>
+          ))}
+          <div className="ml-auto text-[11px] text-slate-500">
+            {copiedTag ? (
+              <span className="font-medium text-emerald-600">
+                Copied <strong className="font-mono">{copiedTag}</strong> to clipboard! Paste into your email body.
+              </span>
+            ) : (
+              <span>Auto-materializes per recipient upon send</span>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-6 border-t border-slate-200/80 pt-6">
           <TiptapEditor
-            key={campaign?.id ?? 'new'}
+            key={`${campaign?.id ?? 'new'}-${composerKey}`}
             variant="document"
-            initialHtml={
-              campaign
-                ? (campaign.htmlContent ??
-                  (campaign.content === '' ? undefined : campaign.content))
-                : undefined
-            }
+            initialHtml={editorInitialHtml}
             onChange={onBodyChange}
             ariaLabel="Campaign email body"
           />
@@ -350,14 +463,12 @@ export function CampaignComposer({
         </div>
         <span className="text-xs font-medium text-slate-500">{audienceLabel(audience)}</span>
       </div>
-
       {error && (
-        <p
-          role="alert"
-          className="border-t border-brand-red/20 bg-brand-red/5 px-6 py-3 text-sm text-brand-red sm:px-10"
-        >
-          {error}
-        </p>
+        <div className="border-t border-[#ff9d91]/30 bg-[#ff9d91]/10 px-6 py-3 sm:px-10">
+          <p role="alert" className="text-xs font-medium text-[#ff9d91]">
+            {error}
+          </p>
+        </div>
       )}
     </form>
   );

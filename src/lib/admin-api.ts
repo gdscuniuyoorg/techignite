@@ -206,6 +206,13 @@ export interface EmailTemplateInfo {
   readonly requiredFields: readonly string[];
 }
 
+export interface EmailTemplateContent {
+  readonly name: string;
+  readonly subject: string;
+  readonly body: string;
+  readonly availableVariables: readonly string[];
+}
+
 export interface Subscriber {
   readonly id: string;
   readonly email: string;
@@ -1073,6 +1080,18 @@ export async function listEmailTemplates(): Promise<readonly EmailTemplateInfo[]
       requiredFields: strArray(t.requiredFields) ?? [],
     };
   });
+}
+
+export async function getEmailTemplateContent(name: string): Promise<EmailTemplateContent> {
+  const body: unknown = await adminApi.get(`api/email/templates/${encodeURIComponent(name)}`).json();
+  const data = expectData(body);
+  const rec = isRecord(data) ? data : {};
+  return {
+    name: str(rec.name, name),
+    subject: str(rec.subject),
+    body: str(rec.body),
+    availableVariables: strArray(rec.availableVariables) ?? [],
+  };
 }
 
 export async function sendTemplateEmail(input: {
