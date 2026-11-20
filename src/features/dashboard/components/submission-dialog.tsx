@@ -76,8 +76,14 @@ export function SubmissionDialog({ team, onClose, onSave }: SubmissionDialogProp
         mode,
       );
     } catch (submitError) {
-      setError(await teamErrorMessage(submitError));
+      const errorMsg = await teamErrorMessage(submitError);
+      setError(errorMsg);
       setSavingMode(null);
+      
+      // If submissions are closed, propagate the error
+      if (errorMsg.includes('currently closed') || errorMsg.includes('Submissions are')) {
+        throw submitError;
+      }
     }
   };
 

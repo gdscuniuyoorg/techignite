@@ -100,6 +100,21 @@ export interface AdminSessionUser {
   readonly permissions: readonly string[];
 }
 
+export interface AdminEvent {
+  readonly id: string;
+  readonly name: string;
+  readonly description: string | null;
+  readonly startDate: string;
+  readonly endDate: string;
+  readonly applicationDeadline: string;
+  readonly submissionDeadline: string;
+  readonly timezone: string;
+  readonly applicationsOpen: boolean;
+  readonly submissionsOpen: boolean;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
 export interface Pagination {
   readonly total: number;
   readonly limit: number;
@@ -1183,6 +1198,64 @@ export async function sendFinalistInvite(input: {
   content?: string;
 }): Promise<void> {
   await adminApi.post('api/campaigns/finalist-invite', { json: input });
+}
+
+// ─── Events ─────────────────────────────────────────────────────────────────
+
+function mapEvent(value: unknown): AdminEvent {
+  if (!isRecord(value)) throw new Error('Malformed event');
+  const id = str(value.id);
+  if (!id) throw new Error('Malformed event: missing id');
+  return {
+    id,
+    name: str(value.name, 'Untitled Event'),
+    description: strOrNull(value.description),
+    startDate: str(value.startDate),
+    endDate: str(value.endDate),
+    applicationDeadline: str(value.applicationDeadline),
+    submissionDeadline: str(value.submissionDeadline),
+    timezone: str(value.timezone, 'UTC'),
+    applicationsOpen: bool(value.applicationsOpen, true),
+    submissionsOpen: bool(value.submissionsOpen, true),
+    createdAt: str(value.createdAt),
+    updatedAt: str(value.updatedAt),
+  };
+}
+
+export async function listEvents(): Promise<readonly AdminEvent[]> {
+  const body: unknown = await adminApi.get('api/events').json();
+  const data = expectData(body);
+  return collectionFrom(data, ['events', 'items']).map(mapEvent);
+}
+
+export async function getCurrentEvent(): Promise<AdminEvent | null> {
+  try {
+    const events = await listEvents();
+    return events.length > 0 ? events[0] : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateEvent(
+  id: string,
+  input: {
+    name?: string;
+    description?: string;
+    startDate?: string;
+    endDate?: string;
+    applicationDeadline?: string;
+    submissionDeadline?: string;
+    timezone?: string;
+    applicationsOpen?: boolean;
+    submissionsOpen?: boolean;
+  },
+): Promise<AdminEvent> {
+  const body: unknown = await adminApi.patch(`api/events/${encodeURIComponent(id)}`, {
+    json: input,
+  }).json();
+  const data = expectData(body);
+  return mapEvent(data);
 }
 
 // ─── Shared error handling ──────────────────────────────────────────────────

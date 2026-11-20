@@ -84,6 +84,13 @@ export function ApplicationSubmissions() {
     );
   };
 
+  const handleSubmissionError = (error: unknown) => {
+    if (error instanceof Error && error.message.includes('currently closed')) {
+      setNotice(null);
+      setEditing(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <DashboardPageHeader

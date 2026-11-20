@@ -8,6 +8,7 @@ import {
   LogOut,
   Mail,
   Menu,
+  Settings,
   UsersRound,
 } from 'lucide-react';
 import type { AdminSessionUser } from '@/lib/admin-api';
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
   { to: '/admin/submissions', label: 'Submissions', icon: Inbox, exact: false },
   { to: '/admin/email', label: 'Email campaigns', icon: Mail, exact: false },
   { to: '/admin/users', label: 'Users & access', icon: KeyRound, exact: false },
+  { to: '/admin/settings', label: 'Event settings', icon: Settings, exact: false },
 ] as const;
 
 function sectionLabel(pathname: string): string {
