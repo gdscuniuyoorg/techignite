@@ -499,6 +499,28 @@ export async function submitTeam(teamId: string): Promise<void> {
   await teamApi.post(`api/teams/${encodeURIComponent(teamId)}/submit`);
 }
 
+export interface EventStatus {
+  readonly submissionsOpen: boolean;
+  readonly applicationsOpen: boolean;
+  readonly submissionDeadline: string | null;
+}
+
+/** GET /api/events — fetch current event status to check if submissions are open. */
+export async function getEventStatus(): Promise<EventStatus> {
+  const body: unknown = await teamApi.get('api/events').json();
+  const data = expectData(body);
+  const events = Array.isArray(data) ? data : [];
+  const currentEvent = events.length > 0 && isRecord(events[0]) ? events[0] : null;
+  
+  return {
+    submissionsOpen: currentEvent ? (currentEvent.submissionsOpen === true) : true,
+    applicationsOpen: currentEvent ? (currentEvent.applicationsOpen === true) : true,
+    submissionDeadline: currentEvent && typeof currentEvent.submissionDeadline === 'string' 
+      ? currentEvent.submissionDeadline 
+      : null,
+  };
+}
+
 // ─── Error messages ────────────────────────────────────────────────────────
 
 /**

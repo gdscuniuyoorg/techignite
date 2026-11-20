@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { Check, Copy, FolderGit2, Lock, Send, Trophy, Tag } from 'lucide-react';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { Check, Copy, FolderGit2, Lock, Send, Trophy, Tag, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +15,7 @@ import {
   connectRepository,
   submitTeam,
   updateTeam,
+  getEventStatus,
   type TeamUpdateInput,
 } from '@/lib/team-api';
 import { DashboardPageHeader } from './dashboard-page-header';
@@ -26,18 +27,23 @@ import {
   type SubmissionSaveMode,
 } from './submission-dialog';
 import { SubmissionStatusBadge } from './submission-status-badge';
-import { formatTeamDate, isSubmissionLocked, toSubmissionStatus } from './team-status';
+import { formatTeamDate, isSubmissionLocked, toSubmissionStatus, canEditSubmission } from './team-status';
 import { TEAM_PROFILE_KEY, useTeamProfile } from '../hooks/use-team-profile';
 import { EVENT, HACKATHON_COUPON } from '../data';
 
 /** Hackathon info card plus the live, judged project submission. */
 export function ApplicationSubmissions() {
   const { data: team, isPending, isError, error, refetch } = useTeamProfile();
+  const eventStatusQuery = useQuery({
+    queryKey: ['event', 'status'],
+    queryFn: getEventStatus,
+    staleTime: 60_000, // Cache for 1 minute
+  });
   const queryClient = useQueryClient();
   const [editing, setEditing] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
-  if (isPending) {
+  if (isPending || eventStatusQuery.isPending) {
     return <DashboardLoading label="Loading your submission…" />;
   }
 
@@ -54,6 +60,8 @@ export function ApplicationSubmissions() {
 
   const status = toSubmissionStatus(team);
   const locked = isSubmissionLocked(team);
+  const submissionsOpen = eventStatusQuery.data?.submissionsOpen ?? true;
+  const canEdit = canEditSubmission(team, submissionsOpen);
 
   const saveSubmission = async (
     values: SubmissionFormValues,
@@ -234,7 +242,30 @@ export function ApplicationSubmissions() {
           )}
         </CardContent>
         <CardFooter>
-          {locked ? (
+          {!submissionsOpen ? (
+            <div className="flex w-full flex-col gap-3">
+              <div
+                role="alert"
+                className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3"
+              >
+                <AlertCircle
+                  size={18}
+                  className="shrink-0 text-amber-600"
+                  aria-hidden="true"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-amber-900">
+                    Submissions are currently closed
+                  </p>
+                  <p className="mt-1 text-xs text-amber-700">
+                    The event organizers have temporarily closed submissions. You can view
+                    your project details below, but editing is disabled until submissions
+                    reopen.
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : locked && !canEdit ? (
             <p className="flex items-center gap-1.5 text-xs text-slate-500">
               <Lock size={13} aria-hidden="true" />
               Locked {formatTeamDate(team.submittedAt)}. Writes are disabled — contact
@@ -249,10 +280,12 @@ export function ApplicationSubmissions() {
                 }}
               >
                 <Send size={16} aria-hidden="true" />
-                Submit project
+                {locked ? 'Edit submission' : 'Submit project'}
               </Button>
               <p className="text-xs text-slate-500">
-                Save a draft any time. Submitting locks the entry.
+                {locked
+                  ? 'Submissions are open. You can update your project.'
+                  : 'Save a draft any time. Submitting locks the entry.'}
               </p>
             </>
           )}

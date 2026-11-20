@@ -24,11 +24,25 @@ export function toSubmissionStatus(team: TeamProfile): DashboardSubmissionStatus
   }
 }
 
-/** Writes are blocked once the team is submitted/locked. */
+/** 
+ * Checks if submission is locked.
+ * Note: When submissions are open (controlled by admin), teams can edit even locked submissions.
+ * The backend enforces the actual write restriction based on event.submissionsOpen status.
+ */
 export function isSubmissionLocked(team: TeamProfile): boolean {
   return (
     team.status === 'LOCKED' || team.status === 'SUBMITTED' || team.submittedAt !== null
   );
+}
+
+/**
+ * Determines if the team can edit their submission based on both lock status and event settings.
+ * This is a UI helper - the backend is the source of truth.
+ */
+export function canEditSubmission(team: TeamProfile, submissionsOpen: boolean): boolean {
+  // Staff/admins always have permission (handled at API level)
+  // For teams: can edit if submissions are open, regardless of lock status
+  return submissionsOpen;
 }
 
 export function formatTeamDate(value: string | null): string {
