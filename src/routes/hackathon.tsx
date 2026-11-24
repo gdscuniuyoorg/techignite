@@ -1,11 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { MotionConfig } from 'framer-motion';
-import { HackathonHero } from '@/features/hackathon/components/hero';
-import { HackathonStats } from '@/features/hackathon/components/hackathon-stats';
-import { WhyApply } from '@/features/hackathon/components/why-apply';
-import { Prizes } from '@/features/hackathon/components/prizes';
-import { HowItWorks } from '@/features/hackathon/components/how-it-works';
-import { HackathonFaq } from '@/features/hackathon/components/faq';
+// Event sections temporarily hidden while the Hackathon page shows the photo wall.
+// import { HackathonHero } from '@/features/hackathon/components/hero';
+// import { HackathonStats } from '@/features/hackathon/components/hackathon-stats';
+// import { WhyApply } from '@/features/hackathon/components/why-apply';
+// import { Prizes } from '@/features/hackathon/components/prizes';
+// import { HowItWorks } from '@/features/hackathon/components/how-it-works';
+// import { HackathonFaq } from '@/features/hackathon/components/faq';
+import { HackathonGallery } from '@/features/hackathon/components/hackathon-gallery';
 import { seoHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/hackathon')({
@@ -17,12 +19,13 @@ function Hackathon() {
   return (
     <main id="main-content">
       <MotionConfig reducedMotion="user">
-        <HackathonHero />
-        <HackathonStats />
-        <WhyApply />
-        <Prizes />
-        <HowItWorks />
-        <HackathonFaq />
+        {/* <HackathonHero /> */}
+        {/* <HackathonStats /> */}
+        {/* <WhyApply /> */}
+        {/* <Prizes /> */}
+        {/* <HowItWorks /> */}
+        {/* <HackathonFaq /> */}
+        <HackathonGallery />
       </MotionConfig>
     </main>
   );

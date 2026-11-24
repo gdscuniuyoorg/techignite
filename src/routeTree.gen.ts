@@ -13,13 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as GetYourPictureRouteImport } from './routes/get-your-picture'
 import { Route as HackathonRouteImport } from './routes/hackathon'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as MemoriesRouteImport } from './routes/memories'
+import { Route as OrganizersRouteImport } from './routes/organizers'
 import { Route as PhotosRouteImport } from './routes/photos'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -58,11 +58,6 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AgendaRoute = AgendaRouteImport.update({
-  id: '/agenda',
-  path: '/agenda',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApplyRoute = ApplyRouteImport.update({
   id: '/apply',
   path: '/apply',
@@ -78,11 +73,6 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GetYourPictureRoute = GetYourPictureRouteImport.update({
-  id: '/get-your-picture',
-  path: '/get-your-picture',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HackathonRoute = HackathonRouteImport.update({
   id: '/hackathon',
   path: '/hackathon',
@@ -91,6 +81,16 @@ const HackathonRoute = HackathonRouteImport.update({
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   id: '/llms.txt',
   path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemoriesRoute = MemoriesRouteImport.update({
+  id: '/memories',
+  path: '/memories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizersRoute = OrganizersRouteImport.update({
+  id: '/organizers',
+  path: '/organizers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PhotosRoute = PhotosRouteImport.update({
@@ -184,13 +184,13 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
-  '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/get-your-picture': typeof GetYourPictureRoute
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/memories': typeof MemoriesRoute
+  '/organizers': typeof OrganizersRoute
   '/photos': typeof PhotosRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -213,12 +213,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
-  '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
-  '/get-your-picture': typeof GetYourPictureRoute
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/memories': typeof MemoriesRoute
+  '/organizers': typeof OrganizersRoute
   '/photos': typeof PhotosRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -243,13 +243,13 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
-  '/agenda': typeof AgendaRoute
   '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/get-your-picture': typeof GetYourPictureRoute
   '/hackathon': typeof HackathonRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/memories': typeof MemoriesRoute
+  '/organizers': typeof OrganizersRoute
   '/photos': typeof PhotosRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -275,13 +275,13 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/admin'
-    | '/agenda'
     | '/apply'
     | '/auth'
     | '/dashboard'
-    | '/get-your-picture'
     | '/hackathon'
     | '/llms.txt'
+    | '/memories'
+    | '/organizers'
     | '/photos'
     | '/robots.txt'
     | '/sitemap.xml'
@@ -304,12 +304,12 @@ export interface FileRouteTypes {
     | '/'
     | '/$'
     | '/about'
-    | '/agenda'
     | '/apply'
     | '/auth'
-    | '/get-your-picture'
     | '/hackathon'
     | '/llms.txt'
+    | '/memories'
+    | '/organizers'
     | '/photos'
     | '/robots.txt'
     | '/sitemap.xml'
@@ -333,13 +333,13 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/admin'
-    | '/agenda'
     | '/apply'
     | '/auth'
     | '/dashboard'
-    | '/get-your-picture'
     | '/hackathon'
     | '/llms.txt'
+    | '/memories'
+    | '/organizers'
     | '/photos'
     | '/robots.txt'
     | '/sitemap.xml'
@@ -364,13 +364,13 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
-  AgendaRoute: typeof AgendaRoute
   ApplyRoute: typeof ApplyRoute
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRouteWithChildren
-  GetYourPictureRoute: typeof GetYourPictureRoute
   HackathonRoute: typeof HackathonRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
+  MemoriesRoute: typeof MemoriesRoute
+  OrganizersRoute: typeof OrganizersRoute
   PhotosRoute: typeof PhotosRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -409,13 +409,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/agenda': {
-      id: '/agenda'
-      path: '/agenda'
-      fullPath: '/agenda'
-      preLoaderRoute: typeof AgendaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/apply': {
       id: '/apply'
       path: '/apply'
@@ -437,13 +430,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/get-your-picture': {
-      id: '/get-your-picture'
-      path: '/get-your-picture'
-      fullPath: '/get-your-picture'
-      preLoaderRoute: typeof GetYourPictureRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/hackathon': {
       id: '/hackathon'
       path: '/hackathon'
@@ -456,6 +442,20 @@ declare module '@tanstack/react-router' {
       path: '/llms.txt'
       fullPath: '/llms.txt'
       preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memories': {
+      id: '/memories'
+      path: '/memories'
+      fullPath: '/memories'
+      preLoaderRoute: typeof MemoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organizers': {
+      id: '/organizers'
+      path: '/organizers'
+      fullPath: '/organizers'
+      preLoaderRoute: typeof OrganizersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/photos': {
@@ -625,13 +625,13 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
-  AgendaRoute: AgendaRoute,
   ApplyRoute: ApplyRoute,
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRouteWithChildren,
-  GetYourPictureRoute: GetYourPictureRoute,
   HackathonRoute: HackathonRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
+  MemoriesRoute: MemoriesRoute,
+  OrganizersRoute: OrganizersRoute,
   PhotosRoute: PhotosRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -642,3 +642,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
