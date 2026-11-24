@@ -13,6 +13,8 @@
     "start": "node .output/server/index.mjs",
     "preview": "vite preview",
     "routes:generate": "tsr generate",
+    "photos:sync": "node scripts/sync-hackathon-photos.mjs",
+    "photos:sync:memories": "node scripts/sync-drive-photos.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
