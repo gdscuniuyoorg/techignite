@@ -1,10 +1,9 @@
 import { useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { FaLinkedin } from 'react-icons/fa6';
 import { lineupSpeakers } from '@/utils/speakers';
 import { DummySpeakerCard } from '@/features/speakers/components/dummy-speaker-card';
-import { REGISTER_URL } from '@/utils/footer';
 import { imageSettle, slideInRight, springUp, staggerContainer } from '@/lib/motion';
 
 export function SpeakerLineup() {
@@ -124,13 +123,6 @@ export function SpeakerLineup() {
                         </p>
                       </div>
 
-                      <a
-                        href={REGISTER_URL}
-                        className="mt-4 flex h-10 shrink-0 items-center justify-center gap-2 rounded-xs bg-brand-blue px-5 text-sm font-medium text-paper transition-colors hover:bg-brand-blue-strong lg:hidden"
-                      >
-                        Register Now
-                        <ArrowRight aria-hidden="true" className="size-4" />
-                      </a>
                     </div>
                   ) : null}
                 </div>

@@ -98,7 +98,7 @@ export function SpeakerSponsorPanel() {
               aria-hidden="true"
               className="size-2 bg-brand-green"
             />
-            Become a sponsor
+            Partner with Tech Ignite
           </motion.p>
 
           <motion.h2
@@ -106,20 +106,17 @@ export function SpeakerSponsorPanel() {
             id="speaker-sponsor-title"
             className="mt-6 text-heading font-bold text-accent-foreground"
           >
-            Why Sponsor{' '}
-            <span className="bg-brand-green-bright px-1 text-paper">
-              Tech Ignite&rsquo;26?
-            </span>
+            Help power{' '}
+            <span className="bg-brand-green-bright px-1 text-paper">what comes next.</span>
           </motion.h2>
 
           <motion.p
             variants={blurUp}
             className="mt-6 max-w-[850px] text-lg leading-relaxed text-accent-foreground"
           >
-            Tech Ignite by GDG Uyo goes beyond a single event. It brings students,
-            developers, and tech enthusiasts together to share ideas, build meaningful
-            connections, explore new opportunities, and grow within a community shaping
-            the future of technology.
+            Tech Ignite &rsquo;26 proved what is possible when community and industry build
+            together. Our partners helped students, developers, and tech enthusiasts share
+            ideas, form meaningful connections, and explore new opportunities.
           </motion.p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -130,7 +127,7 @@ export function SpeakerSponsorPanel() {
               href={SPONSOR_MAILTO}
               className="flex h-11 w-fit items-center gap-2 rounded-xs bg-ink px-6 text-button font-normal text-paper transition-colors hover:bg-ink-soft sm:h-12 sm:px-8"
             >
-              Become a Sponsor
+              Partner With Us
               <ArrowRight aria-hidden="true" className="size-4" />
             </MotionAnchor>
 
@@ -142,7 +139,7 @@ export function SpeakerSponsorPanel() {
               rel="noopener noreferrer"
               className="flex h-11 w-fit items-center gap-2 rounded-xs bg-brand-green-bright px-6 text-button font-normal text-ink sm:h-12 sm:px-8"
             >
-              Check our Pitchdeck
+              View Our Pitchdeck
               <ArrowRight aria-hidden="true" className="size-4" />
             </MotionAnchor>
           </div>
