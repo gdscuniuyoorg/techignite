@@ -1,11 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import { blurUp, fadeUp, springUp, staggerContainer } from '@/lib/motion';
+import { blurUp, fadeUp, staggerContainer } from '@/lib/motion';
 import { SponsorPin } from '@/components/molecules/sponsor-pin';
-import { REGISTER_URL } from '@/utils/footer';
-
-const MotionAnchor = motion.create('a');
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -69,7 +65,7 @@ export function Hero() {
           className="relative z-10 flex w-full flex-col items-center"
         >
           <motion.p variants={fadeUp} className="text-base font-normal text-ink">
-            20 November, 2026. University of Uyo, Aks
+            Successfully held on 19 and 20 November 2026 at the University of Uyo
           </motion.p>
 
           <motion.img
@@ -89,23 +85,10 @@ export function Hero() {
           >
             Are you actually Building?
           </motion.p>
-
-          <MotionAnchor
-            variants={springUp}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            href={REGISTER_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 flex h-13 items-center justify-center gap-2.5 rounded-xs bg-primary px-8 text-button font-normal text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong sm:mt-7 sm:h-14 sm:min-w-[220px] sm:px-10"
-          >
-            Register Now
-            <ArrowRight aria-hidden="true" className="size-4.5 sm:size-5" />
-          </MotionAnchor>
         </motion.div>
 
         <h1 id="hero-title" className="sr-only">
-          Tech Ignite '26 — Are you actually Building?
+          Tech Ignite '26 was successfully held at the University of Uyo
         </h1>
       </motion.div>
     </section>

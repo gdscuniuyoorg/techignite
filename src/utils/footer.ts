@@ -3,7 +3,7 @@ export type FooterLinkItem =
       readonly label: string;
       /** Internal route. Standalone pages link directly; sections still hosted
        * on the home page use `'/'` together with `hash`. */
-      readonly to: '/' | '/about' | '/speakers' | '/get-your-picture';
+      readonly to: '/' | '/about' | '/speakers' | '/memories' | '/organizers';
       readonly hash?: string;
       readonly isExternal?: false;
     }
@@ -24,16 +24,16 @@ export const REGISTER_URL =
   'https://gdg.community.dev/events/details/google-gdg-on-campus-university-of-uyo-uyo-nigeria-presents-tech-ignite-26/';
 
 export const footerTagline =
-  'Get your pass today and immerse yourself in a groundbreaking experience where the worlds of art, design, and cutting-edge technology come together to shape the future.';
+  "Tech Ignite '26 has wrapped — relive the talks, builds, and community moments from the GDGOC UNIUYO flagship event at the University of Uyo.";
 
 export const footerCopyright = '® 2026 Tech Ignite All rights reserved.';
 
 export const footerNavLinks: readonly FooterLinkItem[] = [
   { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
-  { label: 'Agenda', to: '/', hash: 'agenda' },
   { label: 'Speakers', to: '/speakers' },
-  { label: 'Get Your Picture', to: '/get-your-picture' },
+  { label: 'Memories', to: '/memories' },
+  { label: 'Organizers', to: '/organizers' },
   {
     label: 'Past Photos',
     href: 'https://photos.app.goo.gl/9y5H4u4u7N5bF3Y38',

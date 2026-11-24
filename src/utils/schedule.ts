@@ -1,4 +1,4 @@
-/** One timed row of the agenda. */
+/** One timed row of the event schedule. */
 export interface ScheduleSession {
   readonly time: string;
   readonly title: string;

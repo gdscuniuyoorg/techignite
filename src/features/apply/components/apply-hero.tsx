@@ -1,14 +1,11 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import { SPRING_POP, staggerContainer, wordReveal } from '@/lib/motion';
-import { RegisterModal } from '@/features/apply/components/register-modal';
+import { staggerContainer, wordReveal } from '@/lib/motion';
 
 const HERO_WORDS = ['Build', 'With', 'Paga'] as const;
 
 export function ApplyHero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [registerOpen, setRegisterOpen] = useState(false);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
@@ -95,24 +92,7 @@ export function ApplyHero() {
           powered by the Paga Engine API.
         </motion.p>
 
-        <motion.button
-          type="button"
-          onClick={() => {
-            setRegisterOpen(true);
-          }}
-          initial={{ opacity: 0, scale: 0.85, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ ...SPRING_POP, delay: 2 }}
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-          className="relative z-10 mt-6 flex h-13 cursor-pointer items-center justify-center gap-2.5 rounded-xs bg-[#FF84B3] px-8 text-button font-normal text-ink shadow-none transition-colors hover:bg-[#FF84B3]/90 sm:mt-7 sm:h-14 sm:min-w-[220px] sm:px-10"
-        >
-          Register Now
-          <ArrowRight aria-hidden="true" className="size-4.5 sm:size-5" />
-        </motion.button>
       </motion.div>
-
-      <RegisterModal open={registerOpen} onOpenChange={setRegisterOpen} />
     </section>
   );
 }

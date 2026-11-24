@@ -16,7 +16,7 @@ export function Schedule() {
   const userScrolled = useScrollGate();
 
   return (
-    <section id="agenda" aria-labelledby="agenda-title" className="bg-paper text-ink">
+    <section id="schedule" aria-labelledby="schedule-title" className="bg-paper text-ink">
       <motion.div
         variants={staggerContainer(0.16)}
         initial="hidden"
@@ -30,19 +30,20 @@ export function Schedule() {
             className="flex items-center gap-2 text-[13px] font-medium tracking-[0.02em] uppercase"
           >
             <span aria-hidden="true" className="size-2 shrink-0 bg-brand-green-vivid" />
-            Schedule
+            Event recap
           </motion.p>
 
           <motion.h2
-            id="agenda-title"
+            id="schedule-title"
             variants={slideInRight}
             className="mt-7 font-sans text-[36px] leading-[1.22] font-medium not-italic lg:text-[56px]"
           >
             <span className="lg:block">
-              <mark className="bg-brand-green-vivid px-2 text-paper">2 days</mark> of
-              inspiration &amp;
+              <mark className="bg-brand-green-vivid px-2 text-paper">
+                2 successful days
+              </mark>{' '}
+              of inspiration &amp; innovation.
             </span>
-            <span className="lg:block">innovation.</span>
           </motion.h2>
         </div>
 
@@ -112,10 +113,10 @@ export function Schedule() {
                 <MotionLink
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
-                  to="/agenda"
+                  to="/memories"
                   className="inline-flex h-12 items-center gap-2.5 rounded-md bg-brand-green-vivid px-7 text-button font-normal text-paper transition-colors hover:bg-brand-green"
                 >
-                  View Full Agenda
+                  View Event Memories
                   <ArrowRight aria-hidden="true" className="size-4" />
                 </MotionLink>
               </div>

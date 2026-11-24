@@ -26,13 +26,14 @@ export default defineConfig({
         routes: [
           '/',
           '/about',
-          '/agenda',
           '/apply',
           '/auth',
           '/dashboard',
           '/dashboard/submissions',
           '/dashboard/team',
           '/hackathon',
+          '/memories',
+          '/organizers',
           '/photos',
           '/speakers',
           // The admin app is a single client-rendered shell. Apache serves this

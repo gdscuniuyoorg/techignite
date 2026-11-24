@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
-import { REGISTER_URL } from '@/utils/footer';
 
 const navLinks = [
-  { label: 'Speakers', hash: '/speakers' },
-  { label: 'Hackathon', hash: '/hackathon' },
-  { label: 'Agenda', hash: '/agenda' },
-  { label: 'Get Your Picture', hash: '/get-your-picture' },
+  { label: 'Speakers', to: '/speakers' },
+  { label: 'Hackathon', to: '/hackathon' },
+  { label: 'Memories', to: '/memories' },
+  { label: 'Organizers', to: '/organizers' },
 ] as const;
 
 export function Navbar() {
@@ -50,7 +49,7 @@ export function Navbar() {
               <source media="(min-width: 640px)" srcSet="/icons/logo.png" />
               <img
                 src="/icons/banner.png"
-                alt="Tech Ignite '26 — Google Developer Student Clubs, University of Uyo"
+                alt="Tech Ignite '26 — Google Developer Groups on Campus, University of Uyo"
                 width={800}
                 height={213}
                 className="h-6 w-auto sm:h-8 lg:h-9"
@@ -64,22 +63,37 @@ export function Navbar() {
 
         {/* Desktop nav */}
         <nav aria-label="Primary" className="max-lg:hidden">
-          <ul className="flex items-center gap-8">
+          <ul className="flex items-center gap-6 xl:gap-8">
             {navLinks.map((link) => (
-              <li key={link.hash}>
+              <li key={link.to}>
                 <Link
-                  to={link.hash}
+                  to={link.to}
                   className="text-label font-normal text-white transition-colors hover:text-brand-blue-soft"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
+            <li className="xl:hidden">
+              <Link
+                to="/about"
+                className="text-label font-normal text-white transition-colors hover:text-brand-blue-soft"
+              >
+                About
+              </Link>
+            </li>
           </ul>
         </nav>
 
         {/* Actions */}
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <Link
+            to="/about"
+            className="hidden h-11 items-center gap-2 rounded-xs bg-primary px-5 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong xl:flex"
+          >
+            About GDGOC UNIUYO
+            <ArrowRight aria-hidden="true" className="size-4" />
+          </Link>
           <Link
             to="/"
             hash="sponsors"
@@ -87,15 +101,6 @@ export function Navbar() {
           >
             Sponsor
           </Link>
-          <a
-            href={REGISTER_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-9 items-center gap-1.5 rounded-xs bg-primary px-3 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong max-xl:hidden sm:h-11 sm:gap-2 sm:px-4"
-          >
-            Register Now
-            <ArrowRight aria-hidden="true" className="size-3.5 sm:size-4" />
-          </a>
           <button
             type="button"
             onClick={() => {
@@ -127,9 +132,9 @@ export function Navbar() {
         >
           <ul className="container space-y-1 border-t border-line pt-2 pb-6">
             {navLinks.map((link) => (
-              <li key={link.hash}>
+              <li key={link.to}>
                 <Link
-                  to={link.hash}
+                  to={link.to}
                   onClick={closeMenu}
                   className="block rounded-xs px-3 py-3 text-label font-normal text-foreground transition-colors hover:bg-surface"
                 >
@@ -147,17 +152,15 @@ export function Navbar() {
                 Sponsor
               </Link>
             </li>
-            <li>
-              <a
-                href={REGISTER_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+            <li className="pt-2">
+              <Link
+                to="/about"
                 onClick={closeMenu}
-                className="flex items-center gap-1.5 rounded-xs bg-primary px-3 py-3 text-button font-normal whitespace-nowrap text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong"
+                className="flex items-center justify-center gap-2 rounded-xs bg-primary px-3 py-3 text-button font-normal text-primary-foreground shadow-none transition-colors hover:bg-brand-blue-strong"
               >
-                Register Now
+                About GDGOC UNIUYO
                 <ArrowRight aria-hidden="true" className="size-4" />
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

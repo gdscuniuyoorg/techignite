@@ -68,8 +68,8 @@ export function KeynoteSpeakers() {
               variants={blurUp}
               className="max-w-md text-[17px] leading-[1.5] text-white/85"
             >
-              World-class creators, innovators, and tech leaders sharing their stories and
-              insights.
+              Leading creators, innovators, and tech leaders shared their stories and
+              insights with our community.
             </motion.p>
           </div>
         </div>

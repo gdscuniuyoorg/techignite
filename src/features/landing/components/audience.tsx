@@ -11,18 +11,18 @@ export function Audience() {
         <div className="border-t border-border-light pt-8">
           <p className="flex items-center gap-2.5 text-sm font-medium tracking-wider text-ink uppercase sm:text-base">
             <span aria-hidden="true" className="size-2.5 shrink-0 bg-primary" />
-            The audience
+            The community
           </p>
 
           <h2
             id="audience-title"
             className="mt-8 w-full align-middle font-sans text-[28px] leading-[36px] font-normal tracking-[0px] text-ink not-italic sm:text-[36px] sm:leading-[46px] lg:text-[42px] lg:leading-[52px] xl:text-[60px] xl:leading-[70px]"
           >
-            Tech Ignite{' '}
+            Tech Ignite &rsquo;26{' '}
             <mark className="bg-primary px-2 text-primary-foreground">
-              brings together the people
+              brought together the people
             </mark>{' '}
-            building, exploring what’s next in technology.
+            building and exploring what comes next in technology.
           </h2>
 
           <ul className="mt-[4.5rem] grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">

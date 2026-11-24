@@ -27,9 +27,9 @@ export function Faq() {
               id="faq-title"
               className="font-sans text-[36px] leading-[1.1] font-normal tracking-[-0.03em] text-white sm:text-[46px] md:sticky md:top-28 md:text-[54px] xl:text-[64px]"
             >
-              Everything you
+              The event
               <br />
-              need to know.
+              at a glance.
             </h2>
           </div>
 

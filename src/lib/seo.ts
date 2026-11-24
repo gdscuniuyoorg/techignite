@@ -33,9 +33,13 @@ const HOME_AND_ABOUT: readonly BreadcrumbLink[] = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
 ];
-const HOME_AND_AGENDA: readonly BreadcrumbLink[] = [
+const HOME_AND_MEMORIES: readonly BreadcrumbLink[] = [
   { name: 'Home', path: '/' },
-  { name: 'Agenda', path: '/agenda' },
+  { name: 'Memories', path: '/memories' },
+];
+const HOME_AND_ORGANIZERS: readonly BreadcrumbLink[] = [
+  { name: 'Home', path: '/' },
+  { name: 'Organizers', path: '/organizers' },
 ];
 const HOME_AND_SPEAKERS: readonly BreadcrumbLink[] = [
   { name: 'Home', path: '/' },
@@ -49,39 +53,41 @@ const HOME_AND_HACKATHON: readonly BreadcrumbLink[] = [
   { name: 'Home', path: '/' },
   { name: 'Hackathon', path: '/hackathon' },
 ];
-const HOME_AND_GET_PICTURE: readonly BreadcrumbLink[] = [
-  { name: 'Home', path: '/' },
-  { name: 'Get Your Picture', path: '/get-your-picture' },
-];
-
-/** The six indexable routes. Server routes (sitemap, llms.txt) render from
+/** The indexable routes. Server routes (sitemap, llms.txt) render from
  * this table, so a route missing here is invisible to search. */
 export const seoRoutes: readonly SeoRouteEntry[] = [
   {
     path: '/',
-    title: "Tech Ignite '26 — Are You Actually Building?",
+    title: "Tech Ignite '26: A Successful Gathering of Builders",
     description:
-      "Tech Ignite '26 is the annual GDSC UNIUYO flagship tech conference: talks, workshops, community and a hackathon. 20 November 2026, University of Uyo. Free entry.",
+      "Tech Ignite '26 successfully brought students, developers, founders and creators together for talks, workshops, community and a hackathon at the University of Uyo.",
   },
   {
     path: '/about',
-    title: "About Tech Ignite '26 — GDSC UNIUYO Flagship Event",
+    title: "About Tech Ignite '26 — GDGOC UNIUYO Flagship Event",
     description:
       'What Tech Ignite is, who organizes it (GDG on Campus University of Uyo), and why 1,500+ students, developers and creators gather in Uyo every year.',
     breadcrumb: HOME_AND_ABOUT,
   },
   {
-    path: '/agenda',
-    title: "Agenda — Tech Ignite '26 Programme",
+    path: '/memories',
+    title: "Memories — Tech Ignite '26",
     description:
-      "The full Tech Ignite '26 programme: keynotes, sessions, community spaces and the Shipathon experience, 20 November 2026 at the University of Uyo.",
-    breadcrumb: HOME_AND_AGENDA,
+      "Tech Ignite memories: snippets from Tech Ignite '24 plus the full Tech Ignite '26 photo folder from the GDGOC UNIUYO flagship event at the University of Uyo.",
+    breadcrumb: HOME_AND_MEMORIES,
+  },
+  {
+    path: '/organizers',
+    title: "Organizers — Tech Ignite '26",
+    description:
+      "Meet the GDGOC UNIUYO organizers and the outgoing 25/26 CoreTeam behind Tech Ignite '26 at the University of Uyo.",
+    breadcrumb: HOME_AND_ORGANIZERS,
   },
   {
     path: '/speakers',
     title: "Speakers — Tech Ignite '26",
     description:
-      "Meet the speakers at Tech Ignite '26: developers, designers and founders taking the stage at the GDSC UNIUYO flagship conference.",
+      "Meet the developers, designers and founders who took the stage at Tech Ignite '26, the GDGOC UNIUYO flagship conference.",
     breadcrumb: HOME_AND_SPEAKERS,
   },
   {
@@ -95,15 +101,8 @@ export const seoRoutes: readonly SeoRouteEntry[] = [
     path: '/hackathon',
     title: "Hackathon — Tech Ignite '26",
     description:
-      "The Tech Ignite '26 hackathon in Uyo: build, ship and demo in front of judges, with mentors, prizes and a community of builders.",
+      "Our hacks, people shipped: photos from the Tech Ignite '26 Hackathon in Uyo — the teams, builds, demos and late-night pushes from the GDGOC UNIUYO flagship event.",
     breadcrumb: HOME_AND_HACKATHON,
-  },
-  {
-    path: '/get-your-picture',
-    title: "Get Your Picture — Tech Ignite '26",
-    description:
-      "Put your photo inside the official Tech Ignite '26 frame and download it for free. Upload a picture, we crop and place it, you share it.",
-    breadcrumb: HOME_AND_GET_PICTURE,
   },
 ] as const;
 
@@ -155,9 +154,8 @@ export function eventJsonLd(): Record<string, unknown> {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: SITE_NAME,
-    startDate: '2026-11-20',
+    startDate: '2026-11-19',
     endDate: '2026-11-20',
-    eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location: {
       '@type': 'Place',
@@ -183,14 +181,6 @@ export function eventJsonLd(): Record<string, unknown> {
     description: requireEntry('/').description,
     url: SITE_ORIGIN,
     isAccessibleForFree: true,
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'NGN',
-      availability: 'https://schema.org/InStock',
-      validFrom: '2026-01-01T00:00:00+01:00',
-      url: REGISTER_URL,
-    },
   };
 }
 
@@ -320,14 +310,14 @@ export function llmsTxt(): string {
 
   return `# Tech Ignite '26
 
-> Tech Ignite '26 is the annual GDSC UNIUYO (Google Developer Groups on Campus, University of Uyo) flagship tech conference: talks, workshops, community and a hackathon, on 20 November 2026 at the University of Uyo, Uyo, Nigeria. Free entry.
+> Tech Ignite '26 was successfully held at the University of Uyo in Uyo, Nigeria. The annual GDGOC UNIUYO flagship event brought students, developers, founders and creators together for talks, workshops, community and a hackathon.
 
 ## Key facts
 - Event: Tech Ignite '26
-- Date: 20 November 2026
+- Dates: 19 and 20 November 2026
+- Status: successfully concluded
 - Venue: University of Uyo Main Campus, Uyo, Nigeria
-- Entry: free; registration required
-- Register: ${REGISTER_URL}
+- Entry: free
 - Organizer: GDG on Campus University of Uyo
 - Contact: ${CONTACT_EMAIL}
 - Site: ${SITE_ORIGIN}

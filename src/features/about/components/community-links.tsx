@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FaFacebook, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
-import { ArrowUpRight, Image as ImageIcon, Mail, Ticket } from 'lucide-react';
+import { ArrowUpRight, Image as ImageIcon, Mail } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { footerSocialLinks } from '@/utils/footer';
 import { communityExtraLinks } from '@/utils/about';
@@ -22,7 +22,6 @@ const socialIcons: Record<string, PlatformIcon> = {
 
 const extraIcons: Record<string, PlatformIcon> = {
   'Past Photos': ImageIcon,
-  'Get Tickets': Ticket,
   'Email Us': Mail,
 };
 
