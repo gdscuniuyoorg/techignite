@@ -92,7 +92,7 @@ export function AboutHero() {
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 1.7 }}
           className="relative z-10 mt-4 max-w-[40rem] text-subheading leading-relaxed font-normal text-ink"
         >
-          The flagship event of GDSC UNIUYO.
+          The flagship event of GDGOC UNIUYO.
           <br />A full day of code, creativity, and community at the University of Uyo.
         </motion.p>
 

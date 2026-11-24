@@ -1,16 +1,14 @@
 /**
- * Content for the /about page. Links reuse the handles and URLs already
- * committed across the site (footer socials, past-photos album, tickets).
+ * Content for the /about and /organizers pages. Links reuse the handles and
+ * URLs already committed across the site (footer socials, past-photos album).
  */
-import { REGISTER_URL } from './footer';
-
 export interface AboutParagraph {
   readonly text: string;
 }
 
 export const aboutUsParagraphs: readonly AboutParagraph[] = [
   {
-    text: 'Tech Ignite is the annual flagship event of Google Developer Student Clubs, University of Uyo (GDSC UNIUYO). Every year it brings students, developers, designers, and dreamers together for hackathons, keynotes, and hands-on learning on campus.',
+    text: 'Tech Ignite is the annual flagship event of Google Developer Groups on Campus, University of Uyo (GDGOC UNIUYO). Every year it brings students, developers, designers, and dreamers together for hackathons, keynotes, and hands-on learning on campus.',
   },
   {
     text: 'More than a conference, Tech Ignite is a launchpad — a place where ideas find teammates, skills find direction, and the community finds its people.',
@@ -52,9 +50,9 @@ export interface OrganizerPanel {
 
 export const organizerPanels: readonly OrganizerPanel[] = [
   {
-    title: 'GDSC UNIUYO',
+    title: 'GDGOC UNIUYO',
     description:
-      'Google Developer Student Clubs, University of Uyo — a student-led community helping peers grow as developers, designers, and leaders, powered by Google Developers.',
+      'Google Developer Groups on Campus, University of Uyo — a student-led community helping peers grow as developers, designers, and leaders, powered by Google Developers.',
   },
   {
     title: 'GDG Uyo',
@@ -72,10 +70,6 @@ export const communityExtraLinks: readonly CommunityLink[] = [
   {
     label: 'Past Photos',
     href: 'https://photos.app.goo.gl/9y5H4u4u7N5bF3Y38',
-  },
-  {
-    label: 'Get Tickets',
-    href: REGISTER_URL,
   },
   {
     label: 'Email Us',
