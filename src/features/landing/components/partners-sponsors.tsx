@@ -105,7 +105,7 @@ export function PartnersSponsors() {
             className="mt-7 font-sans text-[36px] leading-[1.22] font-medium not-italic lg:text-[52px]"
           >
             <span className="max-lg:hidden lg:block">
-              Tech Ignite is made possible with the{' '}
+              Tech Ignite &rsquo;26 was made possible with the{' '}
             </span>
             <span className="max-lg:hidden lg:block">
               support of{' '}
@@ -116,7 +116,7 @@ export function PartnersSponsors() {
             </span>
             <span className="max-lg:hidden lg:block">creative communities.</span>
             <span className="lg:hidden">
-              Tech Ignite is made possible with the support of{' '}
+              Tech Ignite &rsquo;26 was made possible with the support of{' '}
               <mark className="bg-brand-green-vivid px-2 text-paper">
                 leading brands, organizations,
               </mark>{' '}

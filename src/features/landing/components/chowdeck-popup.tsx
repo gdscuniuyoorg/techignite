@@ -47,7 +47,7 @@ const POPUP_MS = 6000;
 /**
  * Chowdeck co-branding notice.
  *
- * Announces that the event is **GDG × Chowdeck**, then after 6s (or on
+ * Announces that the event was powered by **GDG × Chowdeck**, then after 6s (or on
  * dismiss) the card retreats and hands off to a white Chowdeck mark docked to
  * the right edge of the viewport, which drifts gently in place so the
  * partnership stays visible while browsing. Honours reduced-motion by skipping
@@ -106,7 +106,7 @@ export function ChowdeckPopup() {
           />
 
           <div className="min-w-0 text-[15px] leading-tight">
-            <p className="text-muted">This event is</p>
+            <p className="text-muted">This event was powered by</p>
             <p className="text-base font-bold">
               GDG <span aria-hidden="true">×</span>
               <span className="sr-only">x</span> Chowdeck

@@ -12,7 +12,8 @@ export const stats: readonly StatItem[] = [
     target: 20,
     suffix: '+',
     duration: 1.4,
-    description: 'Global innovators and creative leaders sharing insights that help you.',
+    description:
+      'Innovators and creative leaders shared practical insights with the community.',
   },
   {
     value: '1500+',
@@ -20,7 +21,7 @@ export const stats: readonly StatItem[] = [
     suffix: '+',
     duration: 2.2,
     description:
-      'Connect with fellow tech students, share ideas, and explore new opportunities together.',
+      'Students, developers, founders, and creators gathered to learn, connect, and build.',
   },
   {
     value: '5k+',
@@ -28,6 +29,6 @@ export const stats: readonly StatItem[] = [
     suffix: 'k+',
     duration: 1.1,
     description:
-      'A vibrant community of creators from around the world has the best outcome.',
+      "Community members were reached through the ideas, stories, and momentum of Tech Ignite '26.",
   },
 ];

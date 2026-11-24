@@ -13,44 +13,42 @@ export const faqItems: readonly FaqItem[] = [
   },
   {
     id: 'when-and-where',
-    question: "When and where will Tech Ignite '26 take place?",
+    question: "When and where did Tech Ignite '26 take place?",
     answer:
-      "Tech Ignite '26 will take place on November 19 (Hackathon screening and Workshop day) at UniPod Building, University of Uyo, Main Campus, and on November 20 (Main conference day) at the 1000-capacity hall, University of Uyo, Main Campus (Perm site).",
+      "Tech Ignite '26 was successfully held across two days. The hackathon screening and workshop took place on 19 November at the UniPod Building, University of Uyo Main Campus. The main conference followed on 20 November at the hall with seating for 1,000 on the same campus.",
   },
   {
     id: 'free-to-attend',
-    question: "Is Tech Ignite '26 free to attend?",
-    answer:
-      "Yes! Tech Ignite '26 is 100% free to attend for all participants. All you need to do is register online to secure your spot.",
+    question: "Was Tech Ignite '26 free to attend?",
+    answer: "Yes. Tech Ignite '26 was free for every registered participant.",
   },
   {
     id: 'tech-knowledge',
-    question: 'Do I need technical knowledge to attend?',
+    question: 'Did attendees need prior technical knowledge?',
     answer:
-      "No prior technical knowledge is required. Tech Ignite '26 is open to curious students, beginners, designers, and developers at any skill level.",
+      "No prior technical knowledge was required. Tech Ignite '26 welcomed curious students, beginners, designers, and developers at every skill level.",
   },
   {
     id: 'what-to-expect',
-    question: "What should I expect at Tech Ignite '26?",
+    question: "What happened at Tech Ignite '26?",
     answer:
-      'You will have the opportunity to meet CEOs and top executives from established companies, enjoy games, and learn from engaging speakers and mentors.',
+      'Attendees met industry leaders, learned from engaging speakers and mentors, explored new ideas, and joined games and community activities.',
   },
   {
     id: 'code-of-conduct',
-    question: 'Is there a Code of Conduct?',
+    question: 'Did the event have a Code of Conduct?',
     answer:
-      'Yes. GDG On-Campus University of Uyo is dedicated to providing a safe, welcoming, inclusive, and harassment-free experience for everyone. All participants must follow our Code of Conduct at all times.',
+      'Yes. GDG On Campus University of Uyo provided a safe, welcoming, inclusive, and harassment free experience, with every participant expected to follow the Code of Conduct.',
   },
   {
     id: 'food-and-refreshments',
-    question: 'Will food and refreshments be provided?',
-    answer:
-      'Yes! Registered participants receive light refreshments and lunch during the conference hours.',
+    question: 'Were food and refreshments provided?',
+    answer: 'Yes. Registered participants received light refreshments and lunch.',
   },
   {
-    id: 'recorded-sessions',
-    question: 'Will sessions be recorded?',
+    id: 'event-highlights',
+    question: "Where can I revisit Tech Ignite '26?",
     answer:
-      'Yes, recordings of main sessions and keynotes will be made available to all registered attendees following the conference.',
+      'Photos and highlights from the event are available on the Memories and Hackathon pages.',
   },
 ];

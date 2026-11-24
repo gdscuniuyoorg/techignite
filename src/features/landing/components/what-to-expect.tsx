@@ -11,18 +11,19 @@ export function WhatToExpect() {
         <div className="border-t border-border pt-8">
           <p className="flex items-center gap-2.5 text-sm font-medium tracking-wider text-white uppercase sm:text-base">
             <span aria-hidden="true" className="size-2 shrink-0 bg-primary" />
-            What to expect
+            What we achieved
           </p>
 
           <h2
             id="what-to-expect-title"
             className="mt-8 w-full align-middle font-sans text-[28px] leading-[36px] font-normal tracking-[0px] text-foreground not-italic sm:text-[36px] sm:leading-[46px] lg:text-[42px] lg:leading-[52px] xl:mt-10 xl:text-[60px] xl:leading-[70px]"
           >
-            A global stage where students, innovation, and technology come together to{' '}
+            A successful gathering where students, innovation, and technology came together
+            to{' '}
             <mark className="rounded-xs bg-primary px-1.5 whitespace-nowrap text-primary-foreground">
               build the future,
             </mark>{' '}
-            and inspire what’s next.
+            and inspire what comes next.
           </h2>
         </div>
 

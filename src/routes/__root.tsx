@@ -19,11 +19,11 @@ export const Route = createRootRoute({
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       // Fallback head for the 404 surface. Content routes override title and
       // description with their own head() entries (child head wins on merge).
-      { title: "Tech Ignite '26 — Are you actually Building?" },
+      { title: "Tech Ignite '26: Successfully Held at the University of Uyo" },
       {
         name: 'description',
         content:
-          "Join 1,500+ students, developers, and creators at Tech Ignite '26. 20 November 2026, University of Uyo.",
+          "Tech Ignite '26 successfully brought students, developers, founders, and creators together at the University of Uyo on 19 and 20 November 2026.",
       },
       { name: 'theme-color', content: '#050505' },
     ],
